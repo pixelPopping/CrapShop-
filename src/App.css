@@ -5,34 +5,26 @@
   text-align: center;
 }
 
-/* Hover animation */
-.animated-box:hover {
-  animation: hoverPulse 1s infinite;
-}
-
-@keyframes hoverPulse {
-  0%, 100% {
-    transform: scale(1);
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
   }
-  50% {
-    transform: scale(1.05);
+  to {
+    transform: rotate(1080deg); /* 3 full rotations */
   }
 }
 
-/* Spin animation */
 .spinning {
   animation: spin 2s ease-out;
 }
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(1080deg); /* 3 full spins */
-  }
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 500px;
+  height: 500px;
+  border: 1px solid black;
+  border-radius: 50%;
+  transform: rotate(-90deg);
 }
-
-
-
-
