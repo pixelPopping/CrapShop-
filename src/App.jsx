@@ -14,6 +14,7 @@ function App() {
 
   }
   return (
+      <>
       <section className="App">
         <div  className="animated-box">
           <ul>
@@ -27,7 +28,10 @@ function App() {
           </ul>
         </div>
       </section>
+        <div className="container">
+        </div>
 
+      </>
   );
 }
 
