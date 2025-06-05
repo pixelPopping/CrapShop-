@@ -5,4 +5,34 @@
   text-align: center;
 }
 
+/* Hover animation */
+.animated-box:hover {
+  animation: hoverPulse 1s infinite;
+}
+
+@keyframes hoverPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Spin animation */
+.spinning {
+  animation: spin 2s ease-out;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(1080deg); /* 3 full spins */
+  }
+}
+
+
+
 
