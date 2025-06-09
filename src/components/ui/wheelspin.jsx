@@ -8,19 +8,5 @@
 
 
 
-function wheelOfFortune() {
-    let wheelOfFortune = ["ManChlotes", "FemaleChlotes", "Jewlery", "Electronics", "Vintage",];
-
-    for (let i = 0; i < wheelOfFortune.length; i++) {
-     console.log(wheelOfFortune[i]);
-    }
-}
-
-wheelOfFortune();
-console.log(wheelOfFortune);
-
-
-
-
 
 
