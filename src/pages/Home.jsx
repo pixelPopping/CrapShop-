@@ -1,11 +1,17 @@
 import {useState} from "react";
 import './Home.css';
+import ZoekBalk from "../components/searchFilter/ZoekBalk.jsx";
 
 
 function Home() {
     const [results, setResults] = useState('')
     const [spin, setSpin] = useState(3)
     const [spinning, setSpinng] = useState(false);
+    const [filter, setFilter] = useState('');
+
+    const handleSearchSubmit = (value) => {
+       setFilter(value)
+    };
 
     function wheelOfFortune() {
 
@@ -36,7 +42,10 @@ function Home() {
                 <button className="button-primary" type="button">Sign Up</button>
                 <button className="button-secondary" type="button">Login</button>
             <form>
-                <input type="text" name="text" placeholder="Waar ben je opzoek naar"/>
+            <ZoekBalk
+                type="text"
+                inputValue={filter}
+                inputCalback={handleSearchSubmit}/>
             </form>
             </div>
         </nav>
