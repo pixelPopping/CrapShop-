@@ -1,42 +1,47 @@
-import axios from 'axios'
-import data  from  '../constants/data.json'
-import {useState} from "react";
+import axios from 'axios';
+import {useEffect, useState} from "react";
+import './Shop.css';
 
+function Shop() {
+    const [shop, setShop] = useState([]);
+    const [error, setError] = useState(false);
+    const [loading, setLoading] = useState(false);
 
-function Shop (){
-    const [shop,setShop]= useState([])
-    const show = data.map((shop) => shop.id === shop.id);
-    console.log(show);
+    useEffect(() => {
+     async function  getData() {
+         setError(false);
+            try {
+                const response = await axios.get("https://fakestoreapi.com/products");
+                console.log(response.data);
+                setShop(response.data);
+            } catch (e) {
+                console.error(e);
+                error(true);
+            } finally {
 
-    const getData = async () => {
-        try {
-            const response = await axios.get(`'https://fakestoreapi.com/products'`, )
-            console.log(response.data);
-            setShop(response.data);
-        } catch (error) {
-            console.log(error)
+            }
         }
-        return show
-    };
+            getData();
+        })
 
 
-    return (
-        <>
-            <h1>Countries and Populations</h1>
-            <button type="button" onClick={getData}>Apply</button>
-            <ul>
-                {shop.map((id, index) => (
-                    <li key={index}>
-                        {id.title}
-                    </li>
-                ))}
-            </ul>
-        </>
+        return (
+            <div className="shop">
+                <h1>Shop Producten</h1>
 
-
-    )
-
+                <ul>
+                    {shop.map((item) => (
+                        <li key={item.id}>
+                            <h3>{item.title}</h3>
+                            <p>{item.description}</p>
+                            <img src={item.image} alt={item.title} style={{width: "100px"}}/>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        );
 }
 
-export default Shop
+export default Shop;
+
 
