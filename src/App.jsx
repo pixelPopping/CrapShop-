@@ -4,15 +4,17 @@
 // 3 registreren en inloggen
 // 4 zoek filter/ categorieen box
 import './App.css';
-import './components/ui/wheelspin.css';
+//import './components/ui/wheelspin.css';
 import Home from './pages/Home';
+import Shop from './pages/Shop.jsx';
 
-function App() {
-  return (
-    <Home/>
-  )
+function App () {
+    return (
+        <>
+        <Home/>
+    </>
+    )
+
 }
-
 export default App
-
 
