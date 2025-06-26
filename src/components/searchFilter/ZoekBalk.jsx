@@ -5,21 +5,21 @@
 ///stap 4 filter methode gebruiken om zoekresultaten te filteren
 ///stap 5 state verplaatsen naar app.jsx zodat bij alle componenten de zoekbalk functioneel is
 
+
+
 import {useState} from "react";
 
-function ZoekBalk({type}) {
-const [filter, setFilter] = useState('');
+function ZoekBalk({type, inputValue, inputCallback, }) {
+
 
     return (
         <>
-        <input  type={type}
-                value={filter}
-                onChange={(e) =>  setFilter(e.target.value)}
-                />
-        <section>
-        <p>{filter}</p>
-        </section>
-            </>
+            <input  type={type}
+                    value={inputValue}
+                    onChange={(e)=> inputCallback(e.target.value)}
+
+                    />
+        </>
     )
 }
 
