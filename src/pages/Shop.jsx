@@ -2,52 +2,70 @@ import { useEffect, useState } from "react";
 import './Shop.css';
 import ZoekBalk from '../components/searchfilter/ZoekBalk';
 import axios from 'axios';
+import Shopcard from "../components/shopcard/Shopcard.jsx";
 
 function Shop() {
     const [shop, setShop] = useState([]);
     const [query, setQuery] = useState("");
-    const [filterdEvents, setFilterdEvents] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(false);
 
     useEffect(() => {
+        setLoading(true);
+        setError(false);
         async function getData() {
             try {
                 const response = await axios.get("https://fakestoreapi.com/products");
                 console.log(response.data);
                 setShop(response.data);
-                setFilterdEvents(response.data);
             } catch (e) {
+                setError(true);
                 console.error(e);
+            } finally {
+                setLoading(false);
             }
         }
         getData();
     }, []);
 
-    const FilteredEvent = shop.filter((item) => {
-        const matched = item.title.toLowerCase().includes(query.toLowerCase()) || item.description.toLowerCase().includes(query.toLowerCase())
-        return matched;
+    const filteredItems = shop.filter((item) => {
+        return (
+            item.title.toLowerCase().includes(query.toLowerCase()) ||
+            item.description.toLowerCase().includes(query.toLowerCase())
+        );
     });
 
     return (
-        <div className="shop">
-            <h1>zoekBalk</h1>
-            <ZoekBalk
-                type="tekst"
-                inputValue={query}
-                inputCallback={setQuery}
-            />
-
-
-            {FilteredEvent.map((item, index) => (
-                <li key={index}>
-                    <h3>{item.title}</h3>
-                    <p>{item.description}</p>
-                    <img src={item.image} alt={item.title} />
-                </li>
-            ))}
-        </div>
+        <>
+            {loading && <p>Bezig met laden...</p>}
+            {error && <p>Er ging iets mis bij het ophalen van de producten.</p>}
+            {!loading && !error && (
+                <div className="outer-container">
+                    <h1>ZoekBalk</h1>
+                    <ZoekBalk
+                        type="tekst"
+                        inputValue={query}
+                        inputCallback={setQuery}
+                    />
+                    <div className="outercontainer-card">
+                    <div className="inner-container">
+                    {filteredItems.map((item) => (
+                        <Shopcard
+                            key={item.id}
+                            label={item.title}
+                            text={item.description}
+                            image={item.image}
+                        />
+                    ))}
+                    </div>
+                </div>
+                </div>
+            )}
+        </>
     );
 }
 
 export default Shop;
+
 
 
