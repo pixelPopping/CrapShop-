@@ -47,7 +47,6 @@ function Shop() {
                         inputValue={query}
                         inputCallback={setQuery}
                     />
-                    <div className="outercontainer-card">
                     <div className="inner-container">
                     {filteredItems.map((item) => (
                         <Shopcard
@@ -58,7 +57,6 @@ function Shop() {
                         />
                     ))}
                     </div>
-                </div>
                 </div>
             )}
         </>
