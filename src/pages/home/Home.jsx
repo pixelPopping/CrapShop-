@@ -1,6 +1,6 @@
 import {useState} from "react";
 import './Home.css';
-import ZoekBalk from "../components/searchFilter/ZoekBalk.jsx";
+import ZoekBalk from "../../components/searchFilter/ZoekBalk.jsx";
 
 
 function Home() {
@@ -16,7 +16,7 @@ function Home() {
     function wheelOfFortune() {
 
         if (spin <= 0) return;
-        let wheelOfFortune = ["ManChlotes", "FemaleChlotes", "Jewlery", "Electronics", "Vintage", "10% korting", "15% korting", "30% korting",];
+        let wheelOfFortune = ["ManChlotes", "WomanChlotes", "Jewlery", "Electronics", "Vintage", "10% korting", "15% korting", "30% korting",];
         let i = Math.floor(Math.random() * wheelOfFortune.length);
         let selectedItem = wheelOfFortune[i];
 
@@ -34,8 +34,8 @@ function Home() {
         <>
         <nav className="navbar-four">
             <ul className="nav-links4">
-                <li><a href="/">Heren</a></li>
-                <li><a href="/">Dames</a></li>
+                <li><a href="/public">Heren</a></li>
+                <li><a href="/public">Dames</a></li>
 
             </ul>
             <div className="button-container4">

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import './Shop.css';
-import ZoekBalk from '../components/searchfilter/ZoekBalk';
+import ZoekBalk from '../../components/searchFilter/ZoekBalk.jsx';
 import axios from 'axios';
-import Shopcard from "../components/shopcard/Shopcard.jsx";
+import Shopcard from "../../components/shopcard/Shopcard.jsx";
 
 function Shop() {
     const [shop, setShop] = useState([]);
