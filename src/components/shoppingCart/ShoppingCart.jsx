@@ -1,55 +1,57 @@
+import { useEffect, useState } from 'react';
+import DetailCard from "../detailcard/DetailCard.jsx";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
-import {useState} from 'react'
+function ShoppingCart({ resetButton, cartItems}) {
+   // const [cartItems, setCartItems] = useState([]);
+   // const [product, setProduct] = useState(null);
 
+   // const { id } = useParams();
 
-function ShoppingCart() {
-    const [items, setItems] = useState([]);
-    const [cartItems, setCartItems] = useState([])
+    //useEffect(() => {
+        //async function fetchProduct() {
+           // try {
+               // const response = await axios.get(`https://fakestoreapi.com/products/${id}`);
+               // setProduct(response.data);
+           // } catch (e) {
+               // console.error(e);
+          //  }
+       // }
+       // fetchProduct();
+   // }, [id]);
 
+    //function reset() {
+       // setCartItems([]);
+   // }
 
-
-    function reset (){
-        setCartItems([]);
+    function totaalPrijs() {
+       return cartItems.reduce((totaal, item) => totaal + item.price, 0);
     }
 
-    function totaalPrijs (){
-        return items.reduce((totaal, item) => totaal + item.price, 0)
-    }
-
-
-
-
-    function addToCart(product){
-        setItems([  ...items, product,])
-    }
-
+    //function addToCart() {
+       // if (product) {
+          //  setCartItems([...cartItems, product]);
+        //}
+    //}
 
     return (
         <>
-            <h2>Producten</h2>
+            <div className="inner-container"></div>
+
+            <h2>Winkelwagen</h2>
             <ul>
-                {items.map(product => (
-                    <li key={product.id}>
-                        {product.title} {product.price.toFixed(2)}
-                        <button  onClick={() => addToCart(product)} type="button">add item</button>
+                {cartItems.length === 0 && <li>leeg</li>}
+                {cartItems.map((item) => (
+                    <li key={item.id}>
+                        {item.title} - €{item.price}
                     </li>
                 ))}
             </ul>
-
-        <h2>WinkelWagen</h2>
-            <ul>
-                {cartItems.length === 0 && <li>leeg</li>}
-                {cartItems.map((item, index) => (
-                    <li key={index}>
-                {item.title} {item.price.toFixed(2)}
-            </li>
-                    ))}
-            </ul>
             <p><strong>Totaalprijs:</strong> €{totaalPrijs().toFixed(2)}</p>
-        <button  onClick={reset} type="button">remove item</button>
+            <button onClick={resetButton}>reset</button>
         </>
-    )
-
+    );
 }
 
 export default ShoppingCart;

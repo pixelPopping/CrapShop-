@@ -1,6 +1,7 @@
 import {useState} from "react";
 import './Home.css';
 import ZoekBalk from "../../components/searchFilter/ZoekBalk.jsx";
+import Navigation from "../../components/navbar/Navigation.jsx";
 
 
 function Home() {
@@ -79,7 +80,6 @@ function Home() {
                 <button onClick={wheelOfFortune} disabled={spin <= 0}>spin ({spin} left)</button>
                 {results && <p>You got: <strong>{results}</strong></p>}
             </div>
-
         </main>
 </>
 )
