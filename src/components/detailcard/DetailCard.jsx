@@ -1,7 +1,7 @@
 
 import { useNavigate } from 'react-router-dom';
 
-function DetailCard({ id, label, text, image, button, }) {
+function DetailCard({ id, label, text, image, button,}) {
     const navigate = useNavigate();
 
     function handleClick() {
