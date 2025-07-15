@@ -16,6 +16,8 @@ function Shop() {
     const [query, setQuery] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
+    const [category, setCategory] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState("");
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -24,8 +26,13 @@ function Shop() {
         async function getData() {
             try {
                 const response = await axios.get("https://fakestoreapi.com/products");
+                const categories = await axios.get('https://fakestoreapi.com/products/categories');
+                setCategory(categories.data);
+                setSelectedCategory("");
                 setShop(response.data);
                 console.log(response.data);
+
+
             } catch (e) {
                 setError(true);
                 console.error(e);
@@ -36,10 +43,17 @@ function Shop() {
         getData();
     }, []);
 
-    const filteredItems = shop.filter((item) =>
-        item.title.toLowerCase().includes(query.toLowerCase()) ||
-        item.description.toLowerCase().includes(query.toLowerCase())
-    );
+    const filteredItems = shop.filter((item) => {
+        const matchSearch =
+            item.title.toLowerCase().includes(query.toLowerCase()) ||
+            item.description.toLowerCase().includes(query.toLowerCase()) ||
+            item.category.toLowerCase().includes(query.toLowerCase());
+
+        const matchCategory = selectedCategory === "" || item.category === selectedCategory;
+
+        return matchCategory && matchSearch;
+    })
+
 
     //function onLinkClick(item) {
        // navigate(`/detailpagina/${item.id}`);
@@ -47,6 +61,7 @@ function Shop() {
 
     return (
         <>
+            {!loading && !error && filteredItems.length === 0 && <p>Geen zoekresultaten gevonden.</p>}
             {loading && <p>Bezig met laden...</p>}
             {error && <p>Er ging iets mis bij het ophalen van de producten.</p>}
             {!loading && !error && (
@@ -56,6 +71,9 @@ function Shop() {
                         type="tekst"
                         inputValue={query}
                         inputCallback={setQuery}
+                        selectedCategory={selectedCategory}
+                        onCategoryChange={setSelectedCategory}
+                        categories={category}
                     />
                     <div className="inner-container">
                         {filteredItems.map((item) => (
