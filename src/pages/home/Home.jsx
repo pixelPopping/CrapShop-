@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import { useEffect, useRef, useState } from "react";
 import './Home.css';
 import ZoekBalk from "../../components/searchFilter/ZoekBalk.jsx";
 
@@ -6,42 +6,38 @@ function Home() {
     const [results, setResults] = useState('');
     const [spin, setSpin] = useState(3);
     const [spinning, setSpinning] = useState(false);
-    const timeoutRef = useRef(null);
-    const [stophoek, setStophoek] = useState(0);
     const [rotation, setRotation] = useState(0);
-
-
-
-    function wheelOfFortune() {
-        if (spin <= 0 || spinning) return;
-
-
-        const items = [
-            "ManChlotes", "WomanChlotes", "Jewlery", "Electronics",
-            "Vintage", "10% korting", "15% korting", "30% korting"
-        ];
-
-        const i = Math.floor(Math.random() * items.length);
-        const selectedItem = items[i];
-        const anglePerItem = 360 / items.length;
-        const randomOffset = Math.random() * anglePerItem;
-
-        const newRotation = rotation + (360 * 5) + (i * anglePerItem) + randomOffset;
-
-        setStophoek(newRotation);
-        setRotation(newRotation);
-        setSpinning(true);
-
-        timeoutRef.current = setTimeout(() => {
-            setSpinning(false);
-            setResults(selectedItem);
-            setSpin(prev => prev - 1);
-        }, 2500);
-    }
+    const timeoutRef = useRef(null);
 
     useEffect(() => {
         return () => clearTimeout(timeoutRef.current);
     }, []);
+
+    function wheelOfFortune() {
+        if (spin <= 0 || spinning) return;
+
+        const items = [
+            "ManChlotes", "WomanChlotes", "Jewlery", "Electronics",
+            "Vintage", "10% korting", "15% korting", "30% korting", "gift", "extra spin",
+        ];
+
+        const anglePerItem = 360 / items.length;
+        const i = Math.floor(Math.random() * items.length);
+
+        const middleOfSegment = i * anglePerItem + anglePerItem / 2;
+        const extraRotation = 360 * 5 + middleOfSegment;
+        const newRotation = rotation + extraRotation;
+
+        setRotation(newRotation);
+        setSpinning(true);
+
+        timeoutRef.current = setTimeout(() => {
+            const result = items[i];
+            setSpinning(false);
+            setResults(result);
+            setSpin(prev => result === "extra spin" ? prev : prev - 1);
+        }, 3000);
+    }
 
     return (
         <>
@@ -67,8 +63,8 @@ function Home() {
                     <div
                         className="mainbox"
                         style={{
-                            transform: `rotate(${stophoek}deg)`,
-                            transition: spinning ? "transform 2.5s ease-out" : "none"
+                            transform: `rotate(${rotation}deg)`,
+                            transition: spinning ? "transform 3s ease-out" : "none"
                         }}
                     >
                         <div className="box" id="box">
@@ -81,15 +77,21 @@ function Home() {
                             </div>
                             <div className="box2">
                                 <span className="font span1"><h5>10% korting</h5></span>
-                                <span className="font span2"><h5>Vintage</h5></span>
+                                <span className="font span2"><h5>extra spin</h5></span>
                                 <span className="font span3"><h5>15% korting</h5></span>
-                                <span className="font span4"><h5>Jewlery</h5></span>
+                                <span className="font span4"><h5>gift</h5></span>
                                 <span className="font span5"><h5>30% korting</h5></span>
                             </div>
                         </div>
                     </div>
-                    <button onClick={wheelOfFortune} disabled={spin <= 0}>spin ({spin} left)</button>
-                    {results && <p>You got: <strong>{results}</strong></p>}
+
+                    <button onClick={wheelOfFortune} disabled={spinning || spin <= 0}>
+                        {spinning ? 'Spinning...' : `Spin (${spin} left)`}
+                    </button>
+
+                    {results && !spinning && (
+                        <p>You got: <strong>{results}</strong></p>
+                    )}
                 </div>
             </main>
         </>
@@ -97,3 +99,8 @@ function Home() {
 }
 
 export default Home;
+
+
+
+
+

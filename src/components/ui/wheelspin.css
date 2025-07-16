@@ -9,8 +9,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    overflow: hidden;
+    overflow: scroll;
 }
 
 .mainbox {
@@ -165,7 +164,6 @@ span {
     text-align: center;
 }
 
-
 @keyframes spin {
     from {
         transform: rotate(0deg);
@@ -179,12 +177,14 @@ span {
     animation: spin 2s ease-out forwards;
 }
 
-
 .pointer {
     position: absolute;
     top:  405px;
     left: 50%;
     transform: translateX(-50%);
     font-size: 2rem;
-    color: black;z-index: 10;
+    color: black;
+    z-index: 10;
 }
+
+
