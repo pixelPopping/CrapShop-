@@ -1,6 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import './Home.css';
-import ZoekBalk from "../../components/searchFilter/ZoekBalk.jsx";
+
+function getItems() {
+    return [
+        "ManChlotes", "WomanChlotes", "Jewlery", "Electronics",
+        "Vintage", "10% korting", "15% korting", "30% korting", "gift", "extra spin",
+    ];
+}
+
+function getRandomIndex(items) {
+    return Math.floor(Math.random() * items.length); // Geeft echte index
+}
+
+function getAnglePerItem(items) {
+    return 360 / items.length;
+}
 
 function Home() {
     const [results, setResults] = useState('');
@@ -16,26 +30,25 @@ function Home() {
     function wheelOfFortune() {
         if (spin <= 0 || spinning) return;
 
-        const items = [
-            "ManChlotes", "WomanChlotes", "Jewlery", "Electronics",
-            "Vintage", "10% korting", "15% korting", "30% korting", "gift", "extra spin",
-        ];
+        const items = getItems();
+        const anglePerItem = getAnglePerItem(items);
+        const index = getRandomIndex(items);
+        const resultItem = items[index];
 
-        const anglePerItem = 360 / items.length;
-        const i = Math.floor(Math.random() * items.length);
 
-        const middleOfSegment = i * anglePerItem + anglePerItem / 2;
-        const extraRotation = 360 * 5 + middleOfSegment;
+        const middleOfSegment = index * anglePerItem + anglePerItem / 2;
+        const stopAngle = 360 - middleOfSegment;
+        const extraRotation = 360 * 5 + stopAngle;
+
         const newRotation = rotation + extraRotation;
 
         setRotation(newRotation);
         setSpinning(true);
 
         timeoutRef.current = setTimeout(() => {
-            const result = items[i];
             setSpinning(false);
-            setResults(result);
-            setSpin(prev => result === "extra spin" ? prev : prev - 1);
+            setResults(resultItem);
+            setSpin(prev => resultItem === "extra spin" ? prev : prev - 1);
         }, 3000);
     }
 
@@ -99,6 +112,7 @@ function Home() {
 }
 
 export default Home;
+
 
 
 
