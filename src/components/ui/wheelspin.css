@@ -28,9 +28,13 @@ header h1 {
 }
 
 .mainbox {
+    width: 600px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 6px solid #333;
+    background-color: #f9f9f9;
     position: relative;
-    width: 500px;
-    height: 500px;
     margin: 0 auto;
 }
 
@@ -87,7 +91,7 @@ span {
 .box1 .span9 h5 { top: 80%; right: 21%; transform: rotate(46deg); position: absolute; text-align: center; }
 .box1 .span10 h5 { top: 60%; right: 10%; transform: rotate(15deg); position: absolute; text-align: center; }
 
-/* Pointer bovenaan */
+
 .pointer {
     position: absolute;
     top: 0;
