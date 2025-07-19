@@ -1,18 +1,20 @@
 import './Shopcard.css';
+import { useNavigate } from 'react-router-dom';
 
-function Shopcard({ id, label, text, image}) {
-    return(
-        <>
-            <div className="inner-container">
-            <article className="card">
-                <h3>{label} (#{id})</h3>
-                <p>{text}</p>
-                <img src={image} alt={label} />
-            </article>
-            </div>
-        </>
+function Shopcard({ id, label, text, image, onClick }) {
+    const navigate = useNavigate();
 
-    )
+   // function handleClick() {
+       // navigate(`/detailpagina/${id}`);
+    //}
+
+    return (
+        <article className="card" onClick={onClick}>
+            <h3>{label} {id}</h3>
+            <img src={image} alt={label} />
+            <p>{text}</p>
+        </article>
+    );
 }
 
 export default Shopcard;
