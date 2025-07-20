@@ -1,13 +1,15 @@
 import {useParams, useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import ZoekBalk from "../../components/searchFilter/ZoekBalk.jsx";
 import DetailCard from "../../components/detailcard/DetailCard.jsx";
 import ShoppingCart from "../../components/shoppingCart/ShoppingCart.jsx";
+import {ShoppingCartContext} from "../../components/context/ShoppingCartContext.jsx";
+
+
 
 
 function DetailPagina () {
-
     const [query, setQuery] = useState("");
     const { id } = useParams();
     const navigate = useNavigate();
@@ -41,12 +43,12 @@ function DetailPagina () {
     function addToCart() {
         if (product) {
             setCartItems([...cartItems, product]);
-        }
+       }
     }
 
     function reset() {
         setCartItems([]);
-    }
+   }
 
 
 
@@ -73,11 +75,10 @@ function DetailPagina () {
                 />
             )}
                 <ShoppingCart
-                product={product}
-                resetButton={reset}
-                cartItems={cartItems}
-            />
-
+                    product={product}
+                    resetButton={reset}
+                    cartItems={cartItems}
+                />
             </div>
         </div>
     )}
