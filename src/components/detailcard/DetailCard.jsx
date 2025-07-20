@@ -8,8 +8,6 @@ function DetailCard({ id, label, text, image, button,}) {
         navigate(`/shop/`);
     }
 
-
-
     return (
 
         <article className="card" >
