@@ -1,7 +1,9 @@
-import { useRef, useState } from "react";
+import {useContext, useRef, useState} from "react";
 import "./Home.css";
 import Wheelspin from "../../components/ui/WheelOfFortune";
-
+import {ShoppingCartContext} from "../../components/context/ShoppingCartContext.jsx";
+import ShoppingCart from "../../components/shoppingCart/ShoppingCart.jsx";
+import {useNavigate} from "react-router-dom";
 
 function Home() {
     const [results, setResults] = useState("");
@@ -9,13 +11,17 @@ function Home() {
     const [spinning, setSpinning] = useState(false);
     const [rotation, setRotation] = useState(0);
     const timeoutRef = useRef(null);
+    const navigate = useNavigate();
+    const {product} = useContext(ShoppingCartContext);
+    console.log(product);
+
 
     return (
         <>
             <header>
                 <h1>CrapShop</h1>
             </header>
-
+            {product}
             <nav className="navbar-four">
                 <ul className="nav-links4">
                     <li><a href="/public">Heren</a></li>
@@ -24,6 +30,7 @@ function Home() {
                 <div className="button-container4">
                     <button className="button-primary" type="button">Sign Up</button>
                     <button className="button-secondary" type="button">Login</button>
+                    <button  className="shopping-cart" type="button" onClick={() => navigate('/cart')}>cart</button>
                 </div>
             </nav>
 
