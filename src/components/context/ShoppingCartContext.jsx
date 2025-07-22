@@ -1,71 +1,74 @@
-import {createContext, useEffect, useState} from "react";
-import App from "../../App.jsx";
+import { createContext, useEffect, useState } from "react";
 import axios from "axios";
-import {useParams} from "react-router-dom";
-
+import { useParams } from "react-router-dom";
 
 export const ShoppingCartContext = createContext({});
 
-
-
-export const ShoppingCartProvider = ({children}) => {
+export const ShoppingCartProvider = ({ children }) => {
     const [product, setProduct] = useState(null);
     const [cartItems, setCartItems] = useState([]);
-    const {id} = useParams();
-
+    const { id } = useParams();
 
     useEffect(() => {
         async function getCartData() {
             try {
-                const response = await axios.get(`https://fakestoreapi.com/products/${id}`);
-                const newCart = { userId: 1, products: [{ id: 1 }] };
-                const getNewCart = await axios.post('https://fakestoreapi.com/carts', newCart)
-                const cartRequest = await axios.get('https://fakestoreapi.com/carts/1')
-                console.log(cartRequest)
-                console.log(getNewCart);
-                console.log(response.data);
-                setProduct(response.data);
-                setCartItems(cartRequest.data);
-                setCartItems(getNewCart.data);
-            } catch (e) {
+                const newCart = { userId: 1, products: [{ id: 1 }, { id: 2 }] };
+                const postCart = await axios.post('https://fakestoreapi.com/carts', newCart);
+                const productIds = postCart.data.products.map(item => item.id);
 
+                const fetchProducts = await Promise.all(
+                    productIds.map(id => axios.get(`https://fakestoreapi.com/products/${id}`))
+                );
+
+                const enrichedItems = fetchProducts.map(res => res.data);
+                setCartItems(enrichedItems);
+
+                if (id) {
+                    const selectedProduct = await axios.get(`https://fakestoreapi.com/products/${id}`);
+                    setProduct(selectedProduct.data);
+                }
+            } catch (e) {
                 console.error(e);
             }
         }
 
         getCartData();
-    }, [id])
+    }, [id]);
 
-
-    const data = {
-        product,
-        cartItems,
-        cart: addToCart,
-        reSet: reset,
+    function cart(item) {
+        setCartItems(prev => [...prev, item]);
     }
-console.log(data);
 
-    function addToCart(cartItems) {
-       localStorage.setItem("cartItems", JSON.stringify(data));
-        if (product) {
-            setCartItems([...cartItems, product]);
-        }
-    }
 
     function reset() {
         setCartItems([]);
     }
 
+    function totalPrice() {
+        return cartItems.reduce((totaal, item) =>
+            totaal + (parseFloat(item.price) || 0), 0);
+    }
 
+    function amountCart() {
+        return cartItems.length;
+    }
+
+    const data = {
+        product,
+        items: cartItems,
+        cart: cart,
+        reSet: reset,
+        price: totalPrice,
+        lengthcart: amountCart,
+    };
 
     return (
         <ShoppingCartContext.Provider value={data}>
             {children}
         </ShoppingCartContext.Provider>
-    )
+    );
+};
 
-}
+export default ShoppingCartProvider;
 
-
-export default ShoppingCartProvider
 
