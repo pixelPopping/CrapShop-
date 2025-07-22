@@ -6,6 +6,7 @@
 //stap 6 react context gebruiken als een nieuwe gebruiker inlogt spin counter reset naar 3 spins
 //stap 7 wheel of fortune interactief maken
 
+
 import { useEffect} from "react";
 import getAnglePerItem from "../../helpers/getAnglePerItem";
 import getItems from "../../helpers/getItems";
@@ -29,6 +30,9 @@ function WheelOfFortune({setResults,  spin, setSpin, spinning, setSpinning, rota
             const middleOfSegment = index * anglePerItem + anglePerItem / 2;
             const extraRotation = 360 * 5 + middleOfSegment;
             const newRotation = rotation + extraRotation;
+
+
+            ///switch statement schrijven voor links naar result
 
             setRotation(newRotation);
             setSpinning(true);
