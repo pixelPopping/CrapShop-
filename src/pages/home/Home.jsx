@@ -2,8 +2,8 @@ import {useContext, useRef, useState} from "react";
 import "./Home.css";
 import Wheelspin from "../../components/ui/WheelOfFortune";
 import {ShoppingCartContext} from "../../components/context/ShoppingCartContext.jsx";
-import ShoppingCart from "../../components/shoppingCart/ShoppingCart.jsx";
 import {useNavigate} from "react-router-dom";
+import ClockTime from "../../components/digitaleClock/DigitaleClock.jsx";
 
 function Home() {
     const [results, setResults] = useState("");
@@ -12,15 +12,19 @@ function Home() {
     const [rotation, setRotation] = useState(0);
     const timeoutRef = useRef(null);
     const navigate = useNavigate();
-    const {product} = useContext(ShoppingCartContext);
+    const {items, product} = useContext(ShoppingCartContext);
+    console.log(items);
     console.log(product);
+
 
 
     return (
         <>
             <header>
                 <h1>CrapShop</h1>
+              <ClockTime/>
             </header>
+            {items.length}
             {product}
             <nav className="navbar-four">
                 <ul className="nav-links4">
