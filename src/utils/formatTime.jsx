@@ -12,3 +12,5 @@ const formatTime = () => {
         .replace("ss", seconds)
         .replace("tt", ampm);
 };
+
+export default formatTime;
