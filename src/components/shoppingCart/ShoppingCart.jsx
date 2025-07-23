@@ -1,57 +1,30 @@
-import { useEffect, useState } from 'react';
-import DetailCard from "../detailcard/DetailCard.jsx";
-import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useContext } from "react";
+import { ShoppingCartContext } from "../context/ShoppingCartContext.jsx";
 
-function ShoppingCart({ resetButton, cartItems}) {
-   // const [cartItems, setCartItems] = useState([]);
-   // const [product, setProduct] = useState(null);
-
-   // const { id } = useParams();
-
-    //useEffect(() => {
-        //async function fetchProduct() {
-           // try {
-               // const response = await axios.get(`https://fakestoreapi.com/products/${id}`);
-               // setProduct(response.data);
-           // } catch (e) {
-               // console.error(e);
-          //  }
-       // }
-       // fetchProduct();
-   // }, [id]);
-
-    //function reset() {
-       // setCartItems([]);
-   // }
-
-    function totaalPrijs() {
-       return cartItems.reduce((totaal, item) => totaal + item.price, 0);
-    }
-
-    //function addToCart() {
-       // if (product) {
-          //  setCartItems([...cartItems, product]);
-        //}
-    //}
+function ShoppingCart() {
+    const { items, price,} = useContext(ShoppingCartContext);
 
     return (
-        <>
-            <div className="inner-container"></div>
-
+        <section className="winkelwagen">
             <h2>Winkelwagen</h2>
+            {items.length === 0 && <p>Je winkelwagen is leeg.</p>}
             <ul>
-                {cartItems.length === 0 && <li>leeg</li>}
-                {cartItems.map((item) => (
-                    <li key={item.id}>
-                        {item.title} - €{item.price}
+                {items.map((item) => (
+                    <li key={item.id} style={{ marginBottom: '1rem' }}>
+                        <img
+                            src={item.image}
+                            alt={item.title}
+                            style={{ width: '60px', height: '60px', objectFit: 'contain', marginRight: '1rem' }}
+                        />
+                        <strong>{item.title}</strong> – €{item.price?.toFixed(2)}
                     </li>
                 ))}
             </ul>
-            <p><strong>Totaalprijs:</strong> €{totaalPrijs().toFixed(2)}</p>
-            <button onClick={resetButton}>reset</button>
-        </>
+
+            <p><strong>Totaalprijs:</strong> {price().toFixed(2) ? `€${price().toFixed(2)}` : '€0,00'}</p>
+        </section>
     );
 }
 
 export default ShoppingCart;
+

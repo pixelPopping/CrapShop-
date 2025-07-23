@@ -14,6 +14,11 @@ import Electronics from './pages/electronics/Electronics.jsx';
 import Jewlery from './pages/jewlery/Jewlery.jsx';
 import DetailPagina from './pages/detailPagina/DetailPagina.jsx';
 import Navigation from './components/navbar/Navigation';
+import ShoppingCartContext from "./components/context/ShoppingCartContext.jsx";
+import Cart from './pages/cartpage/Cart.jsx';
+
+
+
 
 function App () {
     return (
@@ -27,6 +32,8 @@ function App () {
                 <Route path="/Electronics"   element={<Electronics/>} />
                 <Route path="/Jewlery" element={<Jewlery/>} />
                 <Route path="/detailpagina/:id" element={<DetailPagina/>}/>
+                <Route path="/cart/" element={<Cart/>} />
+
             </Routes>
 
 

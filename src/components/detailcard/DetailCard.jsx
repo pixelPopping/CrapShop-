@@ -1,24 +1,26 @@
 
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { ShoppingCartContext } from '../context/ShoppingCartContext.jsx';
 
-function DetailCard({ id, label, text, image, button,}) {
+function DetailCard({ id, label, text, image, cart, price }) {
     const navigate = useNavigate();
 
-    function handleClick() {
-        navigate(`/shop/`);
-    }
-
-
-
     return (
-
-        <article className="card" >
+        <article className="card">
             <h3>{label} {id}</h3>
-            <img src={image} alt={label} style={{ width: '200px', objectFit: 'contain' }} />
+            <img
+                src={image}
+                alt={label}
+                style={{ width: '200px', objectFit: 'contain' }}
+            />
             <p>{text}</p>
-            <button onClick={button}>add to cart</button>
+            <p>{price}</p>
+            <button onClick={() => cart({ id, label, text, image })}>add to cart</button>
+
         </article>
     );
 }
+
 
 export default DetailCard;
