@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { ShoppingCartContext } from '../context/ShoppingCartContext.jsx';
 
-function DetailCard({ id, label, text, image, cart }) {
+function DetailCard({ id, label, text, image, cart, price }) {
     const navigate = useNavigate();
 
     return (
@@ -15,6 +15,7 @@ function DetailCard({ id, label, text, image, cart }) {
                 style={{ width: '200px', objectFit: 'contain' }}
             />
             <p>{text}</p>
+            <p>{price}</p>
             <button onClick={() => cart({ id, label, text, image })}>add to cart</button>
 
         </article>

@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 export const ShoppingCartContext = createContext({});
 
@@ -8,6 +8,7 @@ export const ShoppingCartProvider = ({ children }) => {
     const [product, setProduct] = useState(null);
     const [cartItems, setCartItems] = useState([]);
     const { id } = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function getCartData() {
@@ -42,6 +43,7 @@ export const ShoppingCartProvider = ({ children }) => {
 
     function reset() {
         setCartItems([]);
+        navigate("/shop")
     }
 
     function totalPrice() {

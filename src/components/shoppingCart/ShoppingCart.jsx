@@ -1,72 +1,30 @@
-import {useContext, useEffect, useState} from 'react';
-import DetailCard from "../detailcard/DetailCard.jsx";
-import axios from "axios";
-import { useParams } from "react-router-dom";
-import {ShoppingCartContext} from "../context/ShoppingCartContext.jsx";
-
-//({ resetButton, cartItems})
-
+import { useContext } from "react";
+import { ShoppingCartContext } from "../context/ShoppingCartContext.jsx";
 
 function ShoppingCart() {
-const {items, price, lengthcart, reSet} = useContext(ShoppingCartContext);
-
-    //const { id } = useParams();
-
-   // useEffect(() => {
-       // async function fetchProduct() {
-         //   try {
-               // const response = await axios.get(`https://fakestoreapi.com/products/${id}`);
-              //  setProduct(response.data);
-          //  } catch (e) {
-               // console.error(e);
-          //  }
-//}
-      //  fetchProduct();
-   //}, [id]);
-
-    //function reset() {
-     //   setCartItems([]);
-   //}
-
-
-    //function totaalPrijs() {
-    //   return cartItems.reduce((totaal, item) => totaal + item.price, 0);
-    //}
-
-
-    ///functie schrijven met reduce om de lengte van de shoppingcart te berekenen
-
-
-   // function totaalAantal() {
-   //     return cartItems.reduce((aantal, item) => aantal + 1, 0);
-   // }
-
-
-
-    // function addToCart() {
-      //  if (product)
-          //  items([...items, product]);
-       // }
-
+    const { items, price,} = useContext(ShoppingCartContext);
 
     return (
-        <>
-            <div className="inner-container"></div>
-
+        <section className="winkelwagen">
             <h2>Winkelwagen</h2>
+            {items.length === 0 && <p>Je winkelwagen is leeg.</p>}
             <ul>
-                {items.length === 0 && <li>leeg</li>}
                 {items.map((item) => (
-                    <li key={item.id}>
-                        {item.title}  {item.price}
+                    <li key={item.id} style={{ marginBottom: '1rem' }}>
+                        <img
+                            src={item.image}
+                            alt={item.title}
+                            style={{ width: '60px', height: '60px', objectFit: 'contain', marginRight: '1rem' }}
+                        />
+                        <strong>{item.title}</strong> – €{item.price?.toFixed(2)}
                     </li>
                 ))}
             </ul>
-            <p><strong>Totaalprijs:</strong> €{price().toFixed(2)}</p>
-            <p><strong>Totaalproducten: {lengthcart()}</strong></p>
-            <button onClick={()=> reSet()}>reset</button>
-            </>
+
+            <p><strong>Totaalprijs:</strong> {price().toFixed(2) ? `€${price().toFixed(2)}` : '€0,00'}</p>
+        </section>
     );
 }
 
 export default ShoppingCart;
+

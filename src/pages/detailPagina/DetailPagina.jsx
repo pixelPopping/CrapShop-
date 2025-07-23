@@ -13,7 +13,6 @@ function DetailPagina() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [product, setProduct] = useState(null);
-
     const { cart, reSet, items } = useContext(ShoppingCartContext);
 
     useEffect(() => {
@@ -33,7 +32,7 @@ function DetailPagina() {
         ProductDetailsId();
     }, [id]);
 
-    function handleNavigate() {
+    function navigateToShop(){
         navigate("/shop");
     }
 
@@ -63,14 +62,23 @@ function DetailPagina() {
                             text={product.description}
                             price={product.price}
                             image={product.image}
-                            cart={cart}
-                        />
+                            cart={() =>
+                                cart({
+                                    id: product.id,
+                                    title: product.title,
+                                    description: product.description,
+                                    image: product.image,
+                                    price: product.price,
+                                })
+                            }
+                            />
                         <ShoppingCart
                             product={product}
                             resetButton={() => reSet()}
                             cartItems={items}
                         />
                     </div>
+                    <button onClick={() => navigateToShop()}>Back to store</button>
                 </div>
             )}
         </>

@@ -2,7 +2,7 @@
 import {useContext, useEffect, useState} from "react";
 import {ShoppingCartContext} from "../../components/context/ShoppingCartContext.jsx";
 import axios from "axios";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import ShoppingCart from "../../components/shoppingCart/ShoppingCart.jsx";
 
 // stap1 cart component maken
@@ -15,6 +15,11 @@ import ShoppingCart from "../../components/shoppingCart/ShoppingCart.jsx";
 function Cart() {
     const [cartItems, setCartItems] = useState([]);
     const {items, reSet,} = useContext(ShoppingCartContext);
+    const navigate = useNavigate();
+
+    function navigateToShop(){
+        navigate("/shop");
+    }
 
     useEffect(() => {
         async function getCartData() {
@@ -39,6 +44,7 @@ function Cart() {
                 cartItems={cartItems}
             />
              <button onClick={() => reSet()}>Reset</button>
+             <button onClick={() => navigateToShop()}>Back to store</button>
         </div>
     )
 }
