@@ -21,6 +21,7 @@ import SignUp from "./pages/signUP/SignUp.jsx";
 import SignIn from "./pages/signIn/SignIn.jsx";
 import {useContext} from "react";
 import {AuthContext} from "./components/context/AuthContext.jsx";
+import Recencies from "./pages/recencies/Recencies.jsx";
 
 
 
@@ -42,6 +43,7 @@ function App () {
                 <Route path="/Jewlery" element={<Jewlery/>} />
                 <Route path="/detailpagina/:id" element={<DetailPagina/>}/>
                 <Route path="/cart/" element={<Cart/>} />
+                <Route path="/recencies" element={<Recencies/>} />
 
             </Routes>
 

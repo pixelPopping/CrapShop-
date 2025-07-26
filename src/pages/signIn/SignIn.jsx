@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import { AuthContext } from "../../components/context/AuthContext.jsx";
 import axios from "axios";
 
@@ -20,9 +20,10 @@ function SignIn() {
         setLoading(true);
         setErrorMessage("");
 
+
         try {
             const response = await axios.post(
-                "/api/login",
+                `/api/login`,
                 {
                     email: data.email,
                     password: data.password,

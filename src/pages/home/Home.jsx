@@ -4,6 +4,7 @@ import Wheelspin from "../../components/ui/WheelOfFortune";
 import {ShoppingCartContext} from "../../components/context/ShoppingCartContext.jsx";
 import {useNavigate} from "react-router-dom";
 import ClockTime from "../../components/digitaleClock/DigitaleClock.jsx";
+import {AuthContext} from "../../components/context/AuthContext.jsx";
 
 function Home() {
     const [results, setResults] = useState("");
@@ -12,31 +13,59 @@ function Home() {
     const [rotation, setRotation] = useState(0);
     const timeoutRef = useRef(null);
     const navigate = useNavigate();
-    const {items, product} = useContext(ShoppingCartContext);
-    console.log(items);
-    console.log(product);
+    const { isAuth, user, logout } = useContext(AuthContext);
+    const { items, product } = useContext(ShoppingCartContext);
 
-
+    console.log("Items:", items);
+    console.log("Product:", product);
+    console.log("User:", user);
 
     return (
         <>
             <header>
                 <h1>CrapShop</h1>
-              <ClockTime/>
+                <ClockTime/>
             </header>
-            {items.length}
-            {product}
             <nav className="navbar-four">
                 <ul className="nav-links4">
                     <li><a href="/public">Heren</a></li>
                     <li><a href="/public">Dames</a></li>
                 </ul>
                 <div className="button-container4">
-                    <button className="button-primary" type="button">Sign Up</button>
-                    <button className="button-secondary" type="button">Login</button>
-                    <button  className="shopping-cart" type="button" onClick={() => navigate('/cart')}>cart</button>
+                    {isAuth ? (
+                        <button className="navbar-toggler" onClick={logout}>LOG UIT</button>
+                    ) : (
+                        <>
+                            <button className="button-primary" onClick={() => navigate('/signup')} type="button">Sign Up</button>
+                            <button className="button-secondary" onClick={() => navigate('/signin')} type="button">Login</button>
+                        </>
+                    )}
+                    <button className="shopping-cart" type="button" onClick={() => navigate('/cart')}> {items ? `cart (${items.length})` : 'cart (0)'}</button>
                 </div>
             </nav>
+            <div>
+                {isAuth ? (
+                    <p>✅ Gebruiker is ingelogd als <strong>{user?.username ?? "Onbekend"}</strong></p>
+                ) : (
+                    <p>❌ Gebruiker is niet ingelogd</p>
+                )}
+
+                <p>🛒 Aantal items in winkelmandje: {items?.length ?? 0}</p>
+                <p>📦 Product info: {product ?? "Geen product geselecteerd"}</p>
+
+                <button
+                    type="button"
+                    style={{
+                        backgroundColor: isAuth ? "green" : "red",
+                        color: "white",
+                        marginTop: "1rem",
+                        padding: "0.5rem 1rem",
+                        borderRadius: "6px"
+                    }}
+                >
+                    {isAuth ? `Ingelogd als ${user?.username ?? "Onbekend"}` : "Niet ingelogd"}
+                </button>
+            </div>
 
             <main>
                 <Wheelspin
@@ -86,6 +115,7 @@ function Home() {
 }
 
 export default Home;
+
 
 
 

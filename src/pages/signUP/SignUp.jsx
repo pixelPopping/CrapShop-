@@ -1,9 +1,10 @@
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 function SignUp() {
     const navigate = useNavigate();
+
 
     const {
         handleSubmit,
@@ -14,7 +15,7 @@ function SignUp() {
     const handleFormSubmit = async (data) => {
         try {
             const response = await axios.post(
-                '/api/users',
+                `/api/users`,
                 {
                     username: data.username,
                     email: data.email,
