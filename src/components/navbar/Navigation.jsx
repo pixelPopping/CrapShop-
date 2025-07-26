@@ -1,11 +1,17 @@
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
+import {useContext} from "react";
+import {AuthContext} from "../context/AuthContext.jsx";
 
 function Navigation () {
+    const {logout} = useContext(AuthContext);
     return (
         <div className="Navigation">
             <nav className="navbar">
                 <ul className="unordered-list">
                     <li><NavLink to="/" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Home Page</NavLink></li>
+                    <li><NavLink to="/profiel" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Profiel</NavLink></li>
+                    <li><NavLink to="/signin" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>SignIn</NavLink></li>
+                    <li><NavLink to="/signup" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>SignUp</NavLink></li>
                     <li><NavLink to="/Shop" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Shop</NavLink></li>
                     <li><NavLink to="/Jewlery" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Jewlery</NavLink></li>
                     <li><NavLink to="/Menchlotes" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Men Chlotes</NavLink></li>
@@ -13,6 +19,7 @@ function Navigation () {
                     <li><NavLink to="/WomanChlotes" className={({isActive}) => isActive === true ? 'active-link' :'default-link'}>Woman Chlotes</NavLink></li>
                 </ul>
             </nav>
+            <button type='button' className="navbar-toggler" onClick={() => logout()} >LOG UIT</button>
         </div>
     )
 }
