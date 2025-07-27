@@ -5,6 +5,7 @@ import App from './App.jsx'
 import {BrowserRouter} from "react-router-dom";
 import ShoppingCartProvider, {ShoppingCartContext} from "./components/context/ShoppingCartContext";
 import AuthContextProvider, {AuthContext} from  './components/context/AuthContext'
+import SpinProvider, {SpinContext} from "./components/context/SpinContext.jsx";
 
 
 
@@ -13,7 +14,9 @@ createRoot(document.getElementById('root')).render(
 <BrowserRouter>
     <AuthContextProvider>
     <ShoppingCartProvider>
-    <App />
+        <SpinProvider>
+     <App/>
+        </SpinProvider>
     </ShoppingCartProvider>
     </AuthContextProvider>
 </BrowserRouter>
