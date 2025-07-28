@@ -1,8 +1,9 @@
 import { useForm } from "react-hook-form";
 import { useContext, useState } from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import {NavLink, useNavigate, useParams} from "react-router-dom";
 import { AuthContext } from "../../components/context/AuthContext.jsx";
 import axios from "axios";
+import Navigation from "../../components/navbar/Navigation.jsx";
 
 function SignIn() {
     const { login } = useContext(AuthContext);
@@ -51,6 +52,13 @@ function SignIn() {
     };
 
     return (
+        <>
+            <div>
+                <button className="btn btn-primary" onClick={() => navigate('/')}>Home</button>
+            </div>
+            <header>
+                <h1>Inloggen</h1>
+            </header>
         <form className="form" onSubmit={handleSubmit(handleFormSubmit)}>
             <label htmlFor="email-field">
                 Email:
@@ -88,6 +96,7 @@ function SignIn() {
 
             {errorMessage && <p className="error">{errorMessage}</p>}
         </form>
+            </>
     );
 }
 

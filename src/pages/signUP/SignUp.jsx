@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate,} from "react-router-dom";
 
 function SignUp() {
     const navigate = useNavigate();
@@ -39,6 +39,13 @@ function SignUp() {
     };
 
     return (
+        <>
+            <div>
+           <button className="btn btn-primary" onClick={() => navigate('/')}>Home</button>
+            </div>
+        <header>
+            <h1>Registreren</h1>
+        </header>
         <form className="form" onSubmit={handleSubmit(handleFormSubmit)}>
             <label htmlFor="username-field">
                 Username:
@@ -90,6 +97,7 @@ function SignUp() {
 
             <button type="submit">Registreer</button>
         </form>
+            </>
     );
 }
 

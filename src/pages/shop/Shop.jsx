@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import {useContext, useEffect, useState} from "react";
 import './Shop.css';
 import ZoekBalk from '../../components/searchFilter/ZoekBalk.jsx';
 import axios from 'axios';
 import Shopcard from "../../components/shopcard/Shopcard.jsx";
-import { useNavigate } from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import Navigation from "../../components/navbar/Navigation.jsx";
+import {ShoppingCartContext} from "../../components/context/ShoppingCartContext.jsx";
 
 //1 data ophalen met een button en loggen in de console
 //2 als je juiste data heb opslaan in de state
@@ -20,6 +21,7 @@ function Shop() {
     const [category, setCategory] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
     const navigate = useNavigate();
+    const { items } = useContext(ShoppingCartContext);
 
     useEffect(() => {
         setLoading(true);
@@ -62,6 +64,18 @@ function Shop() {
 
     return (
         <>
+            <div>
+                <button onClick={() => navigate('/cart')}>
+                    {items ? `cart (${items.length})` : 'cart (0)'}
+                </button>
+            </div>
+            <nav>
+                <li><NavLink to="/" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Home Page</NavLink></li>
+                <li><NavLink to="/products/jewelery" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Jewelery</NavLink></li>
+                <li><NavLink to="/products/electronics" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Electronics</NavLink></li>
+                <li><NavLink to="/products/men's clothing" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Men</NavLink></li>
+                <li><NavLink to="/products/women's clothing" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Women</NavLink></li>
+            </nav>
             {!loading && !error && filteredItems.length === 0 && <p>Geen zoekresultaten gevonden.</p>}
             {loading && <p>Bezig met laden...</p>}
             {error && <p>Er ging iets mis bij het ophalen van de producten.</p>}

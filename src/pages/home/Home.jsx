@@ -1,10 +1,11 @@
 import { useContext } from "react";
 import "./Home.css";
 import { ShoppingCartContext } from "../../components/context/ShoppingCartContext.jsx";
-import { useNavigate } from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import ClockTime from "../../components/digitaleClock/DigitaleClock.jsx";
 import { AuthContext } from "../../components/context/AuthContext.jsx";
 import { SpinContext } from "../../components/context/SpinContext.jsx";
+import Navigation from "../../components/navbar/Navigation.jsx";
 
 function Home() {
     const navigate = useNavigate();
@@ -25,11 +26,11 @@ function Home() {
                 <h1>CrapShop</h1>
                 <ClockTime />
             </header>
-
             <nav className="navbar-four">
                 <ul className="nav-links4">
-                    <li><a href="/public">Heren</a></li>
-                    <li><a href="/public">Dames</a></li>
+                    <li><NavLink to="/products/men's clothing" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Men</NavLink></li>
+                    <li><NavLink to="/products/women's clothing" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Women</NavLink></li>
+                    <li><NavLink to="/Shop" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Shop</NavLink></li>
                 </ul>
                 <div className="button-container4">
                     {isAuth ? (
@@ -90,6 +91,10 @@ function Home() {
                     {results && !spinning && (
                         <p>You got: <strong>{results}</strong></p>
                     )}
+                </div>
+                <div>
+                    <li><NavLink to="/profiel" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Profiel</NavLink></li>
+                    <li><NavLink to="/recencies" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Recencies</NavLink></li>
                 </div>
             </main>
         </>
