@@ -5,7 +5,7 @@ import { ShoppingCartContext } from "../../components/context/ShoppingCartContex
 import Navigation from "../../components/navbar/Navigation.jsx";
 
 function Recencies() {
-    const { isAuth, user } = useContext(AuthContext);
+    const { isAuth, user, logout } = useContext(AuthContext);
     const { items, product } = useContext(ShoppingCartContext);
     const navigate = useNavigate();
 
@@ -15,41 +15,31 @@ function Recencies() {
 
     return (
         <main>
+            <div>
+                <div className="button-container4">
+                    {isAuth ? (
+                        <button className="navbar-toggler" onClick={logout}>LOG UIT</button>
+                    ) : (
+                        <>
+                            <button onClick={() => navigate('/signup')}>Sign Up</button>
+                            <button onClick={() => navigate('/signin')}>Login</button>
+                        </>
+                    )}
+                    {isAuth && (
+                        <button type="button" className="user-button">
+                            Ingelogd als: {user?.username ?? "Onbekend"}
+                        </button>
+                    )}
+                    <button onClick={() => navigate('/cart')}>
+                        {items ? `cart (${items.length})` : 'cart (0)'}
+                    </button>
+                    <button onClick={() => navigate('/')}>Home</button>
+                </div>
+            </div>
             <header>
                 <h1>Recencies</h1>
             <nav>
                 <Navigation/>
-                <div>
-                    {/* Toon login status */}
-                    {isAuth ? (
-                        <p>✅ Gebruiker is ingelogd als <strong>{user?.username ?? "Onbekend"}</strong></p>
-                    ) : (
-                        <p>❌ Gebruiker is niet ingelogd</p>
-                    )}
-
-                    {/* Shopping cart info */}
-                    <p>🛒 Aantal items in winkelmandje: {items?.length ?? 0}</p>
-                    <p>📦 Product info: {product ?? "Geen product geselecteerd"}</p>
-
-                    {/* Navigatie button */}
-                    <button type="button" onClick={() => navigate("/cart")}>
-                        Ga naar winkelmandje
-                    </button>
-
-                    {/* Status button op basis van login */}
-                    <button
-                        type="button"
-                        style={{
-                            backgroundColor: isAuth ? "green" : "red",
-                            color: "white",
-                            marginTop: "1rem",
-                            padding: "0.5rem 1rem",
-                            borderRadius: "6px"
-                        }}
-                    >
-                        {isAuth ? `Ingelogd als ${user?.username ?? "Onbekend"}` : "Niet ingelogd"}
-                    </button>
-                </div>
             </nav>
             </header>
             </main>

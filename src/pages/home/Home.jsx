@@ -32,35 +32,28 @@ function Home() {
                     <li><NavLink to="/products/women's clothing" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Women</NavLink></li>
                     <li><NavLink to="/Shop" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Shop</NavLink></li>
                 </ul>
-                <div className="button-container4">
-                    {isAuth ? (
-                        <button className="navbar-toggler" onClick={logout}>LOG UIT</button>
-                    ) : (
-                        <>
-                            <button onClick={() => navigate('/signup')}>Sign Up</button>
-                            <button onClick={() => navigate('/signin')}>Login</button>
-                        </>
-                    )}
-                    <button onClick={() => navigate('/cart')}>
-                        {items ? `cart (${items.length})` : 'cart (0)'}
-                    </button>
+                <div>
+                    <div className="button-container4">
+                        {isAuth ? (
+                            <button className="navbar-toggler" onClick={logout}>LOG UIT</button>
+                        ) : (
+                            <>
+                                <button onClick={() => navigate('/signup')}>Sign Up</button>
+                                <button onClick={() => navigate('/signin')}>Login</button>
+                            </>
+                        )}
+                        {isAuth && (
+                            <button type="button" className="user-button">
+                                Ingelogd als: {user?.username ?? "Onbekend"}
+                            </button>
+                        )}
+                        <button onClick={() => navigate('/cart')}>
+                            {items ? `cart (${items.length})` : 'cart (0)'}
+                        </button>
+                    </div>
                 </div>
             </nav>
-
-            <div>
-                <p>{isAuth
-                    ? <>✅ Gebruiker is ingelogd als <strong>{user?.username ?? "Onbekend"}</strong></>
-                    : <>❌ Gebruiker is niet ingelogd</>}
-                </p>
-                <p>🛒 Aantal items in winkelmandje: {items?.length ?? 0}</p>
-                <p>📦 Product info: {product ?? "Geen product geselecteerd"}</p>
-            </div>
-
             <main>
-                <button onClick={handleSpin} disabled={spinning || spin <= 0}>
-                    {spinning ? "Spinning..." : `Spin (${spin} left)`}
-                </button>
-
                 <div className="animated-box">
                     <div className="mainbox">
                         <div
@@ -83,11 +76,12 @@ function Home() {
                             <span className="font span10"><h5>30% korting</h5></span>
                         </div>
                     </div>
-
+                    <button onClick={handleSpin} disabled={spinning || spin <= 0}>
+                        {spinning ? "Spinning..." : `Spin (${spin} left)`}
+                    </button>
                     <button onClick={() => setSpin(3)} disabled={spinning}>
                         Reset Spins
                     </button>
-
                     {results && !spinning && (
                         <p>You got: <strong>{results}</strong></p>
                     )}

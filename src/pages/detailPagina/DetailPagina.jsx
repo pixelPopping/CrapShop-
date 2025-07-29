@@ -71,7 +71,7 @@ function DetailPagina() {
                                     price: product.price,
                                 })
                             }
-                            />
+                        />
                         <ShoppingCart
                             product={product}
                             resetButton={() => reSet()}
@@ -86,5 +86,10 @@ function DetailPagina() {
 }
 
 export default DetailPagina;
+
+
+
+
+
 
 

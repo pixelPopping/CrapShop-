@@ -55,6 +55,26 @@ export const ShoppingCartProvider = ({ children }) => {
         return cartItems.length;
     }
 
+    function increaseQuantity(id) {
+        setCartItems(prev =>
+            prev.map(item =>
+                item.id === id ? { ...item, quantity: (item.quantity || 1) + 1 } : item
+            )
+        );
+    }
+
+    function decreaseQuantity(id) {
+        setCartItems(prev =>
+            prev
+                .map(item =>
+                    item.id === id
+                        ? { ...item, quantity: (item.quantity || 1) - 1 }
+                        : item
+                )
+                .filter(item => item.quantity > 0)
+        );
+    }
+
     const data = {
         product,
         items: cartItems,
@@ -62,7 +82,10 @@ export const ShoppingCartProvider = ({ children }) => {
         reSet: reset,
         price: totalPrice,
         lengthcart: amountCart,
+        increaseQuantity,
+        decreaseQuantity,
     };
+
 
     return (
         <ShoppingCartContext.Provider value={data}>
@@ -72,5 +95,9 @@ export const ShoppingCartProvider = ({ children }) => {
 };
 
 export default ShoppingCartProvider;
+
+
+
+
 
 
