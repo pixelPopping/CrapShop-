@@ -57,7 +57,8 @@ function SignIn() {
                 <button className="btn btn-primary" onClick={() => navigate('/')}>Home</button>
             </div>
             <header>
-                <h1>Inloggen</h1>
+                <h1>CrapShop</h1>
+                <h2>Inloggen</h2>
             </header>
         <form className="form" onSubmit={handleSubmit(handleFormSubmit)}>
             <label htmlFor="email-field">
