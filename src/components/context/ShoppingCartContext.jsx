@@ -51,19 +51,24 @@ export const ShoppingCartProvider = ({ children }) => {
     }, [cartItems]);
 
     function cart(newItem) {
+        const quantityToAdd = parseInt(newItem.quantity) || 1;
+
         setCartItems(prevItems => {
-            const existingItem = prevItems.find(item => item.id === newItem.id);
-            if (existingItem) {
+            const existing = prevItems.find(item => item.id === newItem.id);
+            if (existing) {
                 return prevItems.map(item =>
                     item.id === newItem.id
-                        ? { ...item, quantity: item.quantity + (newItem.quantity || 1) }
+                        ? { ...item, quantity: (item.quantity || 0) + quantityToAdd }
                         : item
                 );
             } else {
-                return [...prevItems, { ...newItem, quantity: newItem.quantity || 1 }];
+                return [...prevItems, { ...newItem, quantity: quantityToAdd }];
             }
         });
     }
+
+
+
 
     function reset() {
         setCartItems([]);
