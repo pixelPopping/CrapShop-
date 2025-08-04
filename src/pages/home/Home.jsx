@@ -87,9 +87,40 @@ function Home() {
                     )}
                 </div>
                 <div>
+                    <ul>
                     <li><NavLink to="/profiel" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Profiel</NavLink></li>
                     <li><NavLink to="/recencies" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Recencies</NavLink></li>
+                    </ul>
                 </div>
+                <section>
+                <img
+                    src="/assets/icons/image13.png"
+                    alt="LinkedIn icon"
+                    onClick={() =>
+                        window.open(
+                            "https://nl.linkedin.com/in/yorian-fransz-58111527b?trk=people-guest_people_search-card&original_referer=https%3A%2F%2Fwww.linkedin.com%2F",
+                            "_blank"
+                        )
+                    }
+                    style={{ cursor: "pointer" }}
+                />
+                    <img
+                        src="/assets/icons/image15.png"
+                        alt="GitHub icon"
+                        onClick={() =>
+                            window.open("https://github.com/PixelPopping", "_blank")
+                        }
+                        style={{ cursor: "pointer" }}
+                    />
+                    <img
+                        src="/assets/icons/image12.png"
+                        alt="Mail icon"
+                        onClick={() =>
+                            window.open("mailto:sydney-cook@outlook.com", "_blank")
+                        }
+                        style={{ cursor: "pointer" }}
+                    />
+                </section>
             </main>
         </>
     );
