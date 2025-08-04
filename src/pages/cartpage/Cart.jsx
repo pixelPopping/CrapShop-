@@ -1,31 +1,21 @@
-
-import {useContext, useEffect, useState} from "react";
-import {ShoppingCartContext} from "../../components/context/ShoppingCartContext.jsx";
-import axios from "axios";
-import {useNavigate, useParams} from "react-router-dom";
-import ShoppingCart from "../../components/shoppingCart/ShoppingCart.jsx";
-
-// stap1 cart component maken
-// stap2 abonneren op context
-// stap3 state toevoegen voor het opslaan van de items in de cart
-// stap4 async await functie schrijven die de request van cart 1 ophaalt die aangemaakt is in de context
-// stap5 useEffect toevoegen voor de mounth
-// stap6 mappen over de lengte van de cart
+import { useContext } from "react";
+import { ShoppingCartContext } from "../../components/context/ShoppingCartContext.jsx";
+import DecrementButton from "../../components/deCrementButton/DecrementButton.jsx";
+import InCrementButton from "../../components/counterbutton/InCrementButton.jsx";
 
 function Cart() {
     const {
         items,
         price,
-        lengthcart,
         reSet,
-        increaseQuantity,
-        decreaseQuantity,
         removeItem
     } = useContext(ShoppingCartContext);
 
     return (
         <div>
-            <h2>🛒 Winkelwagen</h2>
+            <h2>
+                🛒 Winkelwagen – {items.length > 0 ? items.map(item => item.title).join(", ") : "Leeg"}
+            </h2>
 
             {items.length === 0 ? (
                 <p>Je winkelwagen is leeg.</p>
@@ -33,11 +23,22 @@ function Cart() {
                 <>
                     {items.map((item) => (
                         <div key={item.id} style={{ marginBottom: "1rem" }}>
+                            <img
+                                src={item.image}
+                                alt={item.title}
+                                style={{
+                                    width: "80px",
+                                    height: "80px",
+                                    objectFit: "contain",
+                                    marginBottom: "8px"
+                                }}
+                            />
                             <p>
-                                {item.title} – €{item.price} × {item.quantity} = €{(item.price * item.quantity).toFixed(2)}
+                                {item.title} – €{item.price} × {item.quantity} = €
+                                {(item.price * item.quantity).toFixed(2)}
                             </p>
-                            <button onClick={() => decreaseQuantity(item.id)}>-</button>
-                            <button onClick={() => increaseQuantity(item.id)}>+</button>
+                            <DecrementButton id={item.id} />
+                            <InCrementButton id={item.id} />
                             <button onClick={() => removeItem(item.id)}>Verwijder</button>
                         </div>
                     ))}
@@ -47,10 +48,13 @@ function Cart() {
                 </>
             )}
 
-            <a href="/">Back to store</a>
+            <a href="/shop">Back to store</a>
         </div>
     );
 }
 
 export default Cart;
+
+
+
 
