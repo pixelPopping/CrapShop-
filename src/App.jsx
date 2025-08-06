@@ -9,8 +9,6 @@ import './components/ui/wheelspin.css';
 import Home from './pages/home/Home.jsx';
 import Shop from './pages/shop/Shop.jsx';
 import DetailPagina from './pages/detailPagina/DetailPagina.jsx';
-import Navigation from './components/navbar/Navigation';
-import ShoppingCartContext from "./components/context/ShoppingCartContext.jsx";
 import Cart from './pages/cartpage/Cart.jsx';
 import Profiel from "./pages/profiel/Profiel.jsx";
 import SignUp from "./pages/signUP/SignUp.jsx";
@@ -19,6 +17,7 @@ import {useContext} from "react";
 import {AuthContext} from "./components/context/AuthContext.jsx";
 import Recencies from "./pages/recencies/Recencies.jsx";
 import CategoryPage from "./pages/categoryPage/CategoryPage.jsx";
+import Favorite from "./pages/favorietenpage/Favorite.jsx";
 
 
 
@@ -37,6 +36,7 @@ function App () {
                 <Route path="/products/:category" element={<CategoryPage />} />
                 <Route path="/cart" element={isAuth ? <Cart/> : <Navigate to="/"/>} />
                 <Route path="/recencies" element={<Recencies/>} />
+                <Route path="/favorietenpage" element={<Favorite/>} />
             </Routes>
         </>
     )
