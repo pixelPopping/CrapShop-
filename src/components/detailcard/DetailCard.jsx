@@ -1,26 +1,107 @@
+import { useState, useContext } from "react";
+import { ShoppingCartContext } from "../context/ShoppingCartContext";
+import { FavoriteContext } from "../context/FavoriteContext";
+import Dropdown from "../../components/dropdown/Dropdown";
 
-import { useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
-import { ShoppingCartContext } from '../context/ShoppingCartContext.jsx';
+function DetailCard({ id, label, text, image, price }) {
+    const { cart, items: cartItems } = useContext(ShoppingCartContext);
+    const {  toggleFavorite, items: favorieten } = useContext(FavoriteContext);
 
-function DetailCard({ id, label, text, image, cart, price }) {
-    const navigate = useNavigate();
+    const [selectedQuantity, setSelectedQuantity] = useState(1);
+
+    const itemInCart = cartItems.find(item => item.id === id);
+    const quantityInCart = itemInCart?.quantity || 0;
+
+    const isFavoriet = favorieten.some(item => item.id === id);
 
     return (
-        <article className="card">
-            <h3>{label} {id}</h3>
+        <div className="detail-card">
+            <h2>{label}</h2>
             <img
                 src={image}
                 alt={label}
                 style={{ width: '200px', objectFit: 'contain' }}
             />
             <p>{text}</p>
-            <p>{price}</p>
-            <button onClick={() => cart({ id, label, text, image })}>add to cart</button>
+            <p>Prijs: €{price}</p>
 
-        </article>
+            <Dropdown
+                value={selectedQuantity}
+                onChange={setSelectedQuantity}
+            />
+
+            <button
+                onClick={() =>
+                    cart({
+                        id,
+                        label,
+                        text,
+                        image,
+                        price,
+                        quantity: selectedQuantity
+                    })
+                }
+            >
+                Voeg toe
+            </button>
+
+            <button
+                onClick={() =>
+                    toggleFavorite({
+                        id,
+                        label,
+                        text,
+                        image,
+                        price,
+                        quantity: selectedQuantity
+                    })
+                }
+            >
+                {isFavoriet ? "💖 Verwijder uit favorieten" : "🤍 Voeg toe aan favorieten"}
+            </button>
+
+            <p>Aantal in winkelwagen: {quantityInCart}</p>
+        </div>
     );
 }
 
-
 export default DetailCard;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

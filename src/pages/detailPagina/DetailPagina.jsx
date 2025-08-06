@@ -32,7 +32,7 @@ function DetailPagina() {
         ProductDetailsId();
     }, [id]);
 
-    function navigateToShop(){
+    function navigateToShop() {
         navigate("/shop");
     }
 
@@ -71,14 +71,14 @@ function DetailPagina() {
                                     price: product.price,
                                 })
                             }
-                            />
+                        />
                         <ShoppingCart
                             product={product}
                             resetButton={() => reSet()}
                             cartItems={items}
                         />
                     </div>
-                    <button onClick={() => navigateToShop()}>Back to store</button>
+                    <button onClick={navigateToShop}>Back to store</button>
                 </div>
             )}
         </>
@@ -86,5 +86,19 @@ function DetailPagina() {
 }
 
 export default DetailPagina;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

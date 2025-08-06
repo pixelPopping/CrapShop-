@@ -12,7 +12,6 @@ function Shopcard({ id, label, text, image, onClick }) {
         <article className="card" onClick={onClick}>
             <h3>{label} {id}</h3>
             <img src={image} alt={label} />
-            <p>{text}</p>
         </article>
     );
 }
