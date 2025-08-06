@@ -7,48 +7,30 @@ export const ShoppingCartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState([]);
 
     useEffect(() => {
-        const savedCart = localStorage.getItem("cartItems");
+        async function getCartData() {
+            try {
+                const postCart = await axios.post("https://fakestoreapi.com/carts");
+                const productIds = postCart.data.map(item => item.id);
 
-        if (savedCart) {
-            const parsed = JSON.parse(savedCart);
-            const unique = parsed.reduce((acc, item) => {
-                const existing = acc.find(i => i.id === item.id);
-                if (existing) {
-                    existing.quantity += item.quantity;
-                } else {
-                    acc.push({ ...item });
-                }
-                return acc;
-            }, []);
-            setCartItems(unique);
-        } else {
-            async function getCartData() {
-                try {
-                    const postCart = await axios.post('https://fakestoreapi.com/carts');
-                    const productIds = postCart.data.map(item => item.id);
+                const fetchProducts = await Promise.all(
+                    productIds.map(id =>
+                        axios.get(`https://fakestoreapi.com/products/${id}`)
+                    )
+                );
 
-                    const fetchProducts = await Promise.all(
-                        productIds.map(id => axios.get(`https://fakestoreapi.com/products/${id}`))
-                    );
+                const enrichedItems = fetchProducts.map(res => ({
+                    ...res.data,
+                    quantity: 1,
+                }));
 
-                    const enrichedItems = fetchProducts.map(res => ({
-                        ...res.data,
-                        quantity: 1
-                    }));
-
-                    setCartItems(enrichedItems);
-                } catch (e) {
-                    console.error(e);
-                }
+                setCartItems(enrichedItems);
+            } catch (e) {
+                console.error("Fout bij ophalen van cart data:", e);
             }
-
-            getCartData();
         }
-    }, []);
 
-    useEffect(() => {
-        localStorage.setItem("cartItems", JSON.stringify(cartItems));
-    }, [cartItems]);
+        getCartData();
+    }, []);
 
     function cart(newItem) {
         const quantityToAdd = parseInt(newItem.quantity) || 1;
@@ -67,16 +49,16 @@ export const ShoppingCartProvider = ({ children }) => {
         });
     }
 
-
-
-
     function reset() {
         setCartItems([]);
     }
 
     function totalPrice() {
-        return cartItems.reduce((totaal, item) =>
-            totaal + (parseFloat(item.price) || 0) * (item.quantity || 1), 0);
+        return cartItems.reduce(
+            (total, item) =>
+                total + (parseFloat(item.price) || 0) * (item.quantity || 1),
+            0
+        );
     }
 
     function amountCart() {
@@ -135,6 +117,7 @@ export const ShoppingCartProvider = ({ children }) => {
 };
 
 export default ShoppingCartProvider;
+
 
 
 
