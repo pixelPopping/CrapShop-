@@ -5,7 +5,7 @@ import InCrementButton from "../../components/counterbutton/InCrementButton.jsx"
 
 function Cart() {
     const {
-        items,
+        items = [],
         price,
         reSet,
         removeItem
