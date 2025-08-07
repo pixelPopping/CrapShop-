@@ -1,11 +1,11 @@
-import { useState, useContext } from "react";
-import { ShoppingCartContext } from "../context/ShoppingCartContext";
-import { FavoriteContext } from "../context/FavoriteContext";
-import Dropdown from "../../components/dropdown/Dropdown";
+import { useContext, useState } from "react";
+import { ShoppingCartContext } from "../context/ShoppingCartContext.jsx";
+import { FavoriteContext } from "../context/FavoriteContext.jsx";
+import DropDown from "../dropdown/DropDown.jsx";
 
 function DetailCard({ id, label, text, image, price }) {
     const { cart, items: cartItems } = useContext(ShoppingCartContext);
-    const {  toggleFavorite, items: favorieten } = useContext(FavoriteContext);
+    const { toggleFavorite, items: favorieten } = useContext(FavoriteContext);
 
     const [selectedQuantity, setSelectedQuantity] = useState(1);
 
@@ -20,12 +20,13 @@ function DetailCard({ id, label, text, image, price }) {
             <img
                 src={image}
                 alt={label}
-                style={{ width: '200px', objectFit: 'contain' }}
+                style={{ width: "200px", height: "200px", objectFit: "contain", borderRadius: "8px" }}
             />
-            <p>{text}</p>
-            <p>Prijs: €{price}</p>
 
-            <Dropdown
+            <p style={{ fontStyle: "italic" }}>{text}</p>
+            <p><strong>Prijs:</strong> €{price}</p>
+
+            <DropDown
                 value={selectedQuantity}
                 onChange={setSelectedQuantity}
             />
@@ -41,8 +42,9 @@ function DetailCard({ id, label, text, image, price }) {
                         quantity: selectedQuantity
                     })
                 }
+                style={{ marginTop: "10px" }}
             >
-                Voeg toe
+                🛒 Voeg toe
             </button>
 
             <button
@@ -56,16 +58,20 @@ function DetailCard({ id, label, text, image, price }) {
                         quantity: selectedQuantity
                     })
                 }
+                style={{ marginTop: "10px" }}
             >
                 {isFavoriet ? "💖 Verwijder uit favorieten" : "🤍 Voeg toe aan favorieten"}
             </button>
 
-            <p>Aantal in winkelwagen: {quantityInCart}</p>
+            <p style={{ marginTop: "10px" }}>
+                Aantal in winkelwagen: <strong>{quantityInCart}</strong>
+            </p>
         </div>
     );
 }
 
 export default DetailCard;
+
 
 
 

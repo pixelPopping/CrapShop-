@@ -1,7 +1,8 @@
-import { useFavorites } from '../../components/context/FavoriteContext.jsx';
+import { FavoriteContext } from '../../components/context/FavoriteContext.jsx';
+import {useContext} from "react";
 
 const FavorietenPage = () => {
-    const { items, isReady } = useFavorites();
+    const { items, isReady } = useContext(FavoriteContext);
 
     if (!isReady) {
         return <p>Favorieten worden geladen...</p>;
@@ -49,6 +50,14 @@ const FavorietenPage = () => {
 };
 
 export default FavorietenPage;
+
+
+
+
+
+
+
+
 
 
 

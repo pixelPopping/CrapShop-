@@ -5,6 +5,7 @@ import ZoekBalk from "../../components/searchFilter/ZoekBalk.jsx";
 import DetailCard from "../../components/detailcard/DetailCard.jsx";
 import ShoppingCart from "../../components/shoppingCart/ShoppingCart.jsx";
 import { ShoppingCartContext } from "../../components/context/ShoppingCartContext.jsx";
+import Shopcard from "../../components/shopcard/Shopcard.jsx";
 
 function CategoryPage() {
     const { category } = useParams();
@@ -43,14 +44,9 @@ function CategoryPage() {
         fetchCategoryProducts();
     }, [category]);
 
-
     const filteredProducts = products.filter(product =>
         product.title.toLowerCase().includes(query.toLowerCase())
     );
-
-    function navigateToShop() {
-        navigate("/shop");
-    }
 
     return (
         <>
@@ -75,23 +71,13 @@ function CategoryPage() {
                         inputCallback={setQuery}
                     />
                     <div className="inner-container">
-                        {filteredProducts.map(product => (
-                            <DetailCard
-                                key={product.id}
-                                id={product.id}
-                                label={product.title}
-                                text={product.description}
-                                price={product.price}
-                                image={product.image}
-                                cart={() =>
-                                    cart({
-                                        id: product.id,
-                                        title: product.title,
-                                        description: product.description,
-                                        image: product.image,
-                                        price: product.price,
-                                    })
-                                }
+                        {filteredProducts.map((item) => (
+                            <Shopcard
+                                key={item.id}
+                                onClick={() => navigate(`/detailpagina/${item.id}`)}
+                                label={item.title}
+                                text={item.description}
+                                image={item.image}
                             />
                         ))}
                     </div>
@@ -100,7 +86,7 @@ function CategoryPage() {
                         resetButton={() => reSet()}
                         cartItems={items}
                     />
-                    <button onClick={navigateToShop}>Back to store</button>
+                    <button onClick={() => navigate("/shop")}>Back to store</button>
                 </div>
             )}
         </>
@@ -108,5 +94,11 @@ function CategoryPage() {
 }
 
 export default CategoryPage;
+
+
+
+
+
+
 
 

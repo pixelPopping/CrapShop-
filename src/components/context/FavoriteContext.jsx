@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 
-export const FavoriteContext = createContext();
+export const FavoriteContext = createContext({});
 export const useFavorites = () => useContext(FavoriteContext);
 
 const getStorageKey = (userId) => `favorites_${userId}`;
@@ -57,6 +57,25 @@ const FavoriteProvider = ({ children, user }) => {
 };
 
 export default FavoriteProvider;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
