@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useRef, useState } from 'react';
 export const FavoriteContext = createContext({});
 export const useFavorites = () => useContext(FavoriteContext);
 
-const getStorageKey = (userId) => `favorites_${userId}`;
+const getStorageKey = (userId) => `favorites_${userId || 'guest'}`;
 
 const FavoriteProvider = ({ children, user }) => {
     const [items, setItems] = useState([]);
@@ -11,12 +11,8 @@ const FavoriteProvider = ({ children, user }) => {
     const hasInitialized = useRef(false);
 
     useEffect(() => {
-        if (!user?.id) {
-            setIsReady(true); // fallback als er geen user is
-            return;
-        }
-
-        const saved = localStorage.getItem(getStorageKey(user.id));
+        const key = getStorageKey(user?.id);
+        const saved = localStorage.getItem(key);
         if (saved) {
             try {
                 const parsed = JSON.parse(saved);
@@ -33,13 +29,13 @@ const FavoriteProvider = ({ children, user }) => {
     }, [user?.id]);
 
     useEffect(() => {
-        if (!user?.id || !hasInitialized.current) return;
-        localStorage.setItem(getStorageKey(user.id), JSON.stringify(items));
+        if (!hasInitialized.current) return;
+        const key = getStorageKey(user?.id);
+        localStorage.setItem(key, JSON.stringify(items));
     }, [items, user?.id]);
 
     const addFavorite = (item) => setItems((prev) => [...prev, item]);
     const removeFavorite = (id) => setItems((prev) => prev.filter((item) => item.id !== id));
-
     const toggleFavorite = (item) => {
         setItems((prev) => {
             const exists = prev.some((fav) => fav.id === item.id);
@@ -48,15 +44,14 @@ const FavoriteProvider = ({ children, user }) => {
     };
 
     return (
-        <FavoriteContext.Provider
-            value={{ items, addFavorite, removeFavorite, toggleFavorite, isReady }}
-        >
+        <FavoriteContext.Provider value={{ items, addFavorite, removeFavorite, toggleFavorite, isReady }}>
             {children}
         </FavoriteContext.Provider>
     );
 };
 
 export default FavoriteProvider;
+
 
 
 
