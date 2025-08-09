@@ -33,7 +33,7 @@ function App () {
                 <Route path="/signin" element={<SignIn/>}/>
                 <Route path="/Shop" element={<Shop/>} />
                 <Route path="/detailpagina/:id" element={<DetailPagina/>}/>
-                <Route path="/products/:category" element={<CategoryPage />} />
+                <Route path="/products/:category" element={<CategoryPage/>}/>
                 <Route path="/cart" element={isAuth ? <Cart/> : <Navigate to="/"/>} />
                 <Route path="/recencies" element={<Recencies/>} />
                 <Route path="/favorietenpage" element={<Favorite/>} />
