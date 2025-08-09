@@ -116,6 +116,7 @@ function Shop() {
                                 label={item.title}
                                 text={item.description}
                                 image={item.image}
+                                rating={item.rating.rate}
                             />
                         ))}
                     </div>
