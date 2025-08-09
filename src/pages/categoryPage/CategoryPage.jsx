@@ -1,99 +1,59 @@
-import { useParams, useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
-import axios from "axios";
-import ZoekBalk from "../../components/searchFilter/ZoekBalk.jsx";
-import DetailCard from "../../components/detailcard/DetailCard.jsx";
-import ShoppingCart from "../../components/shoppingCart/ShoppingCart.jsx";
-import { ShoppingCartContext } from "../../components/context/ShoppingCartContext.jsx";
-import Shopcard from "../../components/shopcard/Shopcard.jsx";
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-function CategoryPage() {
+const CategoryPage = () => {
     const { category } = useParams();
     const navigate = useNavigate();
-    const [query, setQuery] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(false);
     const [products, setProducts] = useState([]);
-    const { cart, reSet, items } = useContext(ShoppingCartContext);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        async function fetchCategoryProducts() {
-            setLoading(true);
-            setError(false);
-
+        const fetchProducts = async () => {
             try {
-                const response = await axios.get(
-                    `https://fakestoreapi.com/products/category/${category}`
-                );
-
-                if (response.data.length === 0) {
-                    setError(true);
-                    setProducts([]);
-                } else {
-                    setProducts(response.data);
-                }
-            } catch (err) {
-                console.error(err);
-                setError(true);
-                setProducts([]);
+                const res = await axios.get('https://fakestoreapi.com/products');
+                const filtered = res.data.filter(item => item.category === category);
+                setProducts(filtered);
+            } catch (error) {
+                console.error('Fout bij ophalen producten:', error);
             } finally {
                 setLoading(false);
             }
-        }
+        };
 
-        fetchCategoryProducts();
+        fetchProducts();
     }, [category]);
 
-    const filteredProducts = products.filter(product =>
-        product.title.toLowerCase().includes(query.toLowerCase())
-    );
+    if (loading) return <p>Producten laden...</p>;
 
     return (
-        <>
-            <div>
-                <button onClick={() => navigate('/cart')}>
-                    {items ? `cart (${items.length})` : 'cart (0)'}
-                </button>
-                <button className="shopping-cart" type="button" onClick={() => navigate("/")}>
-                    Home
-                </button>
-            </div>
-
-            {loading && <p>Bezig met laden...</p>}
-            {error && <p>Er ging iets mis bij het ophalen van de producten.</p>}
-
-            {!loading && !error && (
-                <div className="outer-container">
-                    <h1>{category}</h1>
-                    <ZoekBalk
-                        type="tekst"
-                        inputValue={query}
-                        inputCallback={setQuery}
-                    />
-                    <div className="inner-container">
-                        {filteredProducts.map((item) => (
-                            <Shopcard
-                                key={item.id}
-                                onClick={() => navigate(`/detailpagina/${item.id}`)}
-                                label={item.title}
-                                text={item.description}
-                                image={item.image}
-                            />
-                        ))}
+        <div className="category-page">
+            <h1>{category}</h1>
+            <div className="product-grid">
+                {products.map(product => (
+                    <div key={product.id} className="product-card">
+                        <img
+                            src={product.image}
+                            alt={product.title}
+                            className="product-image"
+                            onClick={() => navigate(`/detailpagina/${product.id}`)}
+                            style={{ cursor: 'pointer' }}
+                        />
+                        <h3>{product.title}</h3>
+                        <p><strong>€{product.price}</strong></p>
+                        <p>Rating: {product.rating.rate} ⭐</p>
                     </div>
-                    <ShoppingCart
-                        product={products}
-                        resetButton={() => reSet()}
-                        cartItems={items}
-                    />
-                    <button onClick={() => navigate("/shop")}>Back to store</button>
-                </div>
-            )}
-        </>
+                ))}
+            </div>
+        </div>
     );
-}
+};
 
 export default CategoryPage;
+
+
+
+
 
 
 
