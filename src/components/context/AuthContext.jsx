@@ -1,34 +1,22 @@
-import React, {createContext, useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {jwtDecode} from "jwt-decode";
-
+import React, { createContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
 export const AuthContext = createContext({});
 
-function AuthContextProvider({children}) {
+function AuthContextProvider({ children }) {
     const navigate = useNavigate();
-    const [isAuth, setAuthState] = useState({
-
+    const [authState, setAuthState] = useState({
         isAuth: false,
         user: null,
         status: 'pending',
     });
 
-    const data = {
-        isAuth: isAuth.isAuth,
-        user: isAuth.user,
-        login: logIn,
-        logout: logOut,
-    }
-
     useEffect(() => {
         const token = localStorage.getItem('token');
-
         if (token) {
             try {
                 const decoded = jwtDecode(token);
-                console.log(decoded);
-
                 setAuthState({
                     isAuth: true,
                     user: {
@@ -40,29 +28,17 @@ function AuthContextProvider({children}) {
                 });
             } catch (error) {
                 console.error("Ongeldige token:", error);
-                setAuthState({
-                    isAuth: false,
-                    user: null,
-                    status: 'done',
-                });
+                setAuthState({ isAuth: false, user: null, status: 'done' });
             }
         } else {
-            setAuthState({
-                isAuth: false,
-                user: null,
-                status: 'done',
-            });
+            setAuthState({ isAuth: false, user: null, status: 'done' });
         }
     }, []);
 
-
-
     function logIn(token) {
-        try{
+        try {
             localStorage.setItem('token', token);
             const decoded = jwtDecode(token);
-            console.log(decoded);
-
             setAuthState({
                 isAuth: true,
                 user: {
@@ -71,37 +47,34 @@ function AuthContextProvider({children}) {
                     roles: decoded.roles || [decoded.role],
                     projectId: decoded.projectId,
                 },
-                status: "done",
+                status: 'done',
             });
-
-
-            console.log('gebruiker is ingelogd')
-            navigate('/profiel')
+            navigate('/profiel');
         } catch (error) {
-            console.error("Ongeldige token:", error);}
+            console.error("Ongeldige token:", error);
+        }
     }
 
     function logOut() {
         localStorage.removeItem('token');
-        setAuthState({
-            isAuth: false,
-            user: null,
-            status: 'done',
-        });
-        console.log('gebruiker is uitgelogd')
-        navigate('/')
+        setAuthState({ isAuth: false, user: null, status: 'done' });
+        navigate('/');
     }
 
-
+    const contextData = {
+        isAuth: authState.isAuth,
+        user: authState.user,
+        isLoggedOut: !authState.isAuth,
+        login: logIn,
+        logout: logOut,
+    };
 
     return (
-        <AuthContext.Provider value={data}>
-            {isAuth.status === 'pending'
-                ? <p>Loading...</p>
-                : children
-            }
+        <AuthContext.Provider value={contextData}>
+            {authState.status === 'pending' ? <p>Loading...</p> : children}
         </AuthContext.Provider>
-    )
+    );
 }
 
 export default AuthContextProvider;
+

@@ -6,11 +6,14 @@ import ClockTime from "../../components/digitaleClock/DigitaleClock.jsx";
 import { AuthContext } from "../../components/context/AuthContext.jsx";
 import { SpinContext } from "../../components/context/SpinContext.jsx";
 import Navigation from "../../components/navbar/Navigation.jsx";
+import {FavoriteContext} from "../../components/context/FavoriteContext.jsx";
 
 function Home() {
     const navigate = useNavigate();
     const { isAuth, user, logout } = useContext(AuthContext);
-    const { items, product } = useContext(ShoppingCartContext);
+    const { items: cartItems, product } = useContext(ShoppingCartContext);
+    const { items: favoriteItems } = useContext(FavoriteContext);
+
     const {
         spin,
         handleSpin,
@@ -19,6 +22,14 @@ function Home() {
         results,
         setSpin
     } = useContext(SpinContext);
+
+    const { resetFavorites } = useContext(FavoriteContext);
+
+    const handleLogout = () => {
+        logout();
+        resetFavorites();
+    };
+
 
     return (
         <>
@@ -35,7 +46,7 @@ function Home() {
                 <div>
                     <div className="button-container4">
                         {isAuth ? (
-                            <button className="navbar-toggler" onClick={logout}>LOG UIT</button>
+                            <button className="navbar-toggler" onClick={handleLogout}>LOG UIT</button>
                         ) : (
                             <>
                                 <button onClick={() => navigate('/signup')}>Sign Up</button>
@@ -48,7 +59,11 @@ function Home() {
                             </button>
                         )}
                         <button onClick={() => navigate('/cart')}>
-                            {items ? `cart (${items.length})` : 'cart (0)'}
+                            Winkelwagen ({cartItems.length})
+                        </button>
+
+                        <button onClick={() => navigate('/favorietenpage')}>
+                            Favorieten ({new Set(favoriteItems.map(item => item.id)).size})
                         </button>
                     </div>
                 </div>

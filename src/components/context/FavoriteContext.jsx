@@ -9,9 +9,18 @@ const FavoriteProvider = ({ children, user }) => {
     const [items, setItems] = useState([]);
     const [isReady, setIsReady] = useState(false);
     const hasInitialized = useRef(false);
+    const isLoggedOut = !user?.id;
 
     useEffect(() => {
         const key = getStorageKey(user?.id);
+
+        if (isLoggedOut) {
+            localStorage.removeItem(key);
+            setItems([]);
+            setIsReady(true);
+            return;
+        }
+
         const saved = localStorage.getItem(key);
         if (saved) {
             try {
@@ -29,7 +38,7 @@ const FavoriteProvider = ({ children, user }) => {
     }, [user?.id]);
 
     useEffect(() => {
-        if (!hasInitialized.current) return;
+        if (!hasInitialized.current || isLoggedOut) return;
         const key = getStorageKey(user?.id);
         localStorage.setItem(key, JSON.stringify(items));
     }, [items, user?.id]);
@@ -43,39 +52,29 @@ const FavoriteProvider = ({ children, user }) => {
         });
     };
 
+    const resetFavorites = () => {
+        const key = getStorageKey(user?.id);
+        localStorage.removeItem(key);
+        setItems([]);
+    };
+
     return (
-        <FavoriteContext.Provider value={{ items, addFavorite, removeFavorite, toggleFavorite, isReady }}>
+        <FavoriteContext.Provider
+            value={{
+                items,
+                addFavorite,
+                removeFavorite,
+                toggleFavorite,
+                resetFavorites,
+                isReady,
+            }}
+        >
             {children}
         </FavoriteContext.Provider>
     );
 };
 
 export default FavoriteProvider;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
