@@ -21,3 +21,37 @@
     list-style: none;
 
 }
+
+
+.search-filter {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.category-dropdown {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.category-select {
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #aaa;
+    font-size: 1rem;
+}
+
+.category-links a {
+    display: block;
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.category-links a:hover {
+    color: #007bff;
+}
