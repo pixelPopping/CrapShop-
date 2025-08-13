@@ -12,60 +12,52 @@ export const SpinProvider = ({ children }) => {
     const navigate = useNavigate();
     const [results, setResults] = useState("");
     const timeoutRef = useRef(null);
-    const hasInitialized = useRef(false);
     const [spin, setSpin] = useState(3);
     const [spinning, setSpinning] = useState(false);
     const [rotation, setRotation] = useState(0);
-    const getStorageKey = (userId) => `spinsLeft_${userId}`;
 
-   
+    const getStorageKey = (userId) => `spinsLeft_${userId || "guest"}`;
+
+
     useEffect(() => {
         return () => clearTimeout(timeoutRef.current);
     }, []);
 
-
     useEffect(() => {
-        if (!user?.id) return;
+        const key = getStorageKey(user?.id);
+        const savedSpins = localStorage.getItem(key);
 
-        const savedSpins = localStorage.getItem(getStorageKey(user.id));
         if (savedSpins !== null && !isNaN(savedSpins)) {
             setSpin(Number(savedSpins));
         } else {
-            setSpin(3);
-            localStorage.setItem(getStorageKey(user.id), "3");
+            const defaultSpins = 3;
+            setSpin(defaultSpins);
+            localStorage.setItem(key, defaultSpins.toString());
         }
-
-        hasInitialized.current = true;
     }, [user?.id]);
 
 
     useEffect(() => {
-        if (user?.id && hasInitialized.current) {
-            localStorage.setItem(getStorageKey(user.id), spin.toString());
+        if (user?.id) {
+            const key = getStorageKey(user.id);
+            localStorage.setItem(key, spin.toString());
         }
     }, [spin, user?.id]);
+
 
     useEffect(() => {
         if (!results) return;
 
         const delay = setTimeout(() => {
-            switch (results) {
-                case "jewelery":
-                case "men's clothing":
-                case "women's clothing":
-                case "electronics":
-                    navigate(`/products/${encodeURIComponent(results)}`);
-                    break;
+            const validRoutes = ["jewelery", "men's clothing", "women's clothing", "electronics"];
+            if (validRoutes.includes(results)) {
+                navigate(`/products/${encodeURIComponent(results)}`);
             }
-
             setResults("");
         }, 2500);
 
         return () => clearTimeout(delay);
     }, [results, navigate]);
-
-
-
 
     function handleSpin() {
         if (spin <= 0 || spinning) return;
@@ -90,7 +82,9 @@ export const SpinProvider = ({ children }) => {
                 spans[index].classList.add("highlighted");
             }
 
-            setSpin(prev => items[index] === "extra spin" ? prev : prev - 1);
+            if (items[index] !== "extra spin") {
+                setSpin(prev => Math.max(prev - 1, 0));
+            }
         }, 3000);
     }
 
@@ -114,6 +108,10 @@ export const SpinProvider = ({ children }) => {
 };
 
 export default SpinProvider;
+
+
+
+
 
 
 
