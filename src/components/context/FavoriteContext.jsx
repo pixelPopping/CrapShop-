@@ -1,60 +1,71 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { createContext, useState, useEffect, useContext } from "react";
+import { AuthContext } from "./AuthContext.jsx";
 
 export const FavoriteContext = createContext({});
-export const useFavorites = () => useContext(FavoriteContext);
 
-const getStorageKey = (userId) => `favorites_${userId || 'guest'}`;
-
-const FavoriteProvider = ({ children, user }) => {
+export const FavoriteProvider = ({ children }) => {
+    const { user } = useContext(AuthContext);
     const [items, setItems] = useState([]);
-    const [isReady, setIsReady] = useState(false);
-    const hasInitialized = useRef(false);
-    const isLoggedOut = !user?.id;
+
+    const getUserId = () => {
+        const userId = localStorage.getItem("user_id");
+        return userId && userId !== "Onbekend" ? userId : null;
+    };
+
+    const getStorageKey = () => {
+        const userId = getUserId();
+        return userId ? `favorites_user_${userId}` : "favorites_guest";
+    };
 
     useEffect(() => {
-        const key = getStorageKey(user?.id);
+        const key = getStorageKey();
+        console.log("🔑 Gebruikte storage key:", key);
 
-        if (isLoggedOut) {
-            localStorage.removeItem(key);
-            setItems([]);
-            setIsReady(true);
-            return;
-        }
-
-        const saved = localStorage.getItem(key);
-        if (saved) {
+        const stored = localStorage.getItem(key);
+        if (stored) {
             try {
-                const parsed = JSON.parse(saved);
-                setItems(Array.isArray(parsed) ? parsed : []);
-            } catch {
-                setItems([]);
+                const parsed = JSON.parse(stored);
+                console.log("✅ Gevonden favorieten:", parsed);
+                setItems(parsed);
+            } catch (e) {
+                console.error("❌ Fout bij parsen van favorieten:", e);
             }
         } else {
-            setItems([]);
+            console.log("ℹ️ Geen favorieten gevonden voor deze gebruiker.");
         }
-
-        hasInitialized.current = true;
-        setIsReady(true);
     }, [user?.id]);
 
     useEffect(() => {
-        if (!hasInitialized.current || isLoggedOut) return;
-        const key = getStorageKey(user?.id);
-        localStorage.setItem(key, JSON.stringify(items));
+        if (user?.id) {
+            const key = getStorageKey();
+            console.log("💾 Favorieten opslaan onder:", key, items);
+            localStorage.setItem(key, JSON.stringify(items));
+        }
     }, [items, user?.id]);
 
-    const addFavorite = (item) => setItems((prev) => [...prev, item]);
-    const removeFavorite = (id) => setItems((prev) => prev.filter((item) => item.id !== id));
+    const addFavorite = (item) => {
+        console.log("➕ Favoriet toevoegen:", item);
+        if (!items.find((i) => i.id === item.id)) {
+            setItems((prev) => [...prev, item]);
+        }
+    };
+
+    const removeFavorite = (id) => {
+        console.log("➖ Favoriet verwijderen:", id);
+        setItems((prev) => prev.filter((item) => item.id !== id));
+    };
+
     const toggleFavorite = (item) => {
-        setItems((prev) => {
-            const exists = prev.some((fav) => fav.id === item.id);
-            return exists ? prev.filter((fav) => fav.id !== item.id) : [...prev, item];
-        });
+        console.log("🔁 Toggle favoriet:", item);
+        if (items.find((i) => i.id === item.id)) {
+            removeFavorite(item.id);
+        } else {
+            addFavorite(item);
+        }
     };
 
     const resetFavorites = () => {
-        const key = getStorageKey(user?.id);
-        localStorage.removeItem(key);
+        console.log("🧹 Favorieten resetten");
         setItems([]);
     };
 
@@ -66,7 +77,8 @@ const FavoriteProvider = ({ children, user }) => {
                 removeFavorite,
                 toggleFavorite,
                 resetFavorites,
-                isReady,
+                totalFavorites: items.length,
+                setItems,
             }}
         >
             {children}
@@ -75,6 +87,10 @@ const FavoriteProvider = ({ children, user }) => {
 };
 
 export default FavoriteProvider;
+
+
+
+
 
 
 

@@ -14,7 +14,7 @@ function ShoppingCart() {
                         <img
                             src={item.image}
                             alt={item.title}
-                            style={{ width: '60px', height: '60px', objectFit: 'contain', marginRight: '1rem' }}
+                            style={{ width: '100px', height: '100px', objectFit: 'contain', marginRight: '1rem' }}
                         />
                         <strong>{item.title}</strong> – €{item.price?.toFixed(2)}
                     </li>
