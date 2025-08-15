@@ -5,41 +5,37 @@
 // stap 4 querys maken voor zoeken op titel
 ///stap 4 filter methode gebruiken om zoekresultaten te filteren
 ///stap 5 state verplaatsen naar app.jsx zodat bij alle componenten de zoekbalk functioneel is
+import React from "react";
 
-function ZoekBalk({type, inputValue, inputCallback, selectedCategory, onCategoryChange ,categories}) {
-
-
-    function handleInputChange(e) {
-        e.preventDefault();
-    }
-
+const ZoekBalk = ({
+                      inputValue,
+                      inputCallback,
+                      selectedCategory,
+                      onCategoryChange,
+                      categories
+                  }) => {
     return (
-        <>
-            <div className="search-filter">
-                <form onSubmit={handleInputChange}>
-                    <input  type={type}
-                            value={inputValue}
-                            onChange={(e)=> inputCallback(e.target.value)}
-                    />
-                </form>
-                <div className="category-dropdown">
-                    <select
-                        className="category-select"
-                        value={selectedCategory}
-                        onChange={(e) =>onCategoryChange(e.target.value)}
-                    >
-                        <option value="">All categories</option>
-                        {(categories || []).map((cat) => (
-                            <option key={cat} value={cat}>
-                                {cat}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-            </div>
-        </>
+        <div className="zoekbalk-container">
+            <input
+                type="text"
+                value={inputValue}
+                onChange={(e) => inputCallback(e.target.value)}
+                placeholder="Zoek op product..."
+            />
+            <select
+                value={selectedCategory}
+                onChange={(e) => onCategoryChange(e.target.value)}
+            >
+                {categories.map((cat) => (
+                    <option key={cat} value={cat}>
+                        {cat}
+                    </option>
+                ))}
+            </select>
+        </div>
     );
-}
+};
 
 export default ZoekBalk;
+
 

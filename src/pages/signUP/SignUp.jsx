@@ -1,15 +1,63 @@
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
+import ZoekBalk from "../../components/searchFilter/ZoekBalk.jsx";
+import "./SignUp.css";
+import React, {useContext, useEffect, useState} from "react";
+import filterProducts from "../../helpers/filteredProducts.jsx";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faHeart, faShoppingCart, faSignOutAlt, faUser} from "@fortawesome/free-solid-svg-icons";
+import {AuthContext} from "../../components/context/AuthContext.jsx";
+import {ShoppingCartContext} from "../../components/context/ShoppingCartContext.jsx";
+import {FavoriteContext} from "../../components/context/FavoriteContext.jsx";
 
 function SignUp() {
     const navigate = useNavigate();
+    const { isAuth, user, logout } = useContext(AuthContext);
+    const { items: cartItems } = useContext(ShoppingCartContext);
+    const { items: favoriteItems, resetFavorites } = useContext(FavoriteContext);
+    const params = new URLSearchParams(location.search);
+    const zoekQuery = params.get("query")?.toLowerCase() || "";
+    const [query, setQuery] = useState(zoekQuery);
+    const [selectedCategory, setSelectedCategory] = useState("Alle categorieën");
+    const [showModal, setShowModal] = useState(zoekQuery.length > 0);
+    const [allProducts, setAllProducts] = useState([]);
+    const filteredProducts = filterProducts(allProducts, query, selectedCategory);
+    const getStorageKey = (userId) => `Favorieten_${userId || "guest"}`;
 
     const {
         handleSubmit,
         formState: { errors },
         register,
     } = useForm();
+
+    const categories = [
+        "Men's Clothes",
+        "Women's Clothes",
+        "Jewelery",
+        "Electronics",
+        "Vintage"
+    ];
+
+    const handleLogout = () => {
+        const key = getStorageKey(user?.id);
+        localStorage.removeItem(key);
+        resetFavorites();
+        logout();
+    };
+
+    useEffect(() => {
+        async function fetchProducts() {
+            try {
+                const res = await axios.get("https://fakestoreapi.com/products");
+                setAllProducts(res.data);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+        fetchProducts();
+    }, []);
+
 
     const handleFormSubmit = async (data) => {
         try {
@@ -38,16 +86,88 @@ function SignUp() {
     };
 
     return (
-        <>
-            <div>
-                <button className="btn btn-primary" onClick={() => navigate('/')}>Home</button>
+        <div className="signup-container">
+            <ZoekBalk
+                type="text"
+                inputValue={query}
+                inputCallback={(value) => {
+                    setQuery(value);
+                    navigate(`?query=${encodeURIComponent(value)}`);
+                    setShowModal(true);
+                }}
+                selectedCategory={selectedCategory}
+                onCategoryChange={(value) => {
+                    setSelectedCategory(value);
+                    setShowModal(true);
+                    if (value !== "Alle categorieën") {
+                        navigate(`?query=${encodeURIComponent(query)}&category=${encodeURIComponent(value)}`);
+                    }
+                }}
+                categories={["Alle categorieën", ...categories]}
+            />
+            <div className="button-container4">
+                {isAuth ? (
+                    <>
+                        <div className="icon-item" onClick={handleLogout} title="Log uit">
+                            <FontAwesomeIcon icon={faSignOutAlt} />
+                        </div>
+                        <div className="icon-item" title={`Ingelogd als ${user?.username ?? "Onbekend"}`}>
+                            <FontAwesomeIcon icon={faUser} />
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <div className="icon-item" onClick={() => navigate("/signup")} title="Sign Up">
+                            <FontAwesomeIcon icon={faUser} />
+                        </div>
+                        <div className="icon-item" onClick={() => navigate("/signin")} title="Login">
+                            <FontAwesomeIcon icon={faUser} />
+                        </div>
+                    </>
+                )}
+
+                <div className="icon-item" onClick={() => navigate("/cart")} title="Winkelwagen">
+                    <div className="icon-wrapper">
+                        <FontAwesomeIcon icon={faShoppingCart} />
+                        {cartItems.length > 0 && <span className="icon-count">{cartItems.length}</span>}
+                    </div>
+                </div>
+
+                <div className="icon-item" onClick={() => navigate("/favorietenpage")} title="Favorieten">
+                    <div className="icon-wrapper">
+                        <FontAwesomeIcon icon={faHeart} />
+                        {favoriteItems.length > 0 && <span className="icon-count">{favoriteItems.length}</span>}
+                    </div>
+                </div>
             </div>
-            <header>
-                <h1>Nieuw bij CrapShop</h1>
-                <p>Maak een nieuw account en begin met bestellen</p>
-                <p>persoonlijke gegevens</p>
-            </header>
+            {showModal && (
+                <div className="zoek-modal">
+                    <div className="modal-content">
+                        <h3>Zoekresultaten voor: <strong>{query || selectedCategory}</strong></h3>
+                        <button onClick={() => setShowModal(false)}>Sluiten</button>
+                        <ul>
+                            {filteredProducts.length > 0 ? (
+                                filteredProducts.map((product) => (
+                                    <li key={product.id}>
+                                        <NavLink to={`/detailpagina/${product.id}`} onClick={() => setShowModal(false)}>
+                                            {product.title}
+                                        </NavLink>
+                                    </li>
+                                ))
+                            ) : (
+                                <p>Geen resultaten gevonden.</p>
+                            )}
+                        </ul>
+                    </div>
+                </div>
+            )}
+
+
             <form className="form" onSubmit={handleSubmit(handleFormSubmit)}>
+                <h2>Nieuw bij CrapShop</h2>
+                <p>Maak een nieuw account en begin met bestellen</p>
+                <p>Persoonlijke gegevens</p>
+
                 <label htmlFor="gender-man">
                     Man:
                     <input
@@ -85,9 +205,7 @@ function SignUp() {
                     <input
                         type="text"
                         id="username-field"
-                        {...register("username", {
-                            required: "Username is verplicht"
-                        })}
+                        {...register("username", { required: "Username is verplicht" })}
                     />
                     {errors.username && <p>{errors.username.message}</p>}
                 </label>
@@ -97,9 +215,7 @@ function SignUp() {
                     <input
                         type="text"
                         id="lastname-field"
-                        {...register("lastname", {
-                            required: "Lastname is verplicht"
-                        })}
+                        {...register("lastname", { required: "Lastname is verplicht" })}
                     />
                     {errors.lastname && <p>{errors.lastname.message}</p>}
                 </label>
@@ -109,9 +225,7 @@ function SignUp() {
                     <input
                         type="text"
                         id="postalcode-field"
-                        {...register("postalcode", {
-                            required: "Postal code is verplicht"
-                        })}
+                        {...register("postalcode", { required: "Postal code is verplicht" })}
                     />
                     {errors.postalcode && <p>{errors.postalcode.message}</p>}
                 </label>
@@ -121,9 +235,7 @@ function SignUp() {
                     <input
                         type="number"
                         id="unit-field"
-                        {...register("unit", {
-                            required: "Unit is verplicht"
-                        })}
+                        {...register("unit", { required: "Unit is verplicht" })}
                     />
                     {errors.unit && <p>{errors.unit.message}</p>}
                 </label>
@@ -133,9 +245,7 @@ function SignUp() {
                     <input
                         type="text"
                         id="homeadress-field"
-                        {...register("homeadress", {
-                            required: "Home adress is verplicht"
-                        })}
+                        {...register("homeadress", { required: "Home adress is verplicht" })}
                     />
                     {errors.homeadress && <p>{errors.homeadress.message}</p>}
                 </label>
@@ -145,9 +255,7 @@ function SignUp() {
                     <input
                         type="text"
                         id="city-field"
-                        {...register("city", {
-                            required: "City is verplicht"
-                        })}
+                        {...register("city", { required: "City is verplicht" })}
                     />
                     {errors.city && <p>{errors.city.message}</p>}
                 </label>
@@ -157,9 +265,7 @@ function SignUp() {
                     <input
                         type="tel"
                         id="phonenumber-field"
-                        {...register("phonenumber", {
-                            required: "Phone number is verplicht"
-                        })}
+                        {...register("phonenumber", { required: "Phone number is verplicht" })}
                     />
                     {errors.phonenumber && <p>{errors.phonenumber.message}</p>}
                 </label>
@@ -169,14 +275,12 @@ function SignUp() {
                     <input
                         type="date"
                         id="date-field"
-                        {...register("date", {
-                            required: "Date is verplicht"
-                        })}
+                        {...register("date", { required: "Date is verplicht" })}
                     />
                     {errors.date && <p>{errors.date.message}</p>}
                 </label>
 
-                <h1>Register</h1>
+                <h3>Accountgegevens</h3>
 
                 <label htmlFor="email-field">
                     Email:
@@ -210,10 +314,26 @@ function SignUp() {
 
                 <button type="submit">Registreer</button>
             </form>
-        </>
+
+            <div className="profiel-links">
+                <ul>
+                    <li><NavLink to="/profiel">Profiel</NavLink></li>
+                    <li><NavLink to="/recencies">Recensies</NavLink></li>
+                    <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
+                </ul>
+            </div>
+        </div>
     );
 }
 
 export default SignUp;
+
+
+
+
+
+
+
+
 
 

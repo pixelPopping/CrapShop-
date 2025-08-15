@@ -3,13 +3,21 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import DetailCard from "../../components/detailcard/DetailCard.jsx";
 import ShoppingCart from "../../components/shoppingCart/ShoppingCart.jsx";
+import ZoekBalk from "../../components/searchFilter/ZoekBalk.jsx";
 import { ShoppingCartContext } from "../../components/context/ShoppingCartContext.jsx";
+import { AuthContext } from "../../components/context/AuthContext.jsx";
+import { FavoriteContext } from "../../components/context/FavoriteContext.jsx";
+import filterProducts from "../../helpers/filteredProducts.jsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart, faShoppingCart, faSignOutAlt, faUser } from "@fortawesome/free-solid-svg-icons";
 
 function DetailPagina() {
     const { id } = useParams();
     const navigate = useNavigate();
     const location = useLocation();
     const { cart, reSet, items } = useContext(ShoppingCartContext);
+    const { isAuth, user, logout } = useContext(AuthContext);
+    const { items: favoriteItems, resetFavorites } = useContext(FavoriteContext);
 
     const params = new URLSearchParams(location.search);
     const zoekQuery = params.get("query")?.toLowerCase() || "";
@@ -21,13 +29,13 @@ function DetailPagina() {
     const [error, setError] = useState(false);
     const [product, setProduct] = useState(null);
     const [allProducts, setAllProducts] = useState([]);
+    const filteredProducts = filterProducts(allProducts, query, selectedCategory);
 
     const categories = [
-        "Alle categorieën",
         "men's clothing",
         "women's clothing",
         "jewelery",
-        "electronics",
+        "electronics"
     ];
 
     useEffect(() => {
@@ -36,7 +44,7 @@ function DetailPagina() {
                 setLoading(true);
                 const [productRes, allRes] = await Promise.all([
                     axios.get(`https://fakestoreapi.com/products/${id}`),
-                    axios.get("https://fakestoreapi.com/products"),
+                    axios.get("https://fakestoreapi.com/products")
                 ]);
                 setProduct(productRes.data);
                 setAllProducts(allRes.data);
@@ -50,46 +58,80 @@ function DetailPagina() {
         fetchData();
     }, [id]);
 
-    const filteredProducts = allProducts.filter((product) => {
-        const matchQuery = product.title.toLowerCase().includes(query.toLowerCase());
-        const matchCategory =
-            selectedCategory === "Alle categorieën" || product.category === selectedCategory;
-        return matchQuery && matchCategory;
-    });
+    const getStorageKey = (userId) => `Favorieten_${userId || "guest"}`;
 
-    function navigateToShop() {
-        navigate("/shop");
-    }
+    const handleLogout = () => {
+        const key = getStorageKey(user?.id);
+        localStorage.removeItem(key);
+        resetFavorites();
+        logout();
+    };
 
     return (
         <>
-            <div className="zoekbalk-wrapper">
-                <input
-                    type="text"
-                    value={query}
-                    onChange={(e) => {
-                        const value = e.target.value;
-                        setQuery(value);
-                        navigate(`?query=${encodeURIComponent(value)}`);
-                        setShowModal(true);
-                    }}
-                    placeholder="Zoek op product..."
-                />
-                <select
-                    value={selectedCategory}
-                    onChange={(e) => {
-                        const value = e.target.value;
-                        setSelectedCategory(value);
-                        setShowModal(true);
-                        if (value !== "Alle categorieën") {
-                            navigate(`/products/${encodeURIComponent(value)}`);
-                        }
-                    }}
-                >
-                    {categories.map((cat, index) => (
-                        <option key={index} value={cat}>{cat}</option>
-                    ))}
-                </select>
+            <nav className="navbar-four">
+                <div className="button-container4">
+                    <button onClick={() => navigate('/')}>Home</button>
+                    <ZoekBalk
+                        type="text"
+                        inputValue={query}
+                        inputCallback={(value) => {
+                            setQuery(value);
+                            navigate(`?query=${encodeURIComponent(value)}`);
+                            setShowModal(true);
+                        }}
+                        selectedCategory={selectedCategory}
+                        onCategoryChange={(value) => {
+                            setSelectedCategory(value);
+                            setShowModal(true);
+                            if (value !== "Alle categorieën") {
+                                navigate(`/products/${encodeURIComponent(value)}`);
+                            }
+                        }}
+                        categories={["Alle categorieën", ...categories]}
+                    />
+                <ul className="nav-links4">
+                    <li><NavLink to="/products/men's clothing">Men</NavLink></li>
+                    <li><NavLink to="/products/women's clothing">Women</NavLink></li>
+                    <li><NavLink to="/Shop">Shop</NavLink></li>
+                </ul>
+                </div>
+            </nav>
+
+            <div className="button-container4">
+                {isAuth ? (
+                    <>
+                        <div className="icon-item" onClick={handleLogout} title="Log uit">
+                            <FontAwesomeIcon icon={faSignOutAlt} />
+                        </div>
+                        <div className="icon-item" title={`Ingelogd als ${user?.username ?? "Onbekend"}`}>
+                            <FontAwesomeIcon icon={faUser} />
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <div className="icon-item" onClick={() => navigate("/signup")} title="Sign Up">
+                            <FontAwesomeIcon icon={faUser} />
+                        </div>
+                        <div className="icon-item" onClick={() => navigate("/signin")} title="Login">
+                            <FontAwesomeIcon icon={faUser} />
+                        </div>
+                    </>
+                )}
+
+                <div className="icon-item" onClick={() => navigate("/cart")} title="Winkelwagen">
+                    <div className="icon-wrapper">
+                        <FontAwesomeIcon icon={faShoppingCart} />
+                        {items.length > 0 && <span className="icon-count">{items.length}</span>}
+                    </div>
+                </div>
+
+                <div className="icon-item" onClick={() => navigate("/favorietenpage")} title="Favorieten">
+                    <div className="icon-wrapper">
+                        <FontAwesomeIcon icon={faHeart} />
+                        {favoriteItems.length > 0 && <span className="icon-count">{favoriteItems.length}</span>}
+                    </div>
+                </div>
             </div>
 
             {showModal && (
@@ -114,12 +156,6 @@ function DetailPagina() {
                 </div>
             )}
 
-            <div>
-                <button className="shopping-cart" type="button" onClick={() => navigate('/cart')}>
-                    cart
-                </button>
-            </div>
-
             {loading && <p>Bezig met laden...</p>}
             {error && <p>Er ging iets mis bij het ophalen van het product.</p>}
 
@@ -139,7 +175,7 @@ function DetailPagina() {
                                     title: product.title,
                                     description: product.description,
                                     image: product.image,
-                                    price: product.price,
+                                    price: product.price
                                 })
                             }
                         />
@@ -149,13 +185,30 @@ function DetailPagina() {
                             cartItems={items}
                         />
                     </div>
-                    <button onClick={navigateToShop}>Back to store</button>
+                    <button onClick={() => navigate('/shop')}>Back to store</button>
                 </>
             )}
+
+            <div>
+                <ul>
+                    <li><NavLink to="/profiel">Profiel</NavLink></li>
+                    <li><NavLink to="/recencies">Recensies</NavLink></li>
+                    <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
+                </ul>
+            </div>
         </>
     );
 }
 
 export default DetailPagina;
+
+
+
+
+
+
+
+
+
 
 
