@@ -24,14 +24,9 @@ const CategoryPage = () => {
     const [products, setProducts] = useState([]);
     const [allProducts, setAllProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [categories, setCategories] = useState(["Alle categorieën"]);
     const filteredProducts = filterProducts(allProducts, query, selectedCategory);
 
-    const categories = [
-        "men's clothing",
-        "women's clothing",
-        "jewelery",
-        "electronics"
-    ];
 
     useEffect(() => {
         async function fetchProducts() {
@@ -40,6 +35,8 @@ const CategoryPage = () => {
                 setAllProducts(res.data);
                 const filtered = res.data.filter(item => item.category === category);
                 setProducts(filtered);
+                const cat = await axios.get("https://fakestoreapi.com/products/categories");
+                setCategories(["Alle categorieën", ...cat.data]);
             } catch (error) {
                 console.error(error);
             } finally {
@@ -176,7 +173,6 @@ const CategoryPage = () => {
                         <li><NavLink to="/profiel">Profiel</NavLink></li>
                         <li><NavLink to="/recencies">Recencies</NavLink></li>
                         <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
-                        <li><NavLink to="/home">Home</NavLink></li>
                     </ul>
                 </div>
             </main>

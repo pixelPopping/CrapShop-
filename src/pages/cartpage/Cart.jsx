@@ -9,6 +9,7 @@ import InCrementButton from "../../components/counterbutton/InCrementButton.jsx"
 import axios from "axios";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHeart, faShoppingCart, faSignOutAlt, faUser} from "@fortawesome/free-solid-svg-icons";
+import filterProducts from "../../helpers/filteredProducts.jsx";
 
 function Cart() {
     const { items = [], price, reSet, removeItem } = useContext(ShoppingCartContext);
@@ -22,19 +23,17 @@ function Cart() {
     const [selectedCategory, setSelectedCategory] = useState("Alle categorieën");
     const [showModal, setShowModal] = useState(zoekQuery.length > 0);
     const [allProducts, setAllProducts] = useState([]);
+    const [categories, setCategories] = useState(["Alle categorieën"]);
+    const filteredProducts = filterProducts(allProducts, query, selectedCategory);
 
-    const categories = [
-        "men's clothing",
-        "women's clothing",
-        "jewelery",
-        "electronics"
-    ];
 
     useEffect(() => {
         async function fetchProducts() {
             try {
                 const res = await axios.get("https://fakestoreapi.com/products");
                 setAllProducts(res.data);
+                const cat = await axios.get("https://fakestoreapi.com/products/categories");
+                setCategories(["Alle categorieën", ...cat.data]);
             } catch (e) {
                 console.error(e);
             }
@@ -42,12 +41,6 @@ function Cart() {
         fetchProducts();
     }, []);
 
-    const filteredProducts = allProducts.filter((product) => {
-        const matchQuery = product.title.toLowerCase().includes(query.toLowerCase());
-        const matchCategory =
-            selectedCategory === "Alle categorieën" || product.category === selectedCategory;
-        return matchQuery && matchCategory;
-    });
 
     const handleLogout = () => {
         resetFavorites();
@@ -116,6 +109,7 @@ function Cart() {
                             {favoriteItems.length > 0 && <span className="icon-count">{favoriteItems.length}</span>}
                         </div>
                     </div>
+                    <button onClick={() => navigate('/')}>Home</button>
                 </div>
             </nav>
 

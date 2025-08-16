@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import "./Home.css";
 import { ShoppingCartContext } from "../../components/context/ShoppingCartContext.jsx";
-import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import {NavLink, useNavigate, useLocation, useParams} from "react-router-dom";
 import ClockTime from "../../components/digitaleClock/DigitaleClock.jsx";
 import { AuthContext } from "../../components/context/AuthContext.jsx";
 import { SpinContext } from "../../components/context/SpinContext.jsx";
@@ -32,25 +32,24 @@ function Home() {
     const [showModal, setShowModal] = useState(zoekQuery.length > 0);
     const [allProducts, setAllProducts] = useState([]);
     const filteredProducts = filterProducts(allProducts, query, selectedCategory);
+    const [categories, setCategories] = useState(["Alle categorieën"]);
 
-    const categories = [
-        "men's clothing",
-        "women's clothing",
-        "jewelery",
-        "electronics"
-    ];
 
     useEffect(() => {
         async function fetchProducts() {
             try {
                 const res = await axios.get("https://fakestoreapi.com/products");
                 setAllProducts(res.data);
+                const cat = await axios.get("https://fakestoreapi.com/products/categories");
+                setCategories(["Alle categorieën", ...cat.data]);
             } catch (e) {
                 console.error(e);
             }
         }
         fetchProducts();
     }, []);
+
+
 
     const getStorageKey = (userId) => `Favorieten_${userId || "guest"}`;
 

@@ -26,13 +26,9 @@ function Recencies() {
     const [showModal, setShowModal] = useState(zoekQuery.length > 0);
     const [allProducts, setAllProducts] = useState([]);
     const filteredProducts = filterProducts(allProducts, query, selectedCategory);
+    const [categories, setCategories] = useState(["Alle categorieën"]);
 
-    const categories = [
-        "men's clothing",
-        "women's clothing",
-        "jewelery",
-        "electronics"
-    ];
+
 
     useEffect(() => {
         const savedRecencies = JSON.parse(localStorage.getItem("recencies")) || [];
@@ -44,6 +40,8 @@ function Recencies() {
             try {
                 const res = await axios.get("https://fakestoreapi.com/products");
                 setAllProducts(res.data);
+                const cat = await axios.get("https://fakestoreapi.com/products/categories");
+                setCategories(["Alle categorieën", ...cat.data]);
             } catch (e) {
                 console.error(e);
             }

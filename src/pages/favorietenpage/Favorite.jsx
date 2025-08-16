@@ -6,8 +6,8 @@ import { useNavigate, useLocation, NavLink } from "react-router-dom";
 import ZoekBalk from "../../components/searchFilter/ZoekBalk.jsx";
 import axios from "axios";
 import filterProducts from "../../helpers/filteredProducts.jsx";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faHeart, faShoppingCart, faSignOutAlt, faUser} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart, faShoppingCart, faSignOutAlt, faUser } from "@fortawesome/free-solid-svg-icons";
 
 const FavorietenPage = () => {
     const {
@@ -23,10 +23,12 @@ const FavorietenPage = () => {
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const zoekQuery = params.get("query")?.toLowerCase() || "";
+
     const [query, setQuery] = useState(zoekQuery);
     const [selectedCategory, setSelectedCategory] = useState("Alle categorieën");
     const [showModal, setShowModal] = useState(zoekQuery.length > 0);
     const [allProducts, setAllProducts] = useState([]);
+    const [categories, setCategories] = useState(["Alle categorieën"]);
     const filtered = filterProducts(allProducts, query, selectedCategory);
 
     const getStorageKey = (userId) => `Favorieten_${userId || "guest"}`;
@@ -59,23 +61,20 @@ const FavorietenPage = () => {
         }
     }, [user]);
 
-    const categories = [
-        "men's clothing",
-        "women's clothing",
-        "jewelery",
-        "electronics"
-    ];
-
     useEffect(() => {
-        async function fetchProducts() {
+        async function fetchData() {
             try {
-                const res = await axios.get("https://fakestoreapi.com/products");
-                setAllProducts(res.data);
+                const [productsRes, categoriesRes] = await Promise.all([
+                    axios.get("https://fakestoreapi.com/products"),
+                    axios.get("https://fakestoreapi.com/products/categories")
+                ]);
+                setAllProducts(productsRes.data);
+                setCategories(["Alle categorieën", ...categoriesRes.data]);
             } catch (e) {
-                console.error(e);
+                console.error("Fout bij ophalen data:", e);
             }
         }
-        fetchProducts();
+        fetchData();
     }, []);
 
     const handleLogout = () => {
@@ -84,6 +83,7 @@ const FavorietenPage = () => {
         resetFavorites();
         logout();
     };
+
 
     return (
         <>
@@ -108,11 +108,9 @@ const FavorietenPage = () => {
                     onCategoryChange={(value) => {
                         setSelectedCategory(value);
                         setShowModal(true);
-                        if (value !== "Alle categorieën") {
-                            navigate(`/products/${encodeURIComponent(value)}`);
-                        }
+                        navigate(`?query=${encodeURIComponent(query)}&category=${encodeURIComponent(value)}`);
                     }}
-                    categories={["Alle categorieën", ...categories]}
+                    categories={categories}
                 />
 
                 <div className="button-container4">
@@ -194,7 +192,7 @@ const FavorietenPage = () => {
                 <div>
                     <ul>
                         <li><NavLink to="/profiel">Profiel</NavLink></li>
-                        <li><NavLink to="/recencies">Recencies</NavLink></li>
+                        <li><NavLink to="/recencies">Recensies</NavLink></li>
                         <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
                     </ul>
                 </div>
@@ -205,7 +203,11 @@ const FavorietenPage = () => {
                         {filtered.length > 0 ? (
                             <ul>
                                 {filtered.map((product) => (
-                                    <li key={product.id}>{product.title}</li>
+                                    <li key={product.id}>
+                                        <NavLink to={`/detailpagina/${product.id}`} onClick={() => setShowModal(false)}>
+                                            {product.title}
+                                        </NavLink>
+                                    </li>
                                 ))}
                             </ul>
                         ) : (
@@ -219,6 +221,7 @@ const FavorietenPage = () => {
 };
 
 export default FavorietenPage;
+
 
 
 

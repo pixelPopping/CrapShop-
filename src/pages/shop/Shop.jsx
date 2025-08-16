@@ -1,4 +1,11 @@
 
+//1 data ophalen met een button en loggen in de console
+//2 als je juiste data heb opslaan in de state
+//3 mounth toevoegen zodat data automatisch renderd
+//4 error en loading state toevoegen
+// code zoekbalk verplaatsen naar component
+
+
 
 
 

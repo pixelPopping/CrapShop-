@@ -24,6 +24,7 @@ function SignUp() {
     const [allProducts, setAllProducts] = useState([]);
     const filteredProducts = filterProducts(allProducts, query, selectedCategory);
     const getStorageKey = (userId) => `Favorieten_${userId || "guest"}`;
+    const [categories, setCategories] = useState(["Alle categorieën"]);
 
     const {
         handleSubmit,
@@ -31,13 +32,6 @@ function SignUp() {
         register,
     } = useForm();
 
-    const categories = [
-        "Men's Clothes",
-        "Women's Clothes",
-        "Jewelery",
-        "Electronics",
-        "Vintage"
-    ];
 
     const handleLogout = () => {
         const key = getStorageKey(user?.id);
@@ -51,6 +45,8 @@ function SignUp() {
             try {
                 const res = await axios.get("https://fakestoreapi.com/products");
                 setAllProducts(res.data);
+                const cat = await axios.get("https://fakestoreapi.com/products/categories");
+                setCategories(["Alle categorieën", ...cat.data]);
             } catch (e) {
                 console.error(e);
             }

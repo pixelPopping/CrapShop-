@@ -29,14 +29,9 @@ function DetailPagina() {
     const [error, setError] = useState(false);
     const [product, setProduct] = useState(null);
     const [allProducts, setAllProducts] = useState([]);
-    const filteredProducts = filterProducts(allProducts, query, selectedCategory);
+    const [categories, setCategories] = useState(["Alle categorieën"]);
 
-    const categories = [
-        "men's clothing",
-        "women's clothing",
-        "jewelery",
-        "electronics"
-    ];
+    const filteredProducts = filterProducts(allProducts, query, selectedCategory);
 
     useEffect(() => {
         async function fetchData() {
@@ -46,8 +41,11 @@ function DetailPagina() {
                     axios.get(`https://fakestoreapi.com/products/${id}`),
                     axios.get("https://fakestoreapi.com/products")
                 ]);
+                const catRes = await axios.get("https://fakestoreapi.com/products/categories");
+
                 setProduct(productRes.data);
                 setAllProducts(allRes.data);
+                setCategories(["Alle categorieën", ...catRes.data]);
             } catch (e) {
                 setError(true);
                 console.error(e);
@@ -70,32 +68,30 @@ function DetailPagina() {
     return (
         <>
             <nav className="navbar-four">
-                <div className="button-container4">
-                    <button onClick={() => navigate('/')}>Home</button>
-                    <ZoekBalk
-                        type="text"
-                        inputValue={query}
-                        inputCallback={(value) => {
-                            setQuery(value);
-                            navigate(`?query=${encodeURIComponent(value)}`);
-                            setShowModal(true);
-                        }}
-                        selectedCategory={selectedCategory}
-                        onCategoryChange={(value) => {
-                            setSelectedCategory(value);
-                            setShowModal(true);
-                            if (value !== "Alle categorieën") {
-                                navigate(`/products/${encodeURIComponent(value)}`);
-                            }
-                        }}
-                        categories={["Alle categorieën", ...categories]}
-                    />
                 <ul className="nav-links4">
                     <li><NavLink to="/products/men's clothing">Men</NavLink></li>
                     <li><NavLink to="/products/women's clothing">Women</NavLink></li>
                     <li><NavLink to="/Shop">Shop</NavLink></li>
                 </ul>
-                </div>
+
+                <ZoekBalk
+                    type="text"
+                    inputValue={query}
+                    inputCallback={(value) => {
+                        setQuery(value);
+                        navigate(`?query=${encodeURIComponent(value)}`);
+                        setShowModal(true);
+                    }}
+                    selectedCategory={selectedCategory}
+                    onCategoryChange={(value) => {
+                        setSelectedCategory(value);
+                        setShowModal(true);
+                        if (value !== "Alle categorieën") {
+                            navigate(`/products/${encodeURIComponent(value)}`);
+                        }
+                    }}
+                    categories={categories}
+                />
             </nav>
 
             <div className="button-container4">
@@ -132,6 +128,8 @@ function DetailPagina() {
                         {favoriteItems.length > 0 && <span className="icon-count">{favoriteItems.length}</span>}
                     </div>
                 </div>
+
+                <button onClick={() => navigate('/')}>Home</button>
             </div>
 
             {showModal && (
@@ -201,6 +199,7 @@ function DetailPagina() {
 }
 
 export default DetailPagina;
+
 
 
 
