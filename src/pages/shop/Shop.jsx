@@ -1,14 +1,3 @@
-
-//1 data ophalen met een button en loggen in de console
-//2 als je juiste data heb opslaan in de state
-//3 mounth toevoegen zodat data automatisch renderd
-//4 error en loading state toevoegen
-// code zoekbalk verplaatsen naar component
-
-
-
-
-
 //1 data ophalen met een button en loggen in de console
 //2 als je juiste data heb opslaan in de state
 //3 mounth toevoegen zodat data automatisch renderd
@@ -31,7 +20,7 @@ import {
     faShoppingCart,
     faHeart
 } from '@fortawesome/free-solid-svg-icons';
-
+import useHandleLogout from "../../helpers/UseHandleLogout.jsx";
 
 function Shop() {
     const [shop, setShop] = useState([]);
@@ -42,11 +31,13 @@ function Shop() {
     const [selectedCategory, setSelectedCategory] = useState("");
     const navigate = useNavigate();
     const { items } = useContext(ShoppingCartContext);
-    const { isAuth, user, logout } = useContext(AuthContext);
-    const { items: favoriteItems, resetFavorites } = useContext(FavoriteContext);
+    const { isAuth, user } = useContext(AuthContext);
+    const { items: favoriteItems } = useContext(FavoriteContext);
+
+    const handleLogout = useHandleLogout();
 
     useEffect(() => {
-        async function getData() {
+        async function getShopData() {
             try {
                 setLoading(true);
                 const [productsRes, categoriesRes] = await Promise.all([
@@ -62,7 +53,7 @@ function Shop() {
                 setLoading(false);
             }
         }
-        getData();
+        getShopData();
     }, []);
 
     const filteredItems = shop.filter((item) => {
@@ -75,15 +66,6 @@ function Shop() {
 
         return matchCategory && matchSearch;
     });
-
-    const getStorageKey = (userId) => `Favorieten_${userId || "guest"}`;
-
-    const handleLogout = () => {
-        const key = getStorageKey(user?.id);
-        localStorage.removeItem(key);
-        resetFavorites();
-        logout();
-    };
 
     return (
         <>
@@ -140,17 +122,16 @@ function Shop() {
                         </div>
                     </div>
                 </div>
-
-
-
             </nav>
+
             <section>
-                <li><NavLink to="/" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Home Page</NavLink></li>
-                <li><NavLink to="/products/jewelery" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Jewelery</NavLink></li>
-                <li><NavLink to="/products/electronics" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Electronics</NavLink></li>
-                <li><NavLink to="/products/men's clothing" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Men</NavLink></li>
-                <li><NavLink to="/products/women's clothing" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Women</NavLink></li>
+                <li><NavLink to="/" className={({isActive}) => isActive ? 'active-link' : 'default-link'}>Home Page</NavLink></li>
+                <li><NavLink to="/products/jewelery" className={({isActive}) => isActive ? 'active-link' : 'default-link'}>Jewelery</NavLink></li>
+                <li><NavLink to="/products/electronics" className={({isActive}) => isActive ? 'active-link' : 'default-link'}>Electronics</NavLink></li>
+                <li><NavLink to="/products/men's clothing" className={({isActive}) => isActive ? 'active-link' : 'default-link'}>Men</NavLink></li>
+                <li><NavLink to="/products/women's clothing" className={({isActive}) => isActive ? 'active-link' : 'default-link'}>Women</NavLink></li>
             </section>
+
             {!loading && !error && filteredItems.length === 0 && <p>Geen zoekresultaten gevonden.</p>}
             {loading && <p>Bezig met laden...</p>}
             {error && <p>Er ging iets mis bij het ophalen van de producten.</p>}
@@ -172,11 +153,30 @@ function Shop() {
                     </div>
                 </div>
             )}
+            <footer className="shop-footer">
+                <ul>
+                    <li className="footer-links">
+                        <li><NavLink to="/profiel">Profiel</NavLink></li>
+                        <li><NavLink to="/recencies">Recencies</NavLink></li>
+                        <li><NavLink to="/favorieten">Favorieten</NavLink></li>
+                    </li>
+                </ul>
+            </footer>
         </>
     );
 }
 
 export default Shop;
+
+
+
+
+
+
+
+
+
+
 
 
 

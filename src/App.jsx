@@ -5,7 +5,7 @@
 // 4 zoek filter/ categorieen box
 import {Routes, Route, Navigate,} from 'react-router-dom';
 import './App.css';
-import './components/ui/wheelspin.css';
+import './components/wheelOfFortune/wheelspin.css';
 import Home from './pages/home/Home.jsx';
 import Shop from './pages/shop/Shop.jsx';
 import DetailPagina from './pages/detailPagina/DetailPagina.jsx';

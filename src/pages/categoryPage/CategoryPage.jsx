@@ -5,19 +5,23 @@ import ZoekBalk from "../../components/searchFilter/ZoekBalk.jsx";
 import { AuthContext } from "../../components/context/AuthContext.jsx";
 import { ShoppingCartContext } from "../../components/context/ShoppingCartContext.jsx";
 import { FavoriteContext } from "../../components/context/FavoriteContext.jsx";
-import  filterProducts  from "../../helpers/filteredProducts.jsx";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faHeart, faShoppingCart, faSignOutAlt, faUser} from "@fortawesome/free-solid-svg-icons";
+import filterProducts from "../../helpers/filteredProducts.jsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart, faShoppingCart, faSignOutAlt, faUser } from "@fortawesome/free-solid-svg-icons";
+import ShowModal from "../../components/modal/ShowModal.jsx";
+import CategoryCard from "../../components/categoryCard/CategoryCard.jsx";
+import useHandleLogout from "../../helpers/UseHandleLogout.jsx";
 
 const CategoryPage = () => {
     const { category } = useParams();
     const navigate = useNavigate();
     const location = useLocation();
-    const { isAuth, user, logout } = useContext(AuthContext);
+    const { isAuth, user, } = useContext(AuthContext);
     const { items: cartItems } = useContext(ShoppingCartContext);
-    const { items: favoriteItems, resetFavorites } = useContext(FavoriteContext);
+    const { items: favoriteItems, } = useContext(FavoriteContext);
     const params = new URLSearchParams(location.search);
     const zoekQuery = params.get("query")?.toLowerCase() || "";
+
     const [query, setQuery] = useState(zoekQuery);
     const [selectedCategory, setSelectedCategory] = useState(category || "Alle categorieën");
     const [showModal, setShowModal] = useState(zoekQuery.length > 0);
@@ -25,11 +29,11 @@ const CategoryPage = () => {
     const [allProducts, setAllProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [categories, setCategories] = useState(["Alle categorieën"]);
-    const filteredProducts = filterProducts(allProducts, query, selectedCategory);
-
+    const handleLogout = useHandleLogout();
+    const filteredProductsList = filterProducts(allProducts, query, selectedCategory);
 
     useEffect(() => {
-        async function fetchProducts() {
+        async function GetCategory() {
             try {
                 const res = await axios.get("https://fakestoreapi.com/products");
                 setAllProducts(res.data);
@@ -43,17 +47,8 @@ const CategoryPage = () => {
                 setLoading(false);
             }
         }
-        fetchProducts();
+        GetCategory();
     }, [category]);
-
-    const getStorageKey = (userId) => `Favorieten_${userId || "guest"}`;
-
-    const handleLogout = () => {
-        const key = getStorageKey(user?.id);
-        localStorage.removeItem(key);
-        resetFavorites();
-        logout();
-    };
 
     return (
         <>
@@ -125,25 +120,12 @@ const CategoryPage = () => {
             </nav>
 
             {showModal && (
-                <div className="zoek-modal">
-                    <div className="modal-content">
-                        <h3>Zoekresultaten voor: <strong>{query || selectedCategory}</strong></h3>
-                        <button onClick={() => setShowModal(false)}>Sluiten</button>
-                        <ul>
-                            {filteredProducts.length > 0 ? (
-                                filteredProducts.map((product) => (
-                                    <li key={product.id}>
-                                        <NavLink to={`/detailpagina/${product.id}`} onClick={() => setShowModal(false)}>
-                                            {product.title}
-                                        </NavLink>
-                                    </li>
-                                ))
-                            ) : (
-                                <p>Geen resultaten gevonden.</p>
-                            )}
-                        </ul>
-                    </div>
-                </div>
+                <ShowModal
+                    query={query}
+                    selectedCategory={selectedCategory}
+                    filteredProducts={filteredProductsList}
+                    setShowModal={setShowModal}
+                />
             )}
 
             <main>
@@ -152,28 +134,28 @@ const CategoryPage = () => {
                 ) : (
                     <div className="product-grid">
                         {products.map(product => (
-                            <div key={product.id} className="product-card">
-                                <img
-                                    src={product.image}
-                                    alt={product.title}
-                                    className="product-image"
-                                    onClick={() => navigate(`/detailpagina/${product.id}`)}
-                                    style={{ cursor: 'pointer' }}
-                                />
-                                <h3>{product.title}</h3>
-                                <p><strong>€{product.price}</strong></p>
-                                <p>Rating: {product.rating.rate} ⭐</p>
-                            </div>
+                            <CategoryCard
+                                key={product.id}
+                                product={product}
+                                image={product.image}
+                                label={product.title}
+                                text={`€${product.price}`}
+                                rating={product.rating.rate}
+                                onClick={() => navigate(`/detailpagina/${product.id}`)}
+                            />
+
                         ))}
                     </div>
                 )}
 
                 <div>
+                    <footer>
                     <ul>
                         <li><NavLink to="/profiel">Profiel</NavLink></li>
                         <li><NavLink to="/recencies">Recencies</NavLink></li>
                         <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
                     </ul>
+                    </footer>
                 </div>
             </main>
         </>
@@ -181,6 +163,7 @@ const CategoryPage = () => {
 };
 
 export default CategoryPage;
+
 
 
 

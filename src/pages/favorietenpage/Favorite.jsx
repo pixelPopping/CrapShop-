@@ -8,6 +8,9 @@ import axios from "axios";
 import filterProducts from "../../helpers/filteredProducts.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faShoppingCart, faSignOutAlt, faUser } from "@fortawesome/free-solid-svg-icons";
+import useHandleLogout from "../../helpers/UseHandleLogout.jsx";
+import ShowModal from "../../components/modal/ShowModal.jsx";
+import FavorietenItem from "../../components/favorietenItem/FavotietenItem.jsx";
 
 const FavorietenPage = () => {
     const {
@@ -17,7 +20,7 @@ const FavorietenPage = () => {
         totalFavorites,
         resetFavorites
     } = useContext(FavoriteContext);
-    const { user, isAuth, logout } = useContext(AuthContext);
+    const { user, isAuth } = useContext(AuthContext);
     const { items: cartItems } = useContext(ShoppingCartContext);
     const navigate = useNavigate();
     const location = useLocation();
@@ -29,8 +32,8 @@ const FavorietenPage = () => {
     const [showModal, setShowModal] = useState(zoekQuery.length > 0);
     const [allProducts, setAllProducts] = useState([]);
     const [categories, setCategories] = useState(["Alle categorieën"]);
-    const filtered = filterProducts(allProducts, query, selectedCategory);
-
+    const filteredProducts = filterProducts(allProducts, query, selectedCategory);
+    const handleLogout = useHandleLogout();
     const getStorageKey = (userId) => `Favorieten_${userId || "guest"}`;
 
     const totaalPrijs = items
@@ -77,12 +80,6 @@ const FavorietenPage = () => {
         fetchData();
     }, []);
 
-    const handleLogout = () => {
-        const key = getStorageKey(user?.id);
-        localStorage.removeItem(key);
-        resetFavorites();
-        logout();
-    };
 
 
     return (
@@ -164,21 +161,7 @@ const FavorietenPage = () => {
                     <div>
                         {items.map((item) => (
                             <div key={item.id} style={{ marginBottom: "1rem" }}>
-                                <img
-                                    src={item.image}
-                                    alt={item.title}
-                                    onError={(e) => { e.target.src = "/assets/image/fallback.png"; }}
-                                    style={{
-                                        width: "200px",
-                                        height: "200px",
-                                        objectFit: "contain",
-                                        marginBottom: "8px"
-                                    }}
-                                />
-                                <p>
-                                    {item.title} – €{item.price} × {item.quantity} = €
-                                    {(item.price * item.quantity).toFixed(2)}
-                                </p>
+                                <FavorietenItem item={item} />
                                 <button onClick={() => removeFavorite(item.id)}>
                                     Verwijder uit favorieten
                                 </button>
@@ -189,38 +172,29 @@ const FavorietenPage = () => {
                     </div>
                 )}
 
-                <div>
-                    <ul>
-                        <li><NavLink to="/profiel">Profiel</NavLink></li>
-                        <li><NavLink to="/recencies">Recensies</NavLink></li>
-                        <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
-                    </ul>
-                </div>
-
                 {showModal && (
-                    <div className="modal">
-                        <p>🔍 Zoekresultaten voor: <strong>{query}</strong></p>
-                        {filtered.length > 0 ? (
-                            <ul>
-                                {filtered.map((product) => (
-                                    <li key={product.id}>
-                                        <NavLink to={`/detailpagina/${product.id}`} onClick={() => setShowModal(false)}>
-                                            {product.title}
-                                        </NavLink>
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <p>Geen producten gevonden.</p>
-                        )}
-                    </div>
+                    <ShowModal
+                        query={query}
+                        selectedCategory={selectedCategory}
+                        filteredProducts={filteredProducts}
+                        setShowModal={setShowModal}
+                    />
                 )}
             </main>
+
+            <footer>
+                <ul>
+                    <li><NavLink to="/profiel">Profiel</NavLink></li>
+                    <li><NavLink to="/recencies">Recensies</NavLink></li>
+                    <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
+                </ul>
+            </footer>
         </>
     );
 };
 
 export default FavorietenPage;
+
 
 
 

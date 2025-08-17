@@ -1,20 +1,21 @@
-import { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { ShoppingCartContext } from "../../components/context/ShoppingCartContext.jsx";
 import { AuthContext } from "../../components/context/AuthContext.jsx";
 import { FavoriteContext } from "../../components/context/FavoriteContext.jsx";
 import { useNavigate, useLocation, NavLink } from "react-router-dom";
 import ZoekBalk from "../../components/searchFilter/ZoekBalk.jsx";
-import DecrementButton from "../../components/deCrementButton/DecrementButton.jsx";
-import InCrementButton from "../../components/counterbutton/InCrementButton.jsx";
 import axios from "axios";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faHeart, faShoppingCart, faSignOutAlt, faUser} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart, faShoppingCart, faSignOutAlt, faUser } from "@fortawesome/free-solid-svg-icons";
 import filterProducts from "../../helpers/filteredProducts.jsx";
+import useHandleLogout from "../../helpers/UseHandleLogout.jsx";
+import ShowModal from "../../components/modal/ShowModal.jsx";
+import CartItem from "../../components/cartItem/CartItem.jsx";
 
 function Cart() {
-    const { items = [], price, reSet, removeItem } = useContext(ShoppingCartContext);
-    const { isAuth, user, logout } = useContext(AuthContext);
-    const { items: favoriteItems, resetFavorites } = useContext(FavoriteContext);
+    const { items = [], price, reSet, } = useContext(ShoppingCartContext);
+    const { isAuth, user } = useContext(AuthContext);
+    const { items: favoriteItems } = useContext(FavoriteContext);
     const navigate = useNavigate();
     const location = useLocation();
     const params = new URLSearchParams(location.search);
@@ -25,7 +26,7 @@ function Cart() {
     const [allProducts, setAllProducts] = useState([]);
     const [categories, setCategories] = useState(["Alle categorieën"]);
     const filteredProducts = filterProducts(allProducts, query, selectedCategory);
-
+    const handleLogout = useHandleLogout();
 
     useEffect(() => {
         async function fetchProducts() {
@@ -40,12 +41,6 @@ function Cart() {
         }
         fetchProducts();
     }, []);
-
-
-    const handleLogout = () => {
-        resetFavorites();
-        logout();
-    };
 
     return (
         <>
@@ -72,7 +67,7 @@ function Cart() {
                             navigate(`/products/${encodeURIComponent(value)}`);
                         }
                     }}
-                    categories={["Alle categorieën", ...categories]}
+                    categories={categories}
                 />
 
                 <div className="button-container4">
@@ -97,93 +92,60 @@ function Cart() {
                     )}
 
                     <div className="icon-item" onClick={() => navigate("/cart")} title="Winkelwagen">
-                        <div className="icon-wrapper">
-                            <FontAwesomeIcon icon={faShoppingCart} />
-                            {items.length > 0 && <span className="icon-count">{items.length}</span>}
-                        </div>
+                        <FontAwesomeIcon icon={faShoppingCart} />
+                        {items.length > 0 && <span className="icon-count">{items.length}</span>}
                     </div>
 
                     <div className="icon-item" onClick={() => navigate("/favorietenpage")} title="Favorieten">
-                        <div className="icon-wrapper">
-                            <FontAwesomeIcon icon={faHeart} />
-                            {favoriteItems.length > 0 && <span className="icon-count">{favoriteItems.length}</span>}
-                        </div>
+                        <FontAwesomeIcon icon={faHeart} />
+                        {favoriteItems.length > 0 && <span className="icon-count">{favoriteItems.length}</span>}
                     </div>
+
                     <button onClick={() => navigate('/')}>Home</button>
                 </div>
             </nav>
 
             {showModal && (
-                <div className="zoek-modal">
-                    <div className="modal-content">
-                        <h3>Zoekresultaten voor: <strong>{query || selectedCategory}</strong></h3>
-                        <button onClick={() => setShowModal(false)}>Sluiten</button>
-                        <ul>
-                            {filteredProducts.length > 0 ? (
-                                filteredProducts.map((product) => (
-                                    <li key={product.id}>
-                                        <NavLink to={`/detailpagina/${product.id}`} onClick={() => setShowModal(false)}>
-                                            {product.title}
-                                        </NavLink>
-                                    </li>
-                                ))
-                            ) : (
-                                <p>Geen resultaten gevonden.</p>
-                            )}
-                        </ul>
-                    </div>
-                </div>
+                <ShowModal
+                    query={query}
+                    selectedCategory={selectedCategory}
+                    filteredProducts={filteredProducts}
+                    setShowModal={setShowModal}
+                />
             )}
 
             <main>
-                <h2>
-                    🛒 Winkelwagen – {items.length > 0 ? items.map(item => item.title).join(", ") : "Leeg"}
-                </h2>
+                <h2>🛒 Winkelwagen – {items.length > 0 ? items.map(item => item.title).join(", ") : "Leeg"}</h2>
 
                 {items.length === 0 ? (
                     <p>Je winkelwagen is leeg.</p>
                 ) : (
                     <>
                         {items.map((item) => (
-                            <div key={item.id} style={{ marginBottom: "1rem" }}>
-                                <img
-                                    src={item.image}
-                                    alt={item.title}
-                                    style={{
-                                        width: "100px",
-                                        height: "100px",
-                                        objectFit: "contain",
-                                        marginBottom: "8px"
-                                    }}
-                                />
-                                <p>
-                                    {item.title} – €{item.price} × {item.quantity} = €
-                                    {(item.price * item.quantity).toFixed(2)}
-                                </p>
-                                <DecrementButton id={item.id} />
-                                <InCrementButton id={item.id} />
-                                <button onClick={() => removeItem(item.id)}>Verwijder</button>
-                            </div>
+                            <CartItem key={item.id} item={item} />
                         ))}
                         <p><strong>Totaal aantal stuks:</strong> {items.reduce((sum, i) => sum + i.quantity, 0)}</p>
                         <p><strong>Totaalprijs:</strong> €{price().toFixed(2)}</p>
                         <button onClick={reSet}>Reset</button>
                     </>
                 )}
-
-                <div>
-                    <ul>
-                        <li><NavLink to="/profiel">Profiel</NavLink></li>
-                        <li><NavLink to="/recencies">Recencies</NavLink></li>
-                        <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
-                    </ul>
-                </div>
             </main>
+
+            <footer>
+                <ul>
+                    <li><NavLink to="/profiel">Profiel</NavLink></li>
+                    <li><NavLink to="/recencies">Recensies</NavLink></li>
+                    <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
+                </ul>
+            </footer>
         </>
     );
 }
 
 export default Cart;
+
+
+
 
 
 

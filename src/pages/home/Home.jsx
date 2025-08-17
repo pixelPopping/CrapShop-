@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import "./Home.css";
 import { ShoppingCartContext } from "../../components/context/ShoppingCartContext.jsx";
-import {NavLink, useNavigate, useLocation, useParams} from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import ClockTime from "../../components/digitaleClock/DigitaleClock.jsx";
 import { AuthContext } from "../../components/context/AuthContext.jsx";
 import { SpinContext } from "../../components/context/SpinContext.jsx";
@@ -16,15 +16,18 @@ import {
     faShoppingCart,
     faHeart
 } from '@fortawesome/free-solid-svg-icons';
+import WheelOfFortune from "../../components/wheelOfFortune/WheelOfFortune.jsx";
+import getItems from "../../helpers/getItems";
+import ShowModal from "../../components/modal/ShowModal.jsx";
+import useHandleLogout from "../../helpers/UseHandleLogout.jsx";
 
 function Home() {
     const navigate = useNavigate();
     const location = useLocation();
-    const { isAuth, user, logout } = useContext(AuthContext);
+    const { isAuth, user, } = useContext(AuthContext);
     const { items: cartItems } = useContext(ShoppingCartContext);
-    const { items: favoriteItems, resetFavorites } = useContext(FavoriteContext);
-    const { spin, handleSpin, spinning, rotation, results, setSpin } = useContext(SpinContext);
-
+    const { items: favoriteItems} = useContext(FavoriteContext);
+    const { rotation, spinning } = useContext(SpinContext);
     const params = new URLSearchParams(location.search);
     const zoekQuery = params.get("query")?.toLowerCase() || "";
     const [query, setQuery] = useState(zoekQuery);
@@ -33,6 +36,8 @@ function Home() {
     const [allProducts, setAllProducts] = useState([]);
     const filteredProducts = filterProducts(allProducts, query, selectedCategory);
     const [categories, setCategories] = useState(["Alle categorieën"]);
+    const wheelItems = getItems();
+    const handleLogout = useHandleLogout();
 
 
     useEffect(() => {
@@ -50,15 +55,6 @@ function Home() {
     }, []);
 
 
-
-    const getStorageKey = (userId) => `Favorieten_${userId || "guest"}`;
-
-    const handleLogout = () => {
-        const key = getStorageKey(user?.id);
-        localStorage.removeItem(key);
-        resetFavorites();
-        logout();
-    };
 
     return (
         <>
@@ -90,7 +86,7 @@ function Home() {
                             navigate(`?query=${encodeURIComponent(query)}&category=${encodeURIComponent(value)}`);
                         }
                     }}
-                    categories={["Alle categorieën", ...categories]}
+                    categories={categories}
                 />
 
                 <div className="button-container4">
@@ -129,29 +125,14 @@ function Home() {
                     </div>
                 </div>
             </nav>
-
             {showModal && (
-                <div className="zoek-modal">
-                    <div className="modal-content">
-                        <h3>Zoekresultaten voor: <strong>{query || selectedCategory}</strong></h3>
-                        <button onClick={() => setShowModal(false)}>Sluiten</button>
-                        <ul>
-                            {filteredProducts.length > 0 ? (
-                                filteredProducts.map((product) => (
-                                    <li key={product.id}>
-                                        <NavLink to={`/detailpagina/${product.id}`} onClick={() => setShowModal(false)}>
-                                            {product.title}
-                                        </NavLink>
-                                    </li>
-                                ))
-                            ) : (
-                                <p>Geen resultaten gevonden.</p>
-                            )}
-                        </ul>
-                    </div>
-                </div>
+            <ShowModal
+            query={query}
+            selectedCategory={selectedCategory}
+            filteredProducts={filteredProducts}
+            setShowModal={setShowModal}
+            />
             )}
-
             <main>
                 <div className="animated-box">
                     <div className="mainbox">
@@ -165,29 +146,14 @@ function Home() {
                                 transformOrigin: "center center"
                             }}
                         >
-                            {[
-                                "Men's Clothes", "Women's Clothes", "Jewelry", "Electronics",
-                                "Vintage", "10% korting", "extra spin", "15% korting",
-                                "gift", "30% korting"
-                            ].map((text, i) => (
-                                <span key={i} className={`font span${i + 1}`}>
-                                    <h5>{text}</h5>
-                                </span>
+                            {wheelItems.map((text, index) => (
+                                <span key={index} className={`font span${index + 1}`}>
+                                 <h5>{text}</h5>
+                                 </span>
                             ))}
                         </div>
                     </div>
-
-                    <button onClick={handleSpin} disabled={spinning || spin <= 0}>
-                        {spinning ? "Spinning..." : `Spin (${spin} left)`}
-                    </button>
-
-                    <button onClick={() => setSpin(3)} disabled={spinning}>
-                        Reset Spins
-                    </button>
-
-                    {results && !spinning && (
-                        <p>You got: <strong>{results}</strong></p>
-                    )}
+                    <WheelOfFortune buttonLabel="spin" />
                 </div>
 
                 <div>
@@ -225,11 +191,15 @@ function Home() {
                     />
                 </section>
             </main>
+            <footer className="footer">
+                <h1>PixelPopping@productions</h1>
+            </footer>
         </>
     );
 }
 
 export default Home;
+
 
 
 

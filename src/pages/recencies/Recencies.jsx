@@ -1,38 +1,41 @@
-import { useNavigate, useLocation, NavLink } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+
+import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../../components/context/AuthContext.jsx";
 import { ShoppingCartContext } from "../../components/context/ShoppingCartContext.jsx";
 import { FavoriteContext } from "../../components/context/FavoriteContext.jsx";
+import { useNavigate, useLocation, NavLink } from "react-router-dom";
 import ZoekBalk from "../../components/searchFilter/ZoekBalk.jsx";
-import  filterProducts  from "../../helpers/filteredProducts.jsx";
+import filterProducts from "../../helpers/filteredProducts.jsx";
 import axios from "axios";
+import useHandleLogout from "../../helpers/UseHandleLogout.jsx";
+import ShowModal from "../../components/modal/ShowModal.jsx";
+import RecensieForm from "../../components/recensieForm/RecensieForm.jsx";
+import RecensieItem from "../../helpers/RecensieItem.jsx";
+import HandleLike from "../../helpers/HandleLike.jsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faHeart, faShoppingCart, faSignOutAlt, faUser} from "@fortawesome/free-solid-svg-icons";
+import {faHeart, faShoppingCart, faUser} from "@fortawesome/free-solid-svg-icons";
 
 function Recencies() {
     const [recencies, setRecencies] = useState([]);
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [message, setMessage] = useState("");
-    const { isAuth, user, logout } = useContext(AuthContext);
-    const { items: cartItems } = useContext(ShoppingCartContext);
-    const { items: favoriteItems, resetFavorites } = useContext(FavoriteContext);
-    const navigate = useNavigate();
+    const [allProducts, setAllProducts] = useState([]);
+    const [categories, setCategories] = useState(["Alle categorieën"]);
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const zoekQuery = params.get("query")?.toLowerCase() || "";
     const [query, setQuery] = useState(zoekQuery);
     const [selectedCategory, setSelectedCategory] = useState("Alle categorieën");
     const [showModal, setShowModal] = useState(zoekQuery.length > 0);
-    const [allProducts, setAllProducts] = useState([]);
-    const filteredProducts = filterProducts(allProducts, query, selectedCategory);
-    const [categories, setCategories] = useState(["Alle categorieën"]);
-
-
+    const navigate = useNavigate();
+    const { isAuth, user } = useContext(AuthContext);
+    const { items: cartItems } = useContext(ShoppingCartContext);
+    const { items: favoriteItems } = useContext(FavoriteContext);
+    const handleLogout = useHandleLogout();
+    const handleLike = HandleLike(setRecencies, recencies);
+    const filtered = filterProducts(allProducts, query, selectedCategory);
 
     useEffect(() => {
-        const savedRecencies = JSON.parse(localStorage.getItem("recencies")) || [];
-        setRecencies(savedRecencies);
+        const saved = JSON.parse(localStorage.getItem("recencies")) || [];
+        setRecencies(saved);
     }, []);
 
     useEffect(() => {
@@ -49,29 +52,6 @@ function Recencies() {
         fetchProducts();
     }, []);
 
-    const recenciesMessage = (e) => {
-        e.preventDefault();
-        const newRecensie = { text: message, author: name, email: email, likes: 0 };
-        const updatedRecencies = [...recencies, newRecensie];
-        setRecencies(updatedRecencies);
-        localStorage.setItem("recencies", JSON.stringify(updatedRecencies));
-        setName("");
-        setEmail("");
-        setMessage("");
-    };
-
-    const handleLike = (index) => {
-        const updated = [...recencies];
-        updated[index].likes += 1;
-        setRecencies(updated);
-        localStorage.setItem("recencies", JSON.stringify(updated));
-    };
-
-    const handleLogout = () => {
-        resetFavorites();
-        logout();
-    };
-
     return (
         <>
             <nav className="navbar-four">
@@ -80,9 +60,7 @@ function Recencies() {
                     <li><NavLink to="/products/women's clothing">Women</NavLink></li>
                     <li><NavLink to="/Shop">Shop</NavLink></li>
                 </ul>
-                <div>
-                    <button onClick={() => navigate('/')}>Home</button>
-                </div>
+                <button onClick={() => navigate('/')}>Home</button>
                 <ZoekBalk
                     type="text"
                     inputValue={query}
@@ -99,9 +77,8 @@ function Recencies() {
                             navigate(`/products/${encodeURIComponent(value)}`);
                         }
                     }}
-                    categories={["Alle categorieën", ...categories]}
+                    categories={categories}
                 />
-
                 <div className="button-container4">
                     {isAuth ? (
                         <>
@@ -122,89 +99,55 @@ function Recencies() {
                             </div>
                         </>
                     )}
-
                     <div className="icon-item" onClick={() => navigate("/cart")} title="Winkelwagen">
-                        <div className="icon-wrapper">
-                            <FontAwesomeIcon icon={faShoppingCart} />
-                            {cartItems.length > 0 && <span className="icon-count">{cartItems.length}</span>}
-                        </div>
+                        <FontAwesomeIcon icon={faShoppingCart} />
+                        {cartItems.length > 0 && <span className="icon-count">{cartItems.length}</span>}
                     </div>
-
                     <div className="icon-item" onClick={() => navigate("/favorietenpage")} title="Favorieten">
-                        <div className="icon-wrapper">
-                            <FontAwesomeIcon icon={faHeart} />
-                            {favoriteItems.length > 0 && <span className="icon-count">{favoriteItems.length}</span>}
-                        </div>
+                        <FontAwesomeIcon icon={faHeart} />
+                        {favoriteItems.length > 0 && <span className="icon-count">{favoriteItems.length}</span>}
                     </div>
                 </div>
             </nav>
 
             {showModal && (
-                <div className="zoek-modal">
-                    <div className="modal-content">
-                        <h3>Zoekresultaten voor: <strong>{query || selectedCategory}</strong></h3>
-                        <button onClick={() => setShowModal(false)}>Sluiten</button>
-                        <ul>
-                            {filteredProducts.length > 0 ? (
-                                filteredProducts.map((product) => (
-                                    <li key={product.id}>
-                                        <NavLink to={`/detailpagina/${product.id}`} onClick={() => setShowModal(false)}>
-                                            {product.title}
-                                        </NavLink>
-                                    </li>
-                                ))
-                            ) : (
-                                <p>Geen resultaten gevonden.</p>
-                            )}
-                        </ul>
-                    </div>
-                </div>
+                <ShowModal
+                    query={query}
+                    selectedCategory={selectedCategory}
+                    filteredProducts={filtered}
+                    setShowModal={setShowModal}
+                />
             )}
 
             <main>
-                <form onSubmit={recenciesMessage}>
-                    <input
-                        type="text"
-                        placeholder="name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                    <input
-                        type="email"
-                        placeholder="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Message"
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                    />
-                    <button type="submit">Submit</button>
-                </form>
-
+                <RecensieForm recencies={recencies} setRecencies={setRecencies} />
                 <h1>Recencies</h1>
                 <div className="recencies">
                     {recencies.map((m, index) => (
-                        <div key={index}>
-                            <h1>{m.author}</h1>
-                            <p>{m.text}</p>
-                            <p>{m.email}</p>
-                            <p>Likes: {m.likes}</p>
-                            <button onClick={() => handleLike(index)}>❤️ Like</button>
-                        </div>
+                        <RecensieItem
+                            key={index}
+                            label={m.author}
+                            text={m.text}
+                            likes={m.likes}
+                            onLike={() => handleLike(index)}
+                        />
                     ))}
                 </div>
-
-                <div>
+                <ul>
+                    <li><NavLink to="/profiel">Profiel</NavLink></li>
+                    <li><NavLink to="/recencies">Recencies</NavLink></li>
+                    <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
+                </ul>
+            </main>
+            <div>
+                <footer>
                     <ul>
                         <li><NavLink to="/profiel">Profiel</NavLink></li>
-                        <li><NavLink to="/recencies">Recencies</NavLink></li>
+                        <li><NavLink to="/recencies">Recensies</NavLink></li>
                         <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
                     </ul>
-                </div>
-            </main>
+                </footer>
+            </div>
         </>
     );
 }
