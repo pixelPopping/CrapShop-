@@ -1,44 +1,36 @@
-import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate, NavLink } from "react-router-dom";
 import ZoekBalk from "../../components/searchFilter/ZoekBalk.jsx";
 import "./SignUp.css";
-import React, {useContext, useEffect, useState} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import filterProducts from "../../helpers/filteredProducts.jsx";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faHeart, faShoppingCart, faSignOutAlt, faUser} from "@fortawesome/free-solid-svg-icons";
-import {AuthContext} from "../../components/context/AuthContext.jsx";
-import {ShoppingCartContext} from "../../components/context/ShoppingCartContext.jsx";
-import {FavoriteContext} from "../../components/context/FavoriteContext.jsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart, faShoppingCart, faSignOutAlt, faUser } from "@fortawesome/free-solid-svg-icons";
+import { AuthContext } from "../../components/context/AuthContext.jsx";
+import { ShoppingCartContext } from "../../components/context/ShoppingCartContext.jsx";
+import { FavoriteContext } from "../../components/context/FavoriteContext.jsx";
+import SignUpForm from "../../components/signUpForm/SignUpForm.jsx";
+import useHandleLogout from "../../helpers/UseHandleLogout.jsx";
+import ShowModal from "../../components/modal/ShowModal.jsx";
 
 function SignUp() {
     const navigate = useNavigate();
-    const { isAuth, user, logout } = useContext(AuthContext);
+    const { isAuth, user } = useContext(AuthContext);
     const { items: cartItems } = useContext(ShoppingCartContext);
-    const { items: favoriteItems, resetFavorites } = useContext(FavoriteContext);
+    const { items: favoriteItems } = useContext(FavoriteContext);
     const params = new URLSearchParams(location.search);
     const zoekQuery = params.get("query")?.toLowerCase() || "";
+
     const [query, setQuery] = useState(zoekQuery);
     const [selectedCategory, setSelectedCategory] = useState("Alle categorieën");
     const [showModal, setShowModal] = useState(zoekQuery.length > 0);
     const [allProducts, setAllProducts] = useState([]);
-    const filteredProducts = filterProducts(allProducts, query, selectedCategory);
-    const getStorageKey = (userId) => `Favorieten_${userId || "guest"}`;
     const [categories, setCategories] = useState(["Alle categorieën"]);
+    const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
-    const {
-        handleSubmit,
-        formState: { errors },
-        register,
-    } = useForm();
-
-
-    const handleLogout = () => {
-        const key = getStorageKey(user?.id);
-        localStorage.removeItem(key);
-        resetFavorites();
-        logout();
-    };
+    const handleLogout = useHandleLogout();
+    const filteredProducts = filterProducts(allProducts, query, selectedCategory);
 
     useEffect(() => {
         async function fetchProducts() {
@@ -54,8 +46,10 @@ function SignUp() {
         fetchProducts();
     }, []);
 
-
     const handleFormSubmit = async (data) => {
+        setLoading(true);
+        setErrorMessage("");
+
         try {
             const response = await axios.post(
                 `/api/users`,
@@ -78,6 +72,9 @@ function SignUp() {
             navigate('/signin');
         } catch (error) {
             console.error('Fout bij create:', error.message);
+            setErrorMessage("Registratie mislukt. Probeer het opnieuw.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -101,6 +98,7 @@ function SignUp() {
                 }}
                 categories={["Alle categorieën", ...categories]}
             />
+
             <div className="button-container4">
                 {isAuth ? (
                     <>
@@ -136,180 +134,21 @@ function SignUp() {
                     </div>
                 </div>
             </div>
+
             {showModal && (
-                <div className="zoek-modal">
-                    <div className="modal-content">
-                        <h3>Zoekresultaten voor: <strong>{query || selectedCategory}</strong></h3>
-                        <button onClick={() => setShowModal(false)}>Sluiten</button>
-                        <ul>
-                            {filteredProducts.length > 0 ? (
-                                filteredProducts.map((product) => (
-                                    <li key={product.id}>
-                                        <NavLink to={`/detailpagina/${product.id}`} onClick={() => setShowModal(false)}>
-                                            {product.title}
-                                        </NavLink>
-                                    </li>
-                                ))
-                            ) : (
-                                <p>Geen resultaten gevonden.</p>
-                            )}
-                        </ul>
-                    </div>
-                </div>
+                <ShowModal
+                    query={query}
+                    selectedCategory={selectedCategory}
+                    filteredProducts={filteredProducts}
+                    setShowModal={setShowModal}
+                />
             )}
 
-
-            <form className="form" onSubmit={handleSubmit(handleFormSubmit)}>
-                <h2>Nieuw bij CrapShop</h2>
-                <p>Maak een nieuw account en begin met bestellen</p>
-                <p>Persoonlijke gegevens</p>
-
-                <label htmlFor="gender-man">
-                    Man:
-                    <input
-                        {...register("gender", { required: "Selecteer een gender" })}
-                        type="radio"
-                        name="gender"
-                        value="man"
-                        id="gender-man"
-                    />
-                </label>
-                <label htmlFor="gender-woman">
-                    Woman:
-                    <input
-                        {...register("gender", { required: "Selecteer een gender" })}
-                        type="radio"
-                        name="gender"
-                        value="woman"
-                        id="gender-woman"
-                    />
-                </label>
-                <label htmlFor="gender-neutral">
-                    Neutral:
-                    <input
-                        {...register("gender", { required: "Selecteer een gender" })}
-                        type="radio"
-                        name="gender"
-                        value="neutral"
-                        id="gender-neutral"
-                    />
-                </label>
-                {errors.gender && <p>{errors.gender.message}</p>}
-
-                <label htmlFor="username-field">
-                    Username:
-                    <input
-                        type="text"
-                        id="username-field"
-                        {...register("username", { required: "Username is verplicht" })}
-                    />
-                    {errors.username && <p>{errors.username.message}</p>}
-                </label>
-
-                <label htmlFor="lastname-field">
-                    Lastname:
-                    <input
-                        type="text"
-                        id="lastname-field"
-                        {...register("lastname", { required: "Lastname is verplicht" })}
-                    />
-                    {errors.lastname && <p>{errors.lastname.message}</p>}
-                </label>
-
-                <label htmlFor="postalcode-field">
-                    Postal Code:
-                    <input
-                        type="text"
-                        id="postalcode-field"
-                        {...register("postalcode", { required: "Postal code is verplicht" })}
-                    />
-                    {errors.postalcode && <p>{errors.postalcode.message}</p>}
-                </label>
-
-                <label htmlFor="unit-field">
-                    Unit:
-                    <input
-                        type="number"
-                        id="unit-field"
-                        {...register("unit", { required: "Unit is verplicht" })}
-                    />
-                    {errors.unit && <p>{errors.unit.message}</p>}
-                </label>
-
-                <label htmlFor="homeadress-field">
-                    Home Adress:
-                    <input
-                        type="text"
-                        id="homeadress-field"
-                        {...register("homeadress", { required: "Home adress is verplicht" })}
-                    />
-                    {errors.homeadress && <p>{errors.homeadress.message}</p>}
-                </label>
-
-                <label htmlFor="city-field">
-                    City:
-                    <input
-                        type="text"
-                        id="city-field"
-                        {...register("city", { required: "City is verplicht" })}
-                    />
-                    {errors.city && <p>{errors.city.message}</p>}
-                </label>
-
-                <label htmlFor="phonenumber-field">
-                    Phone number:
-                    <input
-                        type="tel"
-                        id="phonenumber-field"
-                        {...register("phonenumber", { required: "Phone number is verplicht" })}
-                    />
-                    {errors.phonenumber && <p>{errors.phonenumber.message}</p>}
-                </label>
-
-                <label htmlFor="date-field">
-                    Date of birth:
-                    <input
-                        type="date"
-                        id="date-field"
-                        {...register("date", { required: "Date is verplicht" })}
-                    />
-                    {errors.date && <p>{errors.date.message}</p>}
-                </label>
-
-                <h3>Accountgegevens</h3>
-
-                <label htmlFor="email-field">
-                    Email:
-                    <input
-                        type="email"
-                        id="email-field"
-                        {...register("email", {
-                            required: "Email is verplicht",
-                            validate: value =>
-                                value.includes('@') || "Ongeldig e-mailadres"
-                        })}
-                    />
-                    {errors.email && <p>{errors.email.message}</p>}
-                </label>
-
-                <label htmlFor="password-field">
-                    Wachtwoord:
-                    <input
-                        type="password"
-                        id="password-field"
-                        {...register("password", {
-                            required: "Wachtwoord is verplicht",
-                            minLength: {
-                                value: 8,
-                                message: "Minimaal 8 tekens"
-                            },
-                        })}
-                    />
-                    {errors.password && <p className="error">{errors.password.message}</p>}
-                </label>
-
-                <button type="submit">Registreer</button>
-            </form>
+            <SignUpForm
+                onSubmit={handleFormSubmit}
+                loading={loading}
+                errorMessage={errorMessage}
+            />
 
             <div className="profiel-links">
                 <ul>
@@ -323,6 +162,7 @@ function SignUp() {
 }
 
 export default SignUp;
+
 
 
 
