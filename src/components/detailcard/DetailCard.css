@@ -1,0 +1,71 @@
+.outer-container3 {
+    display: flex;
+    flex-direction: column;
+    border: solid 2px lightgray;
+    margin-top: 80px;
+}
+
+.inner-content {
+    display: flex;
+    flex-basis: 100%;
+    max-width: 800px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.card-header {
+    display: flex;
+    width: 500px;
+    justify-content: center;
+    flex-direction: column;
+    padding: 30px;
+    margin: 40px;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.winkelwagen {
+    border: solid 2px lightgray;
+    margin-top: 80px;
+}
+
+.main-img {
+    display: flex;
+    width: 100%;
+}
+
+img {
+    padding: 30px;
+    width: 300px;
+    height: 300px;
+}
+
+.card-content {
+    display: flex;
+    flex-basis: 100%;
+    max-width: 800px;
+    padding:50px;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.cart-buttons {
+    display: flex;
+    width: 400px;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-start;
+}
+
+.card-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.add-button{
+    width: 100%;
+    flex-grow: 1;
+}

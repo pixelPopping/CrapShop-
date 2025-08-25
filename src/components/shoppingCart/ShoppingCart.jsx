@@ -38,14 +38,6 @@ function ShoppingCart() {
                     )}
                     <p><strong>Totaalprijs:</strong> {price().toFixed(2) ? `€${price().toFixed(2)}` : '€0,00'}</p>
                 </section>
-
-                <footer>
-                    <ul>
-                        <li><NavLink to="/profiel">Profiel</NavLink></li>
-                        <li><NavLink to="/recencies">Recensies</NavLink></li>
-                        <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
-                    </ul>
-                </footer>
             </main>
         </>
     );

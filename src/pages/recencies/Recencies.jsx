@@ -13,7 +13,7 @@ import RecensieForm from "../../components/recensieForm/RecensieForm.jsx";
 import RecensieItem from "../../helpers/RecensieItem.jsx";
 import HandleLike from "../../helpers/HandleLike.jsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faHeart, faShoppingCart, faUser} from "@fortawesome/free-solid-svg-icons";
+import {faHeart, faShoppingCart, faSignOutAlt, faUser} from "@fortawesome/free-solid-svg-icons";
 
 function Recencies() {
     const [recencies, setRecencies] = useState([]);
@@ -133,11 +133,6 @@ function Recencies() {
                         />
                     ))}
                 </div>
-                <ul>
-                    <li><NavLink to="/profiel">Profiel</NavLink></li>
-                    <li><NavLink to="/recencies">Recencies</NavLink></li>
-                    <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
-                </ul>
             </main>
             <div>
                 <footer>

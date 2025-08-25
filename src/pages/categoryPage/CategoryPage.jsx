@@ -139,7 +139,7 @@ const CategoryPage = () => {
                                 product={product}
                                 image={product.image}
                                 label={product.title}
-                                text={`€${product.price}`}
+                                text={`Price:€${product.price}`}
                                 rating={product.rating.rate}
                                 onClick={() => navigate(`/detailpagina/${product.id}`)}
                             />

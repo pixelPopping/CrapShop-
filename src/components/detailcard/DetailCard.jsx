@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { ShoppingCartContext } from "../context/ShoppingCartContext.jsx";
 import { FavoriteContext } from "../context/FavoriteContext.jsx";
 import DropDown from "../dropdown/DropDown.jsx";
+import './DetailCard.css';
 
 function DetailCard({ id, label, text, image, price }) {
     const { cart, items: cartItems } = useContext(ShoppingCartContext);
@@ -14,62 +15,67 @@ function DetailCard({ id, label, text, image, price }) {
     const isFavoriet = favorieten.some(item => item.id === id);
 
     return (
-        <div className="detail-card">
-            <h2>{label}</h2>
-            <img
-                src={image}
-                alt={label}
-                style={{ width: "200px", height: "200px", objectFit: "contain", borderRadius: "8px" }}
-            />
+        <div className="outer-container3">
+            <section>
+                <article>
+                    <div className="card-content">
+                        <div className="card-header">
+                            <h2>{label}</h2>
+                            <p>{text}</p>
+                            <p><strong>Prijs:</strong> €{price}</p>
+                        </div>
+                        <div className="main-img">
+                            <img src={image} alt={label} />
+                        </div>
+                    </div>
 
-            <p style={{ fontStyle: "italic" }}>{text}</p>
-            <p><strong>Prijs:</strong> €{price}</p>
-
-            <DropDown
-                value={selectedQuantity}
-                onChange={setSelectedQuantity}
-            />
-
-            <button
-                onClick={() =>
-                    cart({
-                        id,
-                        label,
-                        text,
-                        image,
-                        price,
-                        quantity: selectedQuantity
-                    })
-                }
-                style={{ marginTop: "10px" }}
-            >
-                🛒 Voeg toe
-            </button>
-
-            <button
-                onClick={() =>
-                    toggleFavorite({
-                        id,
-                        label,
-                        text,
-                        image,
-                        price,
-                        quantity: selectedQuantity
-                    })
-                }
-                style={{ marginTop: "10px" }}
-            >
-                {isFavoriet ? "💖 Verwijder uit favorieten" : "🤍 Voeg toe aan favorieten"}
-            </button>
-
-            <p style={{ marginTop: "10px" }}>
-                Aantal in winkelwagen: <strong>{quantityInCart}</strong>
-            </p>
+                    <div className="card-container">
+                        <div className="cart-buttons">
+                            <DropDown
+                                value={selectedQuantity}
+                                onChange={setSelectedQuantity}
+                            />
+                            <button
+                                className="add-button"
+                                onClick={() =>
+                                    cart({
+                                        id,
+                                        label,
+                                        text,
+                                        image,
+                                        price,
+                                        quantity: selectedQuantity
+                                    })
+                                }
+                            >
+                                Cart
+                            </button>
+                            <button
+                                className={`favorite-button ${isFavoriet ? "favoriet" : ""}`}
+                                onClick={() =>
+                                    toggleFavorite({
+                                        id,
+                                        label,
+                                        text,
+                                        image,
+                                        price,
+                                        quantity: selectedQuantity
+                                    })
+                                }
+                            >
+                                {isFavoriet ? "💖" : "🤍"}
+                            </button>
+                        </div>
+                    </div>
+                </article>
+            </section>
         </div>
     );
 }
 
 export default DetailCard;
+
+
 
 
 

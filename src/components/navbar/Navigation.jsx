@@ -1,4 +1,5 @@
 import {NavLink} from "react-router-dom";
+import './navbar.css'
 
 function Navigation () {
     return (
@@ -12,6 +13,7 @@ function Navigation () {
                     <li><NavLink to="/profiel" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Profiel</NavLink></li>
                     <li><NavLink to="/recencies" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Recencies</NavLink></li>
                     <li><NavLink to="/favorietenpage" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Favorieten</NavLink></li>
+                    <li><NavLink to="/hamburmenu" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>hamburger</NavLink></li>
                 </ul>
             </nav>
         </div>

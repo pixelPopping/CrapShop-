@@ -19,7 +19,7 @@ function WheelOfFortune({ buttonLabel = "Spin", onResult }) {
                 onClick={handleSpin}
                 disabled={spinning || spin <= 0}
             >
-                {spinning ? "Spinning..." : `${buttonLabel} (${spin} left)`}
+                {spinning ? "Spinning..." : `${buttonLabel} (${spin})`}
             </button>
 
             {results && !spinning && (

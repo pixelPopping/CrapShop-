@@ -6,36 +6,45 @@
 ///stap 4 filter methode gebruiken om zoekresultaten te filteren
 ///stap 5 state verplaatsen naar app.jsx zodat bij alle componenten de zoekbalk functioneel is
 import React from "react";
+import "./ZoekBalk.css";
 
 const ZoekBalk = ({
                       inputValue,
                       inputCallback,
                       selectedCategory,
                       onCategoryChange,
-                      categories
+                      categories,
+                      showCategories
                   }) => {
     return (
-        <div className="zoekbalk-container">
+        <div className="zoekbalkContainer">
             <input
                 type="text"
                 value={inputValue}
                 onChange={(e) => inputCallback(e.target.value)}
                 placeholder="Zoek op product..."
+                className="searchInput"
             />
-            <select
-                value={selectedCategory}
-                onChange={(e) => onCategoryChange(e.target.value)}
-            >
-                {categories.map((cat) => (
-                    <option key={cat} value={cat}>
-                        {cat}
-                    </option>
-                ))}
-            </select>
+
+            {showCategories && (
+                <select
+                    value={selectedCategory}
+                    onChange={(e) => onCategoryChange(e.target.value)}
+                    className="categorySelect"
+                >
+                    {categories.map((cat) => (
+                        <option key={cat} value={cat}>
+                            {cat}
+                        </option>
+                    ))}
+                </select>
+            )}
         </div>
     );
 };
 
 export default ZoekBalk;
+
+
 
 
