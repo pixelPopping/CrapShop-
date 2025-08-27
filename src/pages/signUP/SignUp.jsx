@@ -134,7 +134,7 @@ function SignUp() {
                     </div>
                 </div>
             </div>
-
+            <section>
             {showModal && (
                 <ShowModal
                     query={query}
@@ -143,12 +143,14 @@ function SignUp() {
                     setShowModal={setShowModal}
                 />
             )}
-
+            </section>
+            <section>
             <SignUpForm
                 onSubmit={handleFormSubmit}
                 loading={loading}
                 errorMessage={errorMessage}
             />
+            </section>
 
             <div className="profiel-links">
                 <ul>

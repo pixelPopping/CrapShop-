@@ -11,6 +11,7 @@ import useHandleLogout from "../../helpers/UseHandleLogout.jsx";
 import {
     faSignOutAlt, faUser, faShoppingCart, faHeart
 } from '@fortawesome/free-solid-svg-icons';
+import {FavoriteContext} from "../../components/context/FavoriteContext.jsx";
 
 function ShopPagina() {
     const [shop, setShop] = useState([]);
@@ -23,6 +24,7 @@ function ShopPagina() {
     const navigate = useNavigate();
     const { items } = useContext(ShoppingCartContext);
     const { isAuth, user } = useContext(AuthContext);
+    const { items: favoriteItems } = useContext(FavoriteContext);
     const handleLogout = useHandleLogout();
 
     useEffect(() => {
@@ -56,7 +58,10 @@ function ShopPagina() {
     });
 
     return (
-        <div>
+        <div className="shop">
+            <div className="shop">
+                <h1>Shop.</h1>
+            </div>
             <header className="shop-header">
                 <nav className="navbar-four">
                     <ul className="nav-links4">
@@ -65,10 +70,6 @@ function ShopPagina() {
                         <li><NavLink to="/">Home </NavLink></li>
                     </ul>
                 </nav>
-                <div className="shop">
-                    <h1>Shop.</h1>
-                </div>
-
                 <div className="searchbar">
                     <ZoekBalk
                         type="text"
@@ -83,7 +84,7 @@ function ShopPagina() {
                 <div className="icon-bar">
                     <div className="icon-item" onClick={() => navigate("/favorietenpage")} title="Favorieten">
                         <FontAwesomeIcon icon={faHeart} />
-                        {items.length > 0 && <span className="icon-count">{items.length}</span>}
+                        {favoriteItems.length > 0 && <span className="icon-count">{favoriteItems.length}</span>}
                     </div>
 
                     <div className="icon-item" onClick={() => navigate("/cart")} title="Winkelwagen">

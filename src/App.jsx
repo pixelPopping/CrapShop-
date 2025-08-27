@@ -20,9 +20,6 @@ import CategoryPage from "./pages/categoryPage/CategoryPage.jsx";
 import Favorite from "./pages/favorietenpage/Favorite.jsx";
 
 
-
-
-
 function App () {
     const {isAuth} = useContext(AuthContext);
     return (

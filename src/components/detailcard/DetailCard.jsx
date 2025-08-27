@@ -5,12 +5,10 @@ import DropDown from "../dropdown/DropDown.jsx";
 import './DetailCard.css';
 
 function DetailCard({ id, label, text, image, price }) {
-    const { cart, items: cartItems } = useContext(ShoppingCartContext);
+    const { cart, } = useContext(ShoppingCartContext);
     const { toggleFavorite, items: favorieten } = useContext(FavoriteContext);
     const [selectedQuantity, setSelectedQuantity] = useState(1);
 
-    const itemInCart = cartItems.find(item => item.id === id);
-    const quantityInCart = itemInCart?.quantity || 0;
 
     const isFavoriet = favorieten.some(item => item.id === id);
 

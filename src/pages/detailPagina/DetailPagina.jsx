@@ -73,6 +73,7 @@ function DetailPagina() {
                         <li><NavLink to="/products/men's clothing">Men</NavLink></li>
                         <li><NavLink to="/products/women's clothing">Women</NavLink></li>
                         <li><NavLink to="/Shop">Shop</NavLink></li>
+                        <li><NavLink to="/">Home</NavLink></li>
                     </ul>
                 </nav>
 
@@ -129,7 +130,7 @@ function DetailPagina() {
                     />
                 </div>
             </header>
-
+            <section>
             {showModal && (
                 <ShowModal
                     query={query}
@@ -138,7 +139,7 @@ function DetailPagina() {
                     setShowModal={setShowModal}
                 />
             )}
-
+            </section>
             <main className="inner-container">
                 {loading && <p>Bezig met laden...</p>}
                 {error && <p>Er ging iets mis bij het ophalen van het product.</p>}

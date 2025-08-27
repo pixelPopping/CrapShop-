@@ -89,9 +89,8 @@ const FavorietenPage = () => {
                     <li><NavLink to="/products/men's clothing">Men</NavLink></li>
                     <li><NavLink to="/products/women's clothing">Women</NavLink></li>
                     <li><NavLink to="/Shop">Shop</NavLink></li>
+                    <li><NavLink to="/">Home</NavLink></li>
                 </ul>
-
-                <button onClick={() => navigate('/')}>Home</button>
 
                 <ZoekBalk
                     type="text"
@@ -181,13 +180,14 @@ const FavorietenPage = () => {
                     />
                 )}
             </main>
-
             <footer>
-                <ul>
-                    <li><NavLink to="/profiel">Profiel</NavLink></li>
-                    <li><NavLink to="/recencies">Recensies</NavLink></li>
-                    <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
-                </ul>
+                <div className="footer-links">
+                    <ul>
+                        <li><NavLink to="/profiel">Profiel</NavLink></li>
+                        <li><NavLink to="/recencies">Recensies</NavLink></li>
+                        <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
+                    </ul>
+                </div>
             </footer>
         </>
     );

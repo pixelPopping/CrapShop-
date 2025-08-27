@@ -48,7 +48,6 @@ function SignIn() {
                 <h1>CrapShop</h1>
                 <h2>Inloggen</h2>
             </header>
-
             {loading && <p>Even geduld, je wordt ingelogd...</p>}
             <LoginForm onSubmit={handleFormSubmit} loading={loading} errorMessage={errorMessage} />
         </main>

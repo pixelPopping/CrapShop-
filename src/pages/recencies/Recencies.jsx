@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../../components/context/AuthContext.jsx";
 import { ShoppingCartContext } from "../../components/context/ShoppingCartContext.jsx";
@@ -12,8 +11,8 @@ import ShowModal from "../../components/modal/ShowModal.jsx";
 import RecensieForm from "../../components/recensieForm/RecensieForm.jsx";
 import RecensieItem from "../../helpers/RecensieItem.jsx";
 import HandleLike from "../../helpers/HandleLike.jsx";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faHeart, faShoppingCart, faSignOutAlt, faUser} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart, faShoppingCart, faSignOutAlt, faUser } from "@fortawesome/free-solid-svg-icons";
 
 function Recencies() {
     const [recencies, setRecencies] = useState([]);
@@ -59,8 +58,8 @@ function Recencies() {
                     <li><NavLink to="/products/men's clothing">Men</NavLink></li>
                     <li><NavLink to="/products/women's clothing">Women</NavLink></li>
                     <li><NavLink to="/Shop">Shop</NavLink></li>
+                    <li><NavLink to="/">Home</NavLink></li>
                 </ul>
-                <button onClick={() => navigate('/')}>Home</button>
                 <ZoekBalk
                     type="text"
                     inputValue={query}
@@ -109,16 +108,16 @@ function Recencies() {
                     </div>
                 </div>
             </nav>
-
-            {showModal && (
-                <ShowModal
-                    query={query}
-                    selectedCategory={selectedCategory}
-                    filteredProducts={filtered}
-                    setShowModal={setShowModal}
-                />
-            )}
-
+            <section>
+                {showModal && (
+                    <ShowModal
+                        query={query}
+                        selectedCategory={selectedCategory}
+                        filteredProducts={filtered}
+                        setShowModal={setShowModal}
+                    />
+                )}
+            </section>
             <main>
                 <RecensieForm recencies={recencies} setRecencies={setRecencies} />
                 <h1>Recencies</h1>
@@ -134,15 +133,15 @@ function Recencies() {
                     ))}
                 </div>
             </main>
-            <div>
-                <footer>
+            <footer>
+                <div className="footer-links">
                     <ul>
                         <li><NavLink to="/profiel">Profiel</NavLink></li>
                         <li><NavLink to="/recencies">Recensies</NavLink></li>
                         <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
                     </ul>
-                </footer>
-            </div>
+                </div>
+            </footer>
         </>
     );
 }

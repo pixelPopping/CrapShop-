@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import { useParams, useNavigate, useLocation, NavLink } from "react-router-dom";
 import axios from "axios";
 import ZoekBalk from "../../components/searchFilter/ZoekBalk.jsx";
@@ -11,14 +11,15 @@ import { faHeart, faShoppingCart, faSignOutAlt, faUser } from "@fortawesome/free
 import ShowModal from "../../components/modal/ShowModal.jsx";
 import CategoryCard from "../../components/categoryCard/CategoryCard.jsx";
 import useHandleLogout from "../../helpers/UseHandleLogout.jsx";
+import './CategoryPage.css';
 
 const CategoryPage = () => {
     const { category } = useParams();
     const navigate = useNavigate();
     const location = useLocation();
-    const { isAuth, user, } = useContext(AuthContext);
+    const { isAuth, user } = useContext(AuthContext);
     const { items: cartItems } = useContext(ShoppingCartContext);
-    const { items: favoriteItems, } = useContext(FavoriteContext);
+    const { items: favoriteItems } = useContext(FavoriteContext);
     const params = new URLSearchParams(location.search);
     const zoekQuery = params.get("query")?.toLowerCase() || "";
 
@@ -31,6 +32,14 @@ const CategoryPage = () => {
     const [categories, setCategories] = useState(["Alle categorieën"]);
     const handleLogout = useHandleLogout();
     const filteredProductsList = filterProducts(allProducts, query, selectedCategory);
+
+    const carouselRef = useRef();
+
+    const scrollCarousel = (offset) => {
+        if (carouselRef.current) {
+            carouselRef.current.scrollBy({ left: offset, behavior: "smooth" });
+        }
+    };
 
     useEffect(() => {
         async function GetCategory() {
@@ -61,6 +70,7 @@ const CategoryPage = () => {
                     <li><NavLink to="/products/men's clothing">Men</NavLink></li>
                     <li><NavLink to="/products/women's clothing">Women</NavLink></li>
                     <li><NavLink to="/Shop">Shop</NavLink></li>
+                    <li><NavLink to="/">Home </NavLink></li>
                 </ul>
 
                 <ZoekBalk
@@ -119,50 +129,57 @@ const CategoryPage = () => {
                 </div>
             </nav>
 
-            {showModal && (
-                <ShowModal
-                    query={query}
-                    selectedCategory={selectedCategory}
-                    filteredProducts={filteredProductsList}
-                    setShowModal={setShowModal}
-                />
-            )}
+            <section>
+                {showModal && (
+                    <ShowModal
+                        query={query}
+                        selectedCategory={selectedCategory}
+                        filteredProducts={filteredProductsList}
+                        setShowModal={setShowModal}
+                    />
+                )}
+            </section>
 
             <main>
                 {loading ? (
                     <p>Producten laden...</p>
                 ) : (
-                    <div className="product-grid">
-                        {products.map(product => (
-                            <CategoryCard
-                                key={product.id}
-                                product={product}
-                                image={product.image}
-                                label={product.title}
-                                text={`Price:€${product.price}`}
-                                rating={product.rating.rate}
-                                onClick={() => navigate(`/detailpagina/${product.id}`)}
-                            />
-
-                        ))}
+                    <div className="carousel-wrapper">
+                        <button className="arrow left" onClick={() => scrollCarousel(-300)}>&#8592;</button>
+                        <div className="product-carousel" ref={carouselRef}>
+                            {products.map(product => (
+                                <CategoryCard
+                                    key={product.id}
+                                    product={product}
+                                    image={product.image}
+                                    label={product.title}
+                                    text={`Price:€${product.price}`}
+                                    rating={product.rating.rate}
+                                    onClick={() => navigate(`/detailpagina/${product.id}`)}
+                                />
+                            ))}
+                        </div>
+                        <button className="arrow right" onClick={() => scrollCarousel(300)}>&#8594;</button>
                     </div>
                 )}
+            </main>
 
-                <div>
-                    <footer>
+            <footer>
+                <div className="footer-links">
                     <ul>
                         <li><NavLink to="/profiel">Profiel</NavLink></li>
-                        <li><NavLink to="/recencies">Recencies</NavLink></li>
+                        <li><NavLink to="/recencies">Recensies</NavLink></li>
                         <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
                     </ul>
-                    </footer>
                 </div>
-            </main>
+            </footer>
         </>
     );
 };
 
 export default CategoryPage;
+
+
 
 
 

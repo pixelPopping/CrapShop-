@@ -1,0 +1,75 @@
+
+.shopping-cart {
+    padding: 2rem;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #fafafa;
+}
+
+
+.winkelwagen h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.empty-cart {
+    font-style: italic;
+    color: #777;
+}
+
+.cart-items {
+    list-style: none;
+    padding: 0;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 1rem;
+}
+
+.item-image {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    margin-right: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.item-details {
+    font-size: 1rem;
+}
+
+.total-price {
+    font-size: 1.2rem;
+    margin-top: 2rem;
+}
+
+.footer {
+    background-color: #f0f0f0;
+    padding: 1.5rem 0;
+    margin-top: 3rem;
+    text-align: center;
+}
+
+.footer-links ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.footer-links li a:hover {
+    color: #007bff;
+}

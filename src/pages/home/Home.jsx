@@ -8,19 +8,16 @@ import {
     faShoppingCart,
     faHeart,
 } from "@fortawesome/free-solid-svg-icons";
-
 import "./Home.css";
 import ClockTime from "../../components/digitaleClock/DigitaleClock.jsx";
 import ZoekBalk from "../../components/searchFilter/ZoekBalk.jsx";
 import WheelOfFortune from "../../components/wheelOfFortune/WheelOfFortune.jsx";
 import ShowModal from "../../components/modal/ShowModal.jsx";
 import Hamburger from "../../components/hamburmenu/Hamburger.jsx";
-
 import { ShoppingCartContext } from "../../components/context/ShoppingCartContext.jsx";
 import { AuthContext } from "../../components/context/AuthContext.jsx";
 import { SpinContext } from "../../components/context/SpinContext.jsx";
 import { FavoriteContext } from "../../components/context/FavoriteContext.jsx";
-
 import filterProducts from "../../helpers/filteredProducts.jsx";
 import getItems from "../../helpers/getItems";
 import useHandleLogout from "../../helpers/UseHandleLogout.jsx";
@@ -33,7 +30,6 @@ function Home() {
     const { items: cartItems } = useContext(ShoppingCartContext);
     const { items: favoriteItems } = useContext(FavoriteContext);
     const { rotation, spinning } = useContext(SpinContext);
-
 
     const params = new URLSearchParams(location.search);
     const zoekQuery = params.get("query")?.toLowerCase() || "";
@@ -134,7 +130,7 @@ function Home() {
                     </div>
                 </div>
             </nav>
-
+            <section>
             {showModal && (
                 <ShowModal
                     query={query}
@@ -143,7 +139,7 @@ function Home() {
                     setShowModal={setShowModal}
                 />
             )}
-
+            </section>
             <main>
                 <div className="header-container">
                     <div className="header">
@@ -158,8 +154,7 @@ function Home() {
 
                 <div className="animated-box">
                     <div className="mainbox">
-                        <div
-                            className="box1"
+                        <div className="box1"
                             style={{
                                 transform: `rotate(${rotation}deg)`,
                                 transition: spinning
@@ -170,17 +165,16 @@ function Home() {
                         >
                             {wheelItems.map((text, index) => (
                                 <span key={index} className={`font span${index + 1}`}>
-                  <h5>{text}</h5>
-                </span>
+                                    <h5>{text}</h5>
+                                </span>
                             ))}
                         </div>
                     </div>
-
-                    <div className="outer-wheel-container">
-                        <section className="wheel-of-fortune">
-                            <WheelOfFortune buttonLabel="spin" />
-                        </section>
-                    </div>
+                </div>
+                <div className="wheel-container-fortune">
+                    <section className="wheel-of-fortune">
+                        <WheelOfFortune buttonLabel="spin" />
+                    </section>
                 </div>
 
                 <div className="outer-link-container">
@@ -189,7 +183,6 @@ function Home() {
                             <li><NavLink to="/profiel">Profiel</NavLink></li>
                             <li><NavLink to="/recencies">Recensies</NavLink></li>
                             <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
-                            <li><NavLink to="/hamburmenu">Hamburger</NavLink></li>
                         </ul>
                     </section>
                 </div>

@@ -1,0 +1,140 @@
+.navbar-four {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    padding: 50px;
+}
+
+.nav-links4 {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 60px;
+    flex-grow: 1;
+}
+
+.button-container4 {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.icon-item {
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: #333;
+    position: relative;
+}
+
+.icon-item:hover {
+    color: #007bff;
+}
+
+.icon-wrapper {
+    position: relative;
+}
+
+.icon-count {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background-color: red;
+    color: white;
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    border-radius: 50%;
+}
+
+/* Modal */
+section {
+    margin: 20px 0;
+}
+
+/* Carousel */
+.carousel-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    margin: 40px 0;
+}
+
+.product-carousel {
+    display: flex;
+    gap: 60px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 20px;
+}
+
+.product-carousel::-webkit-scrollbar {
+    display: none;
+}
+
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2rem;
+    background-color: black;
+    border: none;
+    cursor: pointer;
+    z-index: 2;
+    padding: 10px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+
+.arrow.left {
+    left: 10px;
+}
+
+.arrow.right {
+    right: 10px;
+}
+
+footer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: #eee;
+    padding: 40px;
+    margin-top: 80px;
+    text-align: center;
+}
+
+.footer-links ul {
+    list-style: none;
+    width: 400px;
+    padding: 0;
+    margin: 0 0 15px 0;
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+}
+
+.footer-links li a {
+    display: flex;
+    text-decoration: none;
+    font-size: 20px;
+    color: black;
+    font-weight: lighter;
+    padding: 5px 10px;
+}
+
+.footer-links li a:hover {
+    background-color: red;
+    padding: 4px;
+}
+
+.footer-links li a.active {
+    background-color: red;
+}
+
+footer p {
+    color: black;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+

@@ -22,26 +22,32 @@ header h1 {
 }
 
 .animated-box {
-    position: relative;
-    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 20px;
     text-align: center;
+    align-items: center;
 }
 
 .mainbox {
-    width: 600px;
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+    flex-grow: 5;
+    flex-shrink: 1;
     aspect-ratio: 1 / 1;
     border-radius: 50%;
     overflow: hidden;
-    border: 6px solid #333;
+    border: 4px solid #333;
     background-color: #f9f9f9;
-    position: relative;
-    margin: 0 auto;
 }
 
 .box {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
-    position: relative;
     border-radius: 50%;
     border: 10px solid whitesmoke;
     overflow: hidden;
@@ -49,6 +55,7 @@ header h1 {
 
 .box1 {
     display: flex;
+    flex-basis: 800px;
     justify-content: center;
     width: 100%;
     height: 100%;
@@ -63,21 +70,21 @@ span {
 }
 
 .font {
-    color: white;
-    font-size: 20px;
+    color: black;
+    font-size: 25px;
 }
 
 
 .span1 { clip-path: polygon(0 17%, 0 50%, 50% 50%); background: lightgreen; }
 .span2 { clip-path: polygon(0 17%, 30% 0, 50% 50%); background: red; }
 .span3 { clip-path: polygon(30% 0, 71% 0%, 50% 50%); background: blue; }
-.span4 { clip-path: polygon(71% 0, 100% 18%, 50% 50%); background: purple; }
+.span4 { clip-path: polygon(71% 0, 100% 18%, 50% 50%); background: yellow; }
 .span5 { clip-path: polygon(100% 18%, 100% 50%, 50% 50%); background: orange; }
 .span6 { clip-path: polygon(0 50%, 0 83%, 50% 50%); background: green; }
-.span7 { clip-path: polygon(0 83%, 30% 100%, 50% 50%); background: red; }
-.span8 { clip-path: polygon(30% 100%, 71% 100%, 50% 50%); background: blue; }
+.span7 { clip-path: polygon(0 83%, 30% 100%, 50% 50%); background: turquoise; }
+.span8 { clip-path: polygon(30% 100%, 71% 100%, 50% 50%); background: violet; }
 .span9 { clip-path: polygon(71% 100%, 100% 82%, 50% 50%); background: purple; }
-.span10 { clip-path: polygon(100% 82%, 100% 50%, 50% 50%); background: orange; }
+.span10 { clip-path: polygon(100% 82%, 100% 50%, 50% 50%); background: lightpink; }
 
 
 .box1 .span1 h5 { top: 40%; right: 73%; transform: rotate(198deg); position: absolute; text-align: center; }
@@ -163,11 +170,20 @@ p {
 }
 
 
+.wheel-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-basis: 500px;
+    flex-grow: 1
+
+}
 .spin-button{
     font-family: Outfit,sans-serif;
+    width: 100%;
     font-size: 20px;
     margin: 10px;
-    padding:  10px;
+    padding: 20px;
     border: none;
     background: red;
     color: white;
@@ -175,6 +191,12 @@ p {
 
 }
 
+.result-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+}
 
 
 
