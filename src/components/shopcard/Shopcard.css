@@ -1,17 +1,10 @@
-.outer-container {
-    display: flex;
-    flex-direction: column;
 
-}
 
 .inner-container {
     display: flex;
-    width: 1300px;
-    flex-direction: row;
     flex-wrap: wrap;
-    gap: 20px;
-    justify-content: flex-end;
-    padding: 40px;
+    gap: 36px;
+    justify-content: center;
 }
 
 .card {

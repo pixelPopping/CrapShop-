@@ -6,9 +6,9 @@
 ///stap 4 filter methode gebruiken om zoekresultaten te filteren
 ///stap 5 state verplaatsen naar app.jsx zodat bij alle componenten de zoekbalk functioneel is
 import React from "react";
-import "./ZoekBalk.css";
+import "./SearchBar.css";
 
-const ZoekBalk = ({
+const SearchBar = ({
                       inputValue,
                       inputCallback,
                       selectedCategory,
@@ -17,7 +17,7 @@ const ZoekBalk = ({
                       showCategories
                   }) => {
     return (
-        <div className="zoekbalkContainer">
+        <div className="searchBarContainer">
             <input
                 type="text"
                 value={inputValue}
@@ -43,7 +43,7 @@ const ZoekBalk = ({
     );
 };
 
-export default ZoekBalk;
+export default SearchBar;
 
 
 

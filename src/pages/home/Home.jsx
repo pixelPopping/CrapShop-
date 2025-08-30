@@ -1,3 +1,4 @@
+
 import { useContext, useState, useEffect } from "react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
@@ -10,7 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "./Home.css";
 import ClockTime from "../../components/digitaleClock/DigitaleClock.jsx";
-import ZoekBalk from "../../components/searchFilter/ZoekBalk.jsx";
+import SearchBar from "../../components/searchFilter/SearchBar.jsx";
 import WheelOfFortune from "../../components/wheelOfFortune/WheelOfFortune.jsx";
 import ShowModal from "../../components/modal/ShowModal.jsx";
 import Hamburger from "../../components/hamburmenu/Hamburger.jsx";
@@ -60,20 +61,28 @@ function Home() {
         fetchProducts();
     }, []);
 
+    useEffect(() => {
+        function handleClickOutside(e) {
+            if (!e.target.closest(".hamburger-menu") && !e.target.closest(".hamburger")) {
+                setMenuOpen(false);
+            }
+        }
+        document.addEventListener("click", handleClickOutside);
+        return () => document.removeEventListener("click", handleClickOutside);
+    }, []);
+
     return (
         <div className="outer-container-home">
-            <nav className="navbar-four">
+            <nav className="navbar-four-header">
                 <ul className="nav-links4">
                     <li><NavLink to="/products/men's clothing">Men</NavLink></li>
                     <li><NavLink to="/products/women's clothing">Women</NavLink></li>
                     <li><NavLink to="/Shop">Shop</NavLink></li>
                 </ul>
 
-                <div className="search-field-contianer">
+                <div className="search-hamburger-container">
                     <section className="search-field">
-                        <Hamburger menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
-                        <ZoekBalk
-                            type="text"
+                        <SearchBar
                             inputValue={query}
                             inputCallback={(value) => {
                                 setQuery(value);
@@ -89,57 +98,65 @@ function Home() {
                                 }
                             }}
                             categories={categories}
-                            showCategories={menuOpen}
+                            showCategories={false}
+                        />
+                    </section>
+
+                    <section className="burger">
+                        <Hamburger
+                            menuOpen={menuOpen}
+                            setMenuOpen={setMenuOpen}
+                            categories={categories}
                         />
                     </section>
                 </div>
 
-                <div className="button-container4">
-                    {isAuth ? (
-                        <>
-                            <div className="icon-item" onClick={handleLogout} title="Log Off">
-                                <FontAwesomeIcon icon={faSignOutAlt} />
-                            </div>
-                            <div className="icon-item" title={`Ingelogd als ${user?.username ?? "Onbekend"}`}>
-                                <FontAwesomeIcon icon={faUser} />
-                            </div>
-                        </>
-                    ) : (
-                        <>
-                            <div className="icon-item" onClick={() => navigate("/signup")} title="Sign Up">
-                                <FontAwesomeIcon icon={faUser} />
-                            </div>
-                            <div className="icon-item" onClick={() => navigate("/signin")} title="Login">
-                                <FontAwesomeIcon icon={faUser} />
-                            </div>
-                        </>
-                    )}
-
-                    <div className="icon-item" onClick={() => navigate("/cart")} title="Winkelwagen">
-                        <div className="icon-wrapper">
-                            <FontAwesomeIcon icon={faShoppingCart} />
-                            {cartItems.length > 0 && <span className="icon-count">{cartItems.length}</span>}
-                        </div>
-                    </div>
-
-                    <div className="icon-item" onClick={() => navigate("/favorietenpage")} title="Favorieten">
-                        <div className="icon-wrapper">
+                <div className="button-container-nav">
+                    <div className="icon-bar">
+                        <div className="icon-item" onClick={() => navigate("/favorietenpage")} title="Favorits">
                             <FontAwesomeIcon icon={faHeart} />
                             {favoriteItems.length > 0 && <span className="icon-count">{favoriteItems.length}</span>}
                         </div>
+
+                        <div className="icon-item" onClick={() => navigate("/cart")} title="shopping-bag">
+                            <FontAwesomeIcon icon={faShoppingCart} />
+                            {cartItems.length > 0 && <span className="icon-count">{cartItems.length}</span>}
+                        </div>
+
+                        {isAuth ? (
+                            <>
+                                <div className="icon-item" title={`Ingelogd als ${user?.username ?? "Onbekend"}`}>
+                                    <FontAwesomeIcon icon={faUser} />
+                                </div>
+                                <div className="icon-item" onClick={handleLogout} title="Log Off">
+                                    <FontAwesomeIcon icon={faSignOutAlt} />
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div className="icon-item" onClick={() => navigate("/signup")} title="Sign Up">
+                                    <FontAwesomeIcon icon={faUser} />
+                                </div>
+                                <div className="icon-item" onClick={() => navigate("/signin")} title="Login">
+                                    <FontAwesomeIcon icon={faUser} />
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
             </nav>
+
             <section>
-            {showModal && (
-                <ShowModal
-                    query={query}
-                    selectedCategory={selectedCategory}
-                    filteredProducts={filteredProductsList}
-                    setShowModal={setShowModal}
-                />
-            )}
+                {showModal && (
+                    <ShowModal
+                        query={query}
+                        selectedCategory={selectedCategory}
+                        filteredProducts={filteredProductsList}
+                        setShowModal={setShowModal}
+                    />
+                )}
             </section>
+
             <main>
                 <div className="header-container">
                     <div className="header">
@@ -154,7 +171,8 @@ function Home() {
 
                 <div className="animated-box">
                     <div className="mainbox">
-                        <div className="box1"
+                        <div
+                            className="box1"
                             style={{
                                 transform: `rotate(${rotation}deg)`,
                                 transition: spinning
@@ -171,10 +189,13 @@ function Home() {
                         </div>
                     </div>
                 </div>
+
+                <div className="outer-wheel">
                 <div className="wheel-container-fortune">
                     <section className="wheel-of-fortune">
                         <WheelOfFortune buttonLabel="spin" />
                     </section>
+                </div>
                 </div>
 
                 <div className="outer-link-container">
@@ -210,6 +231,7 @@ function Home() {
                     </section>
                 </div>
             </main>
+
             <div className="footer-container">
                 <footer className="footer">
                     <h1>PixelPopping@productions</h1>
@@ -220,6 +242,96 @@ function Home() {
 }
 
 export default Home;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

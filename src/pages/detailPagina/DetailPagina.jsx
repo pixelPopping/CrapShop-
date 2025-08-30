@@ -4,8 +4,9 @@ import axios from "axios";
 
 import DetailCard from "../../components/detailcard/DetailCard.jsx";
 import ShoppingCart from "../../components/shoppingCart/ShoppingCart.jsx";
-import ZoekBalk from "../../components/searchFilter/ZoekBalk.jsx";
+import SearchBar from "../../components/searchFilter/SearchBar.jsx";
 import ShowModal from "../../components/modal/ShowModal.jsx";
+import Hamburger from "../../components/hamburmenu/Hamburger.jsx";
 
 import { ShoppingCartContext } from "../../components/context/ShoppingCartContext.jsx";
 import { AuthContext } from "../../components/context/AuthContext.jsx";
@@ -39,6 +40,7 @@ function DetailPagina() {
     const [product, setProduct] = useState(null);
     const [allProducts, setAllProducts] = useState([]);
     const [categories, setCategories] = useState(["Alle categorieën"]);
+    const [menuOpen, setMenuOpen] = useState(false);
 
     const filteredProducts = filterProducts(allProducts, query, selectedCategory);
 
@@ -46,11 +48,11 @@ function DetailPagina() {
         async function fetchData() {
             try {
                 setLoading(true);
-                const [productRes, allRes] = await Promise.all([
+                const [productRes, allRes, catRes] = await Promise.all([
                     axios.get(`https://fakestoreapi.com/products/${id}`),
-                    axios.get("https://fakestoreapi.com/products")
+                    axios.get("https://fakestoreapi.com/products"),
+                    axios.get("https://fakestoreapi.com/products/categories")
                 ]);
-                const catRes = await axios.get("https://fakestoreapi.com/products/categories");
 
                 setProduct(productRes.data);
                 setAllProducts(allRes.data);
@@ -65,72 +67,89 @@ function DetailPagina() {
         fetchData();
     }, [id]);
 
+    useEffect(() => {
+        function handleClickOutside(e) {
+            if (!e.target.closest(".hamburger-menu") && !e.target.closest(".hamburger")) {
+                setMenuOpen(false);
+            }
+        }
+        document.addEventListener("click", handleClickOutside);
+        return () => document.removeEventListener("click", handleClickOutside);
+    }, []);
+
     return (
         <div className="outer-container">
             <header className="shop-header-detail">
-                <nav className="navbar-four">
-                    <ul className="nav-links4">
+                <div className="button-container-nav">
+                    <div className="icon-bar">
+                        <div className="icon-item-detail" onClick={() => navigate("/favorietenpage")} title="Favorieten">
+                            <FontAwesomeIcon icon={faHeart} />
+                            {favoriteItems.length > 0 && <span className="icon-count">{favoriteItems.length}</span>}
+                        </div>
+                        <div className="icon-item-detail" onClick={() => navigate("/cart")} title="Winkelwagen">
+                            <FontAwesomeIcon icon={faShoppingCart} />
+                            {items.length > 0 && <span className="icon-count">{items.length}</span>}
+                        </div>
+                        {isAuth ? (
+                            <>
+                                <div className="icon-item-detail" title={`Ingelogd als ${user?.username ?? "Onbekend"}`}>
+                                    <FontAwesomeIcon icon={faUser} />
+                                </div>
+                                <div className="icon-item-detail" onClick={handleLogout} title="Log uit">
+                                    <FontAwesomeIcon icon={faSignOutAlt} />
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div className="icon-item-detail" onClick={() => navigate("/signup")} title="Sign Up">
+                                    <FontAwesomeIcon icon={faUser} />
+                                </div>
+                                <div className="icon-item-detail" onClick={() => navigate("/signin")} title="Login">
+                                    <FontAwesomeIcon icon={faUser} />
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </div>
+
+                <nav className="navbar-four-detail">
+                    <ul className={`nav-links4 ${menuOpen ? "active" : ""}`}>
                         <li><NavLink to="/products/men's clothing">Men</NavLink></li>
                         <li><NavLink to="/products/women's clothing">Women</NavLink></li>
                         <li><NavLink to="/Shop">Shop</NavLink></li>
                         <li><NavLink to="/">Home</NavLink></li>
                     </ul>
                 </nav>
-
-                <div className="icon-bar">
-                    <div className="icon-item-detail" onClick={() => navigate("/favorietenpage")} title="Favorieten">
-                        <FontAwesomeIcon icon={faHeart} />
-                        {favoriteItems.length > 0 && <span className="icon-count">{favoriteItems.length}</span>}
-                    </div>
-
-                    <div className="icon-item-detail" onClick={() => navigate("/cart")} title="Winkelwagen">
-                        <FontAwesomeIcon icon={faShoppingCart} />
-                        {items.length > 0 && <span className="icon-count">{items.length}</span>}
-                    </div>
-
-                    {isAuth ? (
-                        <>
-                            <div className="icon-item-detail" title={`Ingelogd als ${user?.username ?? "Onbekend"}`}>
-                                <FontAwesomeIcon icon={faUser} />
-                            </div>
-                            <div className="icon-item-detail" onClick={handleLogout} title="Log uit">
-                                <FontAwesomeIcon icon={faSignOutAlt} />
-                            </div>
-
-                        </>
-                    ) : (
-                        <>
-                            <div className="icon-item" onClick={() => navigate("/signup")} title="Sign Up">
-                                <FontAwesomeIcon icon={faUser} />
-                            </div>
-                            <div className="icon-item" onClick={() => navigate("/signin")} title="Login">
-                                <FontAwesomeIcon icon={faUser} />
-                            </div>
-                        </>
-                    )}
-                </div>
-                <div className="searchbar">
-                    <ZoekBalk
-                        type="text"
-                        inputValue={query}
-                        inputCallback={(value) => {
-                            setQuery(value);
-                            navigate(`?query=${encodeURIComponent(value)}`);
-                            setShowModal(true);
-                        }}
-                        selectedCategory={selectedCategory}
-                        onCategoryChange={(value) => {
-                            setSelectedCategory(value);
-                            setShowModal(true);
-                            if (value !== "Alle categorieën") {
-                                navigate(`/products/${encodeURIComponent(value)}`);
-                            }
-                        }}
-                        categories={categories}
-                    />
-                </div>
             </header>
-            <section>
+
+            <div className="search-hamburger-container">
+                <SearchBar
+                    inputValue={query}
+                    inputCallback={(value) => {
+                        setQuery(value);
+                        navigate(`?query=${encodeURIComponent(value)}`);
+                        setShowModal(true);
+                    }}
+                    selectedCategory={selectedCategory}
+                    onCategoryChange={(value) => {
+                        setSelectedCategory(value);
+                        setShowModal(true);
+                        if (value !== "Alle categorieën") {
+                            navigate(`?query=${encodeURIComponent(query)}&category=${encodeURIComponent(value)}`);
+                        }
+                    }}
+                    categories={categories}
+                    showCategories={false}
+                />
+            </div>
+            <section className="burger">
+                <Hamburger
+                    menuOpen={menuOpen}
+                    setMenuOpen={setMenuOpen}
+                    categories={categories}
+                />
+            </section>
+
             {showModal && (
                 <ShowModal
                     query={query}
@@ -139,7 +158,7 @@ function DetailPagina() {
                     setShowModal={setShowModal}
                 />
             )}
-            </section>
+
             <main className="inner-container">
                 {loading && <p>Bezig met laden...</p>}
                 {error && <p>Er ging iets mis bij het ophalen van het product.</p>}
@@ -163,11 +182,7 @@ function DetailPagina() {
                                 })
                             }
                         />
-                        <ShoppingCart
-                            product={product}
-                            resetButton={() => reSet()}
-                            cartItems={items}
-                        />
+                        <ShoppingCart product={product} resetButton={() => reSet()} cartItems={items} />
                     </>
                 )}
                 <div className="view-all-products">
@@ -189,6 +204,8 @@ function DetailPagina() {
 }
 
 export default DetailPagina;
+
+
 
 
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
 import { useParams, useNavigate, useLocation, NavLink } from "react-router-dom";
 import axios from "axios";
-import ZoekBalk from "../../components/searchFilter/ZoekBalk.jsx";
+import SearchBar from "../../components/searchFilter/SearchBar.jsx";
 import { AuthContext } from "../../components/context/AuthContext.jsx";
 import { ShoppingCartContext } from "../../components/context/ShoppingCartContext.jsx";
 import { FavoriteContext } from "../../components/context/FavoriteContext.jsx";
@@ -73,7 +73,7 @@ const CategoryPage = () => {
                     <li><NavLink to="/">Home </NavLink></li>
                 </ul>
 
-                <ZoekBalk
+                <SearchBar
                     type="text"
                     inputValue={query}
                     inputCallback={(value) => {

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import './Shop.css';
-import ZoekBalk from '../../components/searchFilter/ZoekBalk.jsx';
+import SearchBar from '../../components/searchFilter/SearchBar.jsx';
 import axios from 'axios';
 import Shopcard from "../../components/shopcard/Shopcard.jsx";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -71,7 +71,7 @@ function ShopPagina() {
                     </ul>
                 </nav>
                 <div className="searchbar">
-                    <ZoekBalk
+                    <SearchBar
                         type="text"
                         inputValue={query}
                         inputCallback={setQuery}
@@ -160,6 +160,56 @@ function ShopPagina() {
 }
 
 export default ShopPagina;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

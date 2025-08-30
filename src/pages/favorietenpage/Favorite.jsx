@@ -3,7 +3,7 @@ import { FavoriteContext } from "../../components/context/FavoriteContext.jsx";
 import { AuthContext } from "../../components/context/AuthContext.jsx";
 import { ShoppingCartContext } from "../../components/context/ShoppingCartContext.jsx";
 import { useNavigate, useLocation, NavLink } from "react-router-dom";
-import ZoekBalk from "../../components/searchFilter/ZoekBalk.jsx";
+import SearchBar from "../../components/searchFilter/SearchBar.jsx";
 import axios from "axios";
 import filterProducts from "../../helpers/filteredProducts.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -92,7 +92,7 @@ const FavorietenPage = () => {
                     <li><NavLink to="/">Home</NavLink></li>
                 </ul>
 
-                <ZoekBalk
+                <SearchBar
                     type="text"
                     inputValue={query}
                     inputCallback={(value) => {

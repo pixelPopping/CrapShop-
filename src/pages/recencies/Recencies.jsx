@@ -3,7 +3,7 @@ import { AuthContext } from "../../components/context/AuthContext.jsx";
 import { ShoppingCartContext } from "../../components/context/ShoppingCartContext.jsx";
 import { FavoriteContext } from "../../components/context/FavoriteContext.jsx";
 import { useNavigate, useLocation, NavLink } from "react-router-dom";
-import ZoekBalk from "../../components/searchFilter/ZoekBalk.jsx";
+import SearchBar from "../../components/searchFilter/SearchBar.jsx";
 import filterProducts from "../../helpers/filteredProducts.jsx";
 import axios from "axios";
 import useHandleLogout from "../../helpers/UseHandleLogout.jsx";
@@ -60,7 +60,7 @@ function Recencies() {
                     <li><NavLink to="/Shop">Shop</NavLink></li>
                     <li><NavLink to="/">Home</NavLink></li>
                 </ul>
-                <ZoekBalk
+                <SearchBar
                     type="text"
                     inputValue={query}
                     inputCallback={(value) => {

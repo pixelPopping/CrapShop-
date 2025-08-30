@@ -3,7 +3,7 @@ import { ShoppingCartContext } from "../../components/context/ShoppingCartContex
 import { AuthContext } from "../../components/context/AuthContext.jsx";
 import { FavoriteContext } from "../../components/context/FavoriteContext.jsx";
 import { useNavigate, useLocation, NavLink } from "react-router-dom";
-import ZoekBalk from "../../components/searchFilter/ZoekBalk.jsx";
+import SearchBar from "../../components/searchFilter/SearchBar.jsx";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faShoppingCart, faSignOutAlt, faUser } from "@fortawesome/free-solid-svg-icons";
@@ -52,7 +52,7 @@ function Cart() {
                     <li><NavLink to="/">Home</NavLink></li>
                 </ul>
 
-                <ZoekBalk
+                <SearchBar
                     type="text"
                     inputValue={query}
                     inputCallback={(value) => {

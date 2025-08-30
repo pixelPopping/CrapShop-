@@ -13,7 +13,7 @@ function DetailCard({ id, label, text, image, price }) {
     const isFavoriet = favorieten.some(item => item.id === id);
 
     return (
-        <div className="outer-container3">
+        <div className="outer-container-detail">
             <section>
                 <article>
                     <div className="card-content">

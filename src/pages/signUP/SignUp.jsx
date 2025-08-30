@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useNavigate, NavLink } from "react-router-dom";
-import ZoekBalk from "../../components/searchFilter/ZoekBalk.jsx";
+import SearchBar from "../../components/searchFilter/SearchBar.jsx";
 import "./SignUp.css";
 import React, { useContext, useEffect, useState } from "react";
 import filterProducts from "../../helpers/filteredProducts.jsx";
@@ -80,7 +80,7 @@ function SignUp() {
 
     return (
         <div className="signup-container">
-            <ZoekBalk
+            <SearchBar
                 type="text"
                 inputValue={query}
                 inputCallback={(value) => {

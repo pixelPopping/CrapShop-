@@ -1,4 +1,5 @@
 import {NavLink} from "react-router-dom";
+import './ShowModal.css'
 
 function ShowModal({query, selectedCategory, filteredProducts, setShowModal}) {
     return(
