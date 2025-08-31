@@ -1,31 +1,42 @@
 import { useContext } from "react";
 import { ShoppingCartContext } from "../context/ShoppingCartContext.jsx";
+import { NavLink } from "react-router-dom";
+import "./ShoppingCart.css";
 
 function ShoppingCart() {
-    const { items, price,} = useContext(ShoppingCartContext);
+    const { items, price } = useContext(ShoppingCartContext);
 
     return (
-        <section className="winkelwagen">
-            <h2>Winkelwagen</h2>
-            {items.length === 0 && <p>Je winkelwagen is leeg.</p>}
-            <ul>
-                {items.map((item) => (
-                    <li key={item.id} style={{ marginBottom: '1rem' }}>
-                        <img
-                            src={item.image}
-                            alt={item.title}
-                            style={{ width: '60px', height: '60px', objectFit: 'contain', marginRight: '1rem' }}
-                        />
-                        <strong>{item.title}</strong> – €{item.price?.toFixed(2)}
-                    </li>
-                ))}
-            </ul>
-
-            <p><strong>Totaalprijs:</strong> {price().toFixed(2) ? `€${price().toFixed(2)}` : '€0,00'}</p>
-        </section>
+        <>
+            <main className="shopping-cart">
+                <section className="winkelwagen">
+                    <h2>Shopping Bag</h2>
+                    {items.length === 0 ? (
+                        <p className="empty-cart">Cart is empty.</p>
+                    ) : (
+                        <ul className="cart-items">
+                            {items.map((item) => (
+                                <li key={item.id} className="cart-item">
+                                    <img src={item.image} alt={item.title} className="item-image" />
+                                    <div className="item-details">
+                                        <strong>{item.title}</strong><br />
+                                        €{item.price?.toFixed(2)}
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                    <p className="total-price">
+                        <strong>Totaleprice:</strong> {price().toFixed(2) ? `€${price().toFixed(2)}` : "€0,00"}
+                    </p>
+                </section>
+            </main>
+        </>
     );
 }
 
 export default ShoppingCart;
+
+
 
 

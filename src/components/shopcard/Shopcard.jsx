@@ -1,19 +1,26 @@
 import './Shopcard.css';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
 
-function Shopcard({ id, label, text, image, onClick }) {
-    const navigate = useNavigate();
-
-   // function handleClick() {
-       // navigate(`/detailpagina/${id}`);
-    //}
+function Shopcard({ id, label, image, onClick,  rating, price}) {
 
     return (
         <article className="card" onClick={onClick}>
             <h3>{label} {id}</h3>
             <img src={image} alt={label} />
+            <p>Price €{price}</p>
+            <p>{rating} ⭐</p>
         </article>
     );
 }
 
 export default Shopcard;
+
+
+
+
+
+
+
+
+
+

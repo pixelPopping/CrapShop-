@@ -5,7 +5,7 @@
 // 4 zoek filter/ categorieen box
 import {Routes, Route, Navigate,} from 'react-router-dom';
 import './App.css';
-import './components/ui/wheelspin.css';
+import './components/wheelOfFortune/wheelspin.css';
 import Home from './pages/home/Home.jsx';
 import Shop from './pages/shop/Shop.jsx';
 import DetailPagina from './pages/detailPagina/DetailPagina.jsx';
@@ -20,8 +20,6 @@ import CategoryPage from "./pages/categoryPage/CategoryPage.jsx";
 import Favorite from "./pages/favorietenpage/Favorite.jsx";
 
 
-
-
 function App () {
     const {isAuth} = useContext(AuthContext);
     return (
@@ -33,7 +31,7 @@ function App () {
                 <Route path="/signin" element={<SignIn/>}/>
                 <Route path="/Shop" element={<Shop/>} />
                 <Route path="/detailpagina/:id" element={<DetailPagina/>}/>
-                <Route path="/products/:category" element={<CategoryPage />} />
+                <Route path="/products/:category" element={<CategoryPage/>}/>
                 <Route path="/cart" element={isAuth ? <Cart/> : <Navigate to="/"/>} />
                 <Route path="/recencies" element={<Recencies/>} />
                 <Route path="/favorietenpage" element={<Favorite/>} />

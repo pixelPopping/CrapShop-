@@ -1,7 +1,278 @@
+@import url('https://fonts.googleapis.com/css2?family=Abel&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Outfit:wght@100..900&family=Truculenta:opsz,wght@12..72,100..900&display=swap');
 
-
-.shop{
-    height: 100vh;
-    width: 800px;
-    overflow: scroll;
+body {
+    background-color: beige;
 }
+
+.shop-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    flex-wrap: wrap;
+    max-width: 1300px;
+    padding: 40px;
+}
+
+.shop h1 {
+    display: flex;
+    color: white;
+    background-color: #E11208 ;
+    border: solid 1px black;
+    text-shadow: 0px 1px 4px rgba(0,0,0,0.2);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+    flex-direction: column;
+    font-size: clamp(2rem, 10vw, 200px);
+    justify-content: center;
+    padding: 40px;
+}
+
+.navbar-header {
+    flex: 1;
+}
+
+.nav-links4 {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-links4 li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+}
+
+.nav-links4 a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 0%;
+    height: 3px;
+    background-color: black;
+    transition: width 0.5s ease-out, background-color 0.35s ease-in-out;
+}
+
+.nav-links-shop a:hover::after {
+    width: 100%;
+}
+
+.nav-links-shop a.active::after {
+    width: 100%;
+    background-color:red ;
+}
+
+.searchbar {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    padding: 40px;
+}
+
+.icon-bar {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    padding: 20px;
+}
+
+.icon-item {
+    cursor: pointer;
+    position: relative;
+    font-size: 1.4rem;
+    color: #333;
+}
+
+.icon-item:hover {
+    color: #0078d4;
+}
+
+.icon-count {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background-color: #0078d4;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 0.75rem;
+}
+
+.inner-container-cards {
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 3;
+    flex-wrap: wrap;
+    row-gap: 40px;
+    gap: 36px;
+    justify-content: center;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    padding: 70px;
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    margin-bottom: 12px;
+}
+
+.sidebar a {
+    font-family: "Truculenta", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
+    text-decoration: none;
+    font-size: clamp(2rem, 10vw, 30px);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sidebar a:hover {
+    background-color: red;
+}
+
+.shop-products {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    justify-content: center;
+}
+
+.outer-product-list{
+    display: flex;
+    flex-basis:100%;
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.product-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+footer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: #eee;
+    padding: 40px;
+    margin-top: 80px;
+    text-align: center;
+}
+
+.footer-links ul {
+    list-style: none;
+    width: 400px;
+    padding: 0;
+    margin: 0 0 15px 0;
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+}
+
+.footer-links li a {
+    display: flex;
+    text-decoration: none;
+    font-size: 20px;
+    color: black;
+    font-weight: lighter;
+    padding: 5px 10px;
+}
+
+.footer-links li a:hover {
+    background-color: red;
+    padding: 4px;
+}
+
+.footer-links li a.active {
+    background-color: red;
+}
+
+footer p {
+    color: black;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.sociale-container img {
+    width: 100px;
+    height: 100px;
+}
+
+@media (max-width: 768px) {
+    .shop-header {
+        flex-direction: column;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .nav-links4 {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .searchbar {
+        padding: 20px;
+        width: 100%;
+    }
+
+    .icon-bar {
+        justify-content: center;
+    }
+
+    .sidebar {
+        position: static;
+        padding: 20px;
+    }
+
+    .sidebar a {
+        font-size: 20px;
+    }
+
+    .shop-products {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .product-list {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    footer {
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-links ul {
+        flex-direction: column;
+        width: auto;
+        gap: 10px;
+    }
+}
+
+
+

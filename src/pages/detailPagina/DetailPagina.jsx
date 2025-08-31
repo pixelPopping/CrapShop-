@@ -1,27 +1,62 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation, NavLink } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import ZoekBalk from "../../components/searchFilter/ZoekBalk.jsx";
+
 import DetailCard from "../../components/detailcard/DetailCard.jsx";
 import ShoppingCart from "../../components/shoppingCart/ShoppingCart.jsx";
+import SearchBar from "../../components/searchFilter/SearchBar.jsx";
+import ShowModal from "../../components/modal/ShowModal.jsx";
+import Hamburger from "../../components/hamburmenu/Hamburger.jsx";
+
 import { ShoppingCartContext } from "../../components/context/ShoppingCartContext.jsx";
+import { AuthContext } from "../../components/context/AuthContext.jsx";
+import { FavoriteContext } from "../../components/context/FavoriteContext.jsx";
+import useHandleLogout from "../../helpers/UseHandleLogout.jsx";
+import filterProducts from "../../helpers/filteredProducts.jsx";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart, faShoppingCart, faSignOutAlt, faUser } from "@fortawesome/free-solid-svg-icons";
+
+import "./DetailPagina.css";
 
 function DetailPagina() {
-    const [query, setQuery] = useState("");
     const { id } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const { cart, reSet, items } = useContext(ShoppingCartContext);
+    const { isAuth, user } = useContext(AuthContext);
+    const { items: favoriteItems } = useContext(FavoriteContext);
+    const handleLogout = useHandleLogout();
+
+    const params = new URLSearchParams(location.search);
+    const zoekQuery = params.get("query")?.toLowerCase() || "";
+
+    const [query, setQuery] = useState(zoekQuery);
+    const [selectedCategory, setSelectedCategory] = useState("Alle categorieën");
+    const [showModal, setShowModal] = useState(zoekQuery.length > 0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [product, setProduct] = useState(null);
-    const { cart, reSet, items } = useContext(ShoppingCartContext);
+    const [allProducts, setAllProducts] = useState([]);
+    const [categories, setCategories] = useState(["Alle categorieën"]);
+    const [menuOpen, setMenuOpen] = useState(false);
+
+    const filteredProducts = filterProducts(allProducts, query, selectedCategory);
 
     useEffect(() => {
-        setLoading(true);
-        setError(false);
-        async function ProductDetailsId() {
+        async function fetchData() {
             try {
-                const response = await axios.get(`https://fakestoreapi.com/products/${id}`);
-                setProduct(response.data);
+                setLoading(true);
+                const [productRes, allRes, catRes] = await Promise.all([
+                    axios.get(`https://fakestoreapi.com/products/${id}`),
+                    axios.get("https://fakestoreapi.com/products"),
+                    axios.get("https://fakestoreapi.com/products/categories")
+                ]);
+
+                setProduct(productRes.data);
+                setAllProducts(allRes.data);
+                setCategories(["Alle categorieën", ...catRes.data]);
             } catch (e) {
                 setError(true);
                 console.error(e);
@@ -29,32 +64,107 @@ function DetailPagina() {
                 setLoading(false);
             }
         }
-        ProductDetailsId();
+        fetchData();
     }, [id]);
 
-    function navigateToShop() {
-        navigate("/shop");
-    }
+    useEffect(() => {
+        function handleClickOutside(e) {
+            if (!e.target.closest(".hamburger-menu") && !e.target.closest(".hamburger")) {
+                setMenuOpen(false);
+            }
+        }
+        document.addEventListener("click", handleClickOutside);
+        return () => document.removeEventListener("click", handleClickOutside);
+    }, []);
 
     return (
-        <>
-            <div>
-                <button className="shopping-cart" type="button" onClick={() => navigate('/cart')}>
-                    cart
-                </button>
+        <div className="outer-container">
+            <header className="shop-header-detail">
+                <div className="button-container-nav">
+                    <div className="icon-bar">
+                        <div className="icon-item-detail" onClick={() => navigate("/favorietenpage")} title="Favorieten">
+                            <FontAwesomeIcon icon={faHeart} />
+                            {favoriteItems.length > 0 && <span className="icon-count">{favoriteItems.length}</span>}
+                        </div>
+                        <div className="icon-item-detail" onClick={() => navigate("/cart")} title="Winkelwagen">
+                            <FontAwesomeIcon icon={faShoppingCart} />
+                            {items.length > 0 && <span className="icon-count">{items.length}</span>}
+                        </div>
+                        {isAuth ? (
+                            <>
+                                <div className="icon-item-detail" title={`Ingelogd als ${user?.username ?? "Onbekend"}`}>
+                                    <FontAwesomeIcon icon={faUser} />
+                                </div>
+                                <div className="icon-item-detail" onClick={handleLogout} title="Log uit">
+                                    <FontAwesomeIcon icon={faSignOutAlt} />
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div className="icon-item-detail" onClick={() => navigate("/signup")} title="Sign Up">
+                                    <FontAwesomeIcon icon={faUser} />
+                                </div>
+                                <div className="icon-item-detail" onClick={() => navigate("/signin")} title="Login">
+                                    <FontAwesomeIcon icon={faUser} />
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </div>
+
+                <nav className="navbar-four-detail">
+                    <ul className={`nav-links4 ${menuOpen ? "active" : ""}`}>
+                        <li><NavLink to="/products/men's clothing">Men</NavLink></li>
+                        <li><NavLink to="/products/women's clothing">Women</NavLink></li>
+                        <li><NavLink to="/Shop">Shop</NavLink></li>
+                        <li><NavLink to="/">Home</NavLink></li>
+                    </ul>
+                </nav>
+            </header>
+
+            <div className="search-hamburger-container">
+                <SearchBar
+                    inputValue={query}
+                    inputCallback={(value) => {
+                        setQuery(value);
+                        navigate(`?query=${encodeURIComponent(value)}`);
+                        setShowModal(true);
+                    }}
+                    selectedCategory={selectedCategory}
+                    onCategoryChange={(value) => {
+                        setSelectedCategory(value);
+                        setShowModal(true);
+                        if (value !== "Alle categorieën") {
+                            navigate(`?query=${encodeURIComponent(query)}&category=${encodeURIComponent(value)}`);
+                        }
+                    }}
+                    categories={categories}
+                    showCategories={false}
+                />
             </div>
+            <section className="burger">
+                <Hamburger
+                    menuOpen={menuOpen}
+                    setMenuOpen={setMenuOpen}
+                    categories={categories}
+                />
+            </section>
 
-            {loading && <p>Bezig met laden...</p>}
-            {error && <p>Er ging iets mis bij het ophalen van de producten.</p>}
+            {showModal && (
+                <ShowModal
+                    query={query}
+                    selectedCategory={selectedCategory}
+                    filteredProducts={filteredProducts}
+                    setShowModal={setShowModal}
+                />
+            )}
 
-            {!loading && !error && product && (
-                <div className="outer-container">
-                    <ZoekBalk
-                        type="tekst"
-                        inputValue={query}
-                        inputCallback={setQuery}
-                    />
-                    <div className="inner-container">
+            <main className="inner-container">
+                {loading && <p>Bezig met laden...</p>}
+                {error && <p>Er ging iets mis bij het ophalen van het product.</p>}
+
+                {!loading && !error && product && (
+                    <>
                         <DetailCard
                             key={product.id}
                             id={product.id}
@@ -68,24 +178,41 @@ function DetailPagina() {
                                     title: product.title,
                                     description: product.description,
                                     image: product.image,
-                                    price: product.price,
+                                    price: product.price
                                 })
                             }
                         />
-                        <ShoppingCart
-                            product={product}
-                            resetButton={() => reSet()}
-                            cartItems={items}
-                        />
-                    </div>
-                    <button onClick={navigateToShop}>Back to store</button>
+                        <ShoppingCart product={product} resetButton={() => reSet()} cartItems={items} />
+                    </>
+                )}
+                <div className="view-all-products">
+                    <li><NavLink to="/Shop" className={({ isActive }) => isActive ? 'active-link' : 'default-link'}>View All</NavLink></li>
                 </div>
-            )}
-        </>
+            </main>
+
+            <footer>
+                <div className="footer-links">
+                    <ul>
+                        <li><NavLink to="/profiel">Profiel</NavLink></li>
+                        <li><NavLink to="/recencies">Recensies</NavLink></li>
+                        <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
+                    </ul>
+                </div>
+            </footer>
+        </div>
     );
 }
 
 export default DetailPagina;
+
+
+
+
+
+
+
+
+
 
 
 

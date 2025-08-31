@@ -1,23 +1,15 @@
-.outer-container {
-    padding: 40px;
-    height: 100vh;
-    overflow: scroll;
-}
 
 
 .inner-container {
     display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
-    gap: 20px;
-    justify-content: flex-end;
-    padding: 40px;
+    gap: 36px;
+    justify-content: center;
 }
 
 .card {
-    border: 1px solid orange;
-    background-color: lightgray;
-    border-radius: 8px;
+    border: 1px solid lightgray;
+    background-color: white;
     padding: 20px;
     width: 300px;
     display: flex;
@@ -27,8 +19,8 @@
 }
 
 .card img {
-    width: 120px;
-    height: 120px;
+    width: 200px;
+    height: 200px;
 }
 
 h2, h3 {
@@ -46,11 +38,4 @@ ul {
     list-style: none;
     padding: 0;
     margin: 0;
-}
-
-h1 {
-    font-family: 'Luckiest Guy', cursive;
-    font-size: 40px;
-    color: #ffcb05;
-    text-shadow: 2px 2px #2a75bb;
 }

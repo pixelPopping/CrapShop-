@@ -1,55 +1,85 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { createContext, useState, useEffect, useContext } from "react";
+import { AuthContext } from "./AuthContext.jsx";
 
-export const FavoriteContext = createContext();
-export const useFavorites = () => useContext(FavoriteContext);
+export const FavoriteContext = createContext({});
 
-const getStorageKey = (userId) => `favorites_${userId}`;
-
-const FavoriteProvider = ({ children, user }) => {
+export const FavoriteProvider = ({ children }) => {
+    const { user } = useContext(AuthContext);
     const [items, setItems] = useState([]);
-    const [isReady, setIsReady] = useState(false);
-    const hasInitialized = useRef(false);
+
+    const getUserId = () => {
+        const userId = localStorage.getItem("user_id");
+        return userId && userId !== "Onbekend" ? userId : null;
+    };
+
+    const getStorageKey = () => {
+        const userId = getUserId();
+        return userId ? `favorites_user_${userId}` : "favorites_guest";
+    };
 
     useEffect(() => {
-        if (!user?.id) {
-            setIsReady(true); // fallback als er geen user is
-            return;
-        }
+        const key = getStorageKey();
+        console.log("🔑 Gebruikte storage key:", key);
 
-        const saved = localStorage.getItem(getStorageKey(user.id));
-        if (saved) {
+        const stored = localStorage.getItem(key);
+        if (stored) {
             try {
-                const parsed = JSON.parse(saved);
-                setItems(Array.isArray(parsed) ? parsed : []);
-            } catch {
-                setItems([]);
+                const parsed = JSON.parse(stored);
+                console.log("✅ Gevonden favorieten:", parsed);
+                setItems(parsed);
+            } catch (e) {
+                console.error("❌ Fout bij parsen van favorieten:", e);
             }
         } else {
-            setItems([]);
+            console.log("ℹ️ Geen favorieten gevonden voor deze gebruiker.");
         }
-
-        hasInitialized.current = true;
-        setIsReady(true);
     }, [user?.id]);
 
     useEffect(() => {
-        if (!user?.id || !hasInitialized.current) return;
-        localStorage.setItem(getStorageKey(user.id), JSON.stringify(items));
+        if (user?.id) {
+            const key = getStorageKey();
+            console.log("💾 Favorieten opslaan onder:", key, items);
+            localStorage.setItem(key, JSON.stringify(items));
+        }
     }, [items, user?.id]);
 
-    const addFavorite = (item) => setItems((prev) => [...prev, item]);
-    const removeFavorite = (id) => setItems((prev) => prev.filter((item) => item.id !== id));
+    const addFavorite = (item) => {
+        console.log("➕ Favoriet toevoegen:", item);
+        if (!items.find((i) => i.id === item.id)) {
+            setItems((prev) => [...prev, item]);
+        }
+    };
+
+    const removeFavorite = (id) => {
+        console.log("➖ Favoriet verwijderen:", id);
+        setItems((prev) => prev.filter((item) => item.id !== id));
+    };
 
     const toggleFavorite = (item) => {
-        setItems((prev) => {
-            const exists = prev.some((fav) => fav.id === item.id);
-            return exists ? prev.filter((fav) => fav.id !== item.id) : [...prev, item];
-        });
+        console.log("🔁 Toggle favoriet:", item);
+        if (items.find((i) => i.id === item.id)) {
+            removeFavorite(item.id);
+        } else {
+            addFavorite(item);
+        }
+    };
+
+    const resetFavorites = () => {
+        console.log("🧹 Favorieten resetten");
+        setItems([]);
     };
 
     return (
         <FavoriteContext.Provider
-            value={{ items, addFavorite, removeFavorite, toggleFavorite, isReady }}
+            value={{
+                items,
+                addFavorite,
+                removeFavorite,
+                toggleFavorite,
+                resetFavorites,
+                totalFavorites: items.length,
+                setItems,
+            }}
         >
             {children}
         </FavoriteContext.Provider>
@@ -57,7 +87,6 @@ const FavoriteProvider = ({ children, user }) => {
 };
 
 export default FavoriteProvider;
-
 
 
 

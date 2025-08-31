@@ -22,26 +22,35 @@ header h1 {
 }
 
 .animated-box {
-    position: relative;
-    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 40px;
     text-align: center;
+    align-items: center;
 }
 
 .mainbox {
-    width: 600px;
-    aspect-ratio: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    width: clamp(300px, 60vw, 600px);aspect-ratio: 1 / 1;
     border-radius: 50%;
     overflow: hidden;
     border: 6px solid #333;
-    background-color: #f9f9f9;
-    position: relative;
-    margin: 0 auto;
+    background: radial-gradient(circle, #ffffff 0%, #f0f0f0 100%);
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.mainbox:hover {
+    transform: scale(1.02);
 }
 
 .box {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
-    position: relative;
     border-radius: 50%;
     border: 10px solid whitesmoke;
     overflow: hidden;
@@ -53,6 +62,7 @@ header h1 {
     width: 100%;
     height: 100%;
     transform: rotate(360deg);
+    transition: transform 3s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 span {
@@ -63,22 +73,20 @@ span {
 }
 
 .font {
-    color: white;
-    font-size: 20px;
+    color: black;
+    font-size: 25px;
 }
-
 
 .span1 { clip-path: polygon(0 17%, 0 50%, 50% 50%); background: lightgreen; }
 .span2 { clip-path: polygon(0 17%, 30% 0, 50% 50%); background: red; }
 .span3 { clip-path: polygon(30% 0, 71% 0%, 50% 50%); background: blue; }
-.span4 { clip-path: polygon(71% 0, 100% 18%, 50% 50%); background: purple; }
+.span4 { clip-path: polygon(71% 0, 100% 18%, 50% 50%); background: yellow; }
 .span5 { clip-path: polygon(100% 18%, 100% 50%, 50% 50%); background: orange; }
 .span6 { clip-path: polygon(0 50%, 0 83%, 50% 50%); background: green; }
-.span7 { clip-path: polygon(0 83%, 30% 100%, 50% 50%); background: red; }
-.span8 { clip-path: polygon(30% 100%, 71% 100%, 50% 50%); background: blue; }
+.span7 { clip-path: polygon(0 83%, 30% 100%, 50% 50%); background: turquoise; }
+.span8 { clip-path: polygon(30% 100%, 71% 100%, 50% 50%); background: violet; }
 .span9 { clip-path: polygon(71% 100%, 100% 82%, 50% 50%); background: purple; }
-.span10 { clip-path: polygon(100% 82%, 100% 50%, 50% 50%); background: orange; }
-
+.span10 { clip-path: polygon(100% 82%, 100% 50%, 50% 50%); background: lightpink; }
 
 .box1 .span1 h5 { top: 40%; right: 73%; transform: rotate(198deg); position: absolute; text-align: center; }
 .box1 .span2 h5 { top: 21%; right: 59%; transform: rotate(-128deg); position: absolute; text-align: center; }
@@ -90,7 +98,6 @@ span {
 .box1 .span8 h5 { top: 84%; right: 40%; transform: rotate(98deg); position: absolute; text-align: center; }
 .box1 .span9 h5 { top: 80%; right: 21%; transform: rotate(46deg); position: absolute; text-align: center; }
 .box1 .span10 h5 { top: 60%; right: 10%; transform: rotate(15deg); position: absolute; text-align: center; }
-
 
 .pointer {
     position: absolute;
@@ -117,7 +124,6 @@ span {
     cursor: pointer;
 }
 
-
 .box1 span.highlighted::after {
     position: absolute;
     top: 50%;
@@ -136,9 +142,6 @@ span {
 .box1 span.highlighted:hover::after {
     opacity: 1;
 }
-
-
-
 
 button {
     margin: 10px;
@@ -160,6 +163,80 @@ p {
     margin-top: 20px;
     font-size: 1.2rem;
     color: #333;
+}
+
+.wheel-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-basis: 500px;
+    flex-grow: 1;
+}
+
+.spin-button{
+    font-family: Outfit,sans-serif;
+    width: 100%;
+    font-size: 20px;
+    margin: 10px;
+    padding: 20px;
+    border: none;
+    background: red;
+    color: white;
+    cursor: pointer;
+}
+
+.result-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+}
+
+@media (max-width: 768px) {
+    .mainbox {
+        width: 90%;
+        aspect-ratio: 1 / 1;
+        border-width: 3px;
+    }
+
+    .box {
+        border-width: 6px;
+    }
+
+    .font {
+        font-size: 16px;
+    }
+
+    .spin-button {
+        font-size: 16px;
+        padding: 15px;
+    }
+
+    .pointer {
+        font-size: 1.5rem;
+    }
+
+    .box1 .span1 h5,
+    .box1 .span2 h5,
+    .box1 .span3 h5,
+    .box1 .span4 h5,
+    .box1 .span5 h5,
+    .box1 .span6 h5,
+    .box1 .span7 h5,
+    .box1 .span8 h5,
+    .box1 .span9 h5,
+    .box1 .span10 h5 {
+        font-size: 12px;
+    }
+
+    .result-container {
+        padding: 10px;
+    }
+
+    header h1 {
+        font-size: 1.5rem;
+        margin-top: 10px;
+    }
 }
 
 

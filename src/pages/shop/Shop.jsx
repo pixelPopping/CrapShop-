@@ -1,43 +1,41 @@
-import {useContext, useEffect, useState} from "react";
+import { useContext, useEffect, useState } from "react";
 import './Shop.css';
-import ZoekBalk from '../../components/searchFilter/ZoekBalk.jsx';
+import SearchBar from '../../components/searchFilter/SearchBar.jsx';
 import axios from 'axios';
 import Shopcard from "../../components/shopcard/Shopcard.jsx";
-import {NavLink, useNavigate} from "react-router-dom";
-import Navigation from "../../components/navbar/Navigation.jsx";
-import {ShoppingCartContext} from "../../components/context/ShoppingCartContext.jsx";
-import {AuthContext} from "../../components/context/AuthContext.jsx";
+import { NavLink, useNavigate } from "react-router-dom";
+import { ShoppingCartContext } from "../../components/context/ShoppingCartContext.jsx";
+import { AuthContext } from "../../components/context/AuthContext.jsx";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import useHandleLogout from "../../helpers/UseHandleLogout.jsx";
+import {
+    faSignOutAlt, faUser, faShoppingCart, faHeart
+} from '@fortawesome/free-solid-svg-icons';
+import {FavoriteContext} from "../../components/context/FavoriteContext.jsx";
 
-//1 data ophalen met een button en loggen in de console
-//2 als je juiste data heb opslaan in de state
-//3 mounth toevoegen zodat data automatisch renderd
-//4 error en loading state toevoegen
-// code zoekbalk verplaatsen naar component
-
-function Shop() {
+function ShopPagina() {
     const [shop, setShop] = useState([]);
     const [query, setQuery] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [category, setCategory] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("");
+
     const navigate = useNavigate();
     const { items } = useContext(ShoppingCartContext);
-    const { isAuth, user, logout } = useContext(AuthContext);
+    const { isAuth, user } = useContext(AuthContext);
+    const { items: favoriteItems } = useContext(FavoriteContext);
+    const handleLogout = useHandleLogout();
 
     useEffect(() => {
-        setLoading(true);
-        setError(false);
         async function getData() {
+            setLoading(true);
+            setError(false);
             try {
                 const response = await axios.get("https://fakestoreapi.com/products");
-                const categories = await axios.get('https://fakestoreapi.com/products/categories');
-                setCategory(categories.data);
-                setSelectedCategory("");
+                const categories = await axios.get("https://fakestoreapi.com/products/categories");
                 setShop(response.data);
-                console.log(response.data);
-
-
+                setCategory(categories.data);
             } catch (e) {
                 setError(true);
                 console.error(e);
@@ -56,76 +54,206 @@ function Shop() {
 
         const matchCategory = selectedCategory === "" || item.category === selectedCategory;
 
-        return matchCategory && matchSearch;
-    })
-
-
-    //function onLinkClick(item) {
-       // navigate(`/detailpagina/${item.id}`);
-    //}
+        return matchSearch && matchCategory;
+    });
 
     return (
-        <>
-            <div>
-                <div className="button-container4">
-                    {isAuth ? (
-                        <button className="navbar-toggler" onClick={logout}>LOG UIT</button>
-                    ) : (
-                        <>
-                            <button onClick={() => navigate('/signup')}>Sign Up</button>
-                            <button onClick={() => navigate('/signin')}>Login</button>
-                        </>
-                    )}
-                    {isAuth && (
-                        <button type="button" className="user-button">
-                            Ingelogd als: {user?.username ?? "Onbekend"}
-                        </button>
-                    )}
-                    <button onClick={() => navigate('/cart')}>
-                        {items ? `cart (${items.length})` : 'cart (0)'}
-                    </button>
-                    <button onClick={() => navigate('/')}>Home</button>
-                </div>
+        <div className="shop">
+            <div className="shop">
+                <h1>Shop.</h1>
             </div>
-            <nav>
-                <li><NavLink to="/" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Home Page</NavLink></li>
-                <li><NavLink to="/products/jewelery" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Jewelery</NavLink></li>
-                <li><NavLink to="/products/electronics" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Electronics</NavLink></li>
-                <li><NavLink to="/products/men's clothing" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Men</NavLink></li>
-                <li><NavLink to="/products/women's clothing" className={({isActive}) => isActive === true ? 'active-link' : 'default-link'}>Women</NavLink></li>
-            </nav>
-            {!loading && !error && filteredItems.length === 0 && <p>Geen zoekresultaten gevonden.</p>}
-            {loading && <p>Bezig met laden...</p>}
-            {error && <p>Er ging iets mis bij het ophalen van de producten.</p>}
-            {!loading && !error && (
-                <div className="outer-container">
-                    <h1>Shop</h1>
-                    <ZoekBalk
-                        type="tekst"
+            <header className="shop-header">
+                <nav className="navbar-four">
+                    <ul className="nav-links4">
+                        <li><NavLink to="/products/men's clothing">Men</NavLink></li>
+                        <li><NavLink to="/products/women's clothing">Women</NavLink></li>
+                        <li><NavLink to="/">Home </NavLink></li>
+                    </ul>
+                </nav>
+                <div className="searchbar">
+                    <SearchBar
+                        type="text"
                         inputValue={query}
                         inputCallback={setQuery}
                         selectedCategory={selectedCategory}
                         onCategoryChange={setSelectedCategory}
-                        categories={category}
+                        categories={["Alle categorieën", ...category]}
                     />
-                    <div className="inner-container">
-                        {filteredItems.map((item) => (
-                            <Shopcard
-                                key={item.id}
-                                onClick={() => navigate(`/detailpagina/${item.id}`)}
-                                label={item.title}
-                                text={item.description}
-                                image={item.image}
-                            />
-                        ))}
-                    </div>
                 </div>
-            )}
-        </>
+
+                <div className="icon-bar">
+                    <div className="icon-item" onClick={() => navigate("/favorietenpage")} title="Favorieten">
+                        <FontAwesomeIcon icon={faHeart} />
+                        {favoriteItems.length > 0 && <span className="icon-count">{favoriteItems.length}</span>}
+                    </div>
+
+                    <div className="icon-item" onClick={() => navigate("/cart")} title="Winkelwagen">
+                        <FontAwesomeIcon icon={faShoppingCart} />
+                        {items.length > 0 && <span className="icon-count">{items.length}</span>}
+                    </div>
+
+                    {isAuth ? (
+                        <>
+                            <div className="icon-item" title={`Ingelogd als ${user?.username ?? "Onbekend"}`}>
+                                <FontAwesomeIcon icon={faUser} />
+                            </div>
+                            <div className="icon-item" onClick={handleLogout} title="Log uit">
+                                <FontAwesomeIcon icon={faSignOutAlt} />
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <div className="icon-item" onClick={() => navigate("/signup")} title="Sign Up">
+                                <FontAwesomeIcon icon={faUser} />
+                            </div>
+                            <div className="icon-item" onClick={() => navigate("/signin")} title="Login">
+                                <FontAwesomeIcon icon={faUser} />
+                            </div>
+                        </>
+                    )}
+                </div>
+            </header>
+
+            <div className="inner-container">
+                <nav className="sidebar">
+                    <ul>
+                        <li><NavLink to="/products/jewelery">Jewelery</NavLink></li>
+                        <li><NavLink to="/products/electronics">Electronics</NavLink></li>
+                        <li><NavLink to="/products/men's clothing">Men</NavLink></li>
+                        <li><NavLink to="/products/women's clothing">Women</NavLink></li>
+                    </ul>
+                </nav>
+
+                <main className="shop-products">
+                    {loading && <p>Bezig met laden...</p>}
+                    {error && <p>Er ging iets mis bij het ophalen van de producten.</p>}
+                    {!loading && !error && filteredItems.length === 0 && <p>Geen zoekresultaten gevonden.</p>}
+                    {!loading && !error && (
+                        <section className="product-list">
+                            {filteredItems.map((item) => (
+                                <Shopcard
+                                    key={item.id}
+                                    onClick={() => navigate(`/detailpagina/${item.id}`)}
+                                    label={item.title}
+                                    text={item.description}
+                                    image={item.image}
+                                    price={item.price}
+                                    rating={item.rating.rate}
+                                />
+                            ))}
+                        </section>
+                    )}
+                </main>
+            </div>
+
+            <footer>
+                <div className="footer-links">
+                    <ul>
+                        <li><NavLink to="/profiel">Profiel</NavLink></li>
+                        <li><NavLink to="/recencies">Recensies</NavLink></li>
+                        <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
+                    </ul>
+                </div>
+            </footer>
+        </div>
     );
 }
 
-export default Shop;
+export default ShopPagina;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
