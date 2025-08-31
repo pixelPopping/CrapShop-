@@ -4,7 +4,6 @@
     right: 20px;
     background-color: white;
     border: 1px solid #ccc;
-    border-radius: 6px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     padding: 16px;
     z-index: 100;
@@ -23,7 +22,6 @@
     color: white;
     border: none;
     padding: 6px 10px;
-    border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
     margin-bottom: 10px;
@@ -43,7 +41,7 @@
 
 .modal-content a {
     text-decoration: none;
-    color: #0077cc;
+    color: black;
     font-weight: 500;
 }
 

@@ -1,14 +1,17 @@
 
 .shopping-cart {
-    padding: 2rem;
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #fafafa;
+    width: 400px;
+    padding: 16px;
+    font-family: 'Outfit', sans-serif;
 }
 
 
 .winkelwagen h2 {
-    font-size: 2rem;
+    font-size: 40px;
+    padding: 40px;
     margin-bottom: 1rem;
+    border: solid 1px lightgray;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .empty-cart {
@@ -23,19 +26,17 @@
 
 .cart-item {
     display: flex;
+    flex-direction: column;
     align-items: center;
     margin-bottom: 1rem;
-    border-bottom: 1px solid #ddd;
     padding-bottom: 1rem;
 }
 
 .item-image {
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
     object-fit: contain;
     margin-right: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
 }
 
 .item-details {

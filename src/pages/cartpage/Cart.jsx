@@ -114,10 +114,10 @@ function Cart() {
             )}
 
             <main>
-                <h2>🛒 Winkelwagen – {items.length > 0 ? items.map(item => item.title).join(", ") : "Leeg"}</h2>
+                <h2>Shopping Bag – {items.length > 0 ? items.map(item => item.title).join(", ") : "Leeg"}</h2>
 
                 {items.length === 0 ? (
-                    <p>Je winkelwagen is leeg.</p>
+                    <p>Shopping Bag is empty.</p>
                 ) : (
                     <>
                         {items.map((item) => (

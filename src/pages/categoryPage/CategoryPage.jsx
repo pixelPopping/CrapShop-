@@ -11,7 +11,8 @@ import { faHeart, faShoppingCart, faSignOutAlt, faUser } from "@fortawesome/free
 import ShowModal from "../../components/modal/ShowModal.jsx";
 import CategoryCard from "../../components/categoryCard/CategoryCard.jsx";
 import useHandleLogout from "../../helpers/UseHandleLogout.jsx";
-import './CategoryPage.css';
+import "./CategoryPage.css";
+import Hamburger from "../../components/hamburmenu/Hamburger.jsx";
 
 const CategoryPage = () => {
     const { category } = useParams();
@@ -20,16 +21,19 @@ const CategoryPage = () => {
     const { isAuth, user } = useContext(AuthContext);
     const { items: cartItems } = useContext(ShoppingCartContext);
     const { items: favoriteItems } = useContext(FavoriteContext);
+
     const params = new URLSearchParams(location.search);
     const zoekQuery = params.get("query")?.toLowerCase() || "";
 
     const [query, setQuery] = useState(zoekQuery);
+    const [menuOpen, setMenuOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState(category || "Alle categorieën");
     const [showModal, setShowModal] = useState(zoekQuery.length > 0);
     const [products, setProducts] = useState([]);
     const [allProducts, setAllProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [categories, setCategories] = useState(["Alle categorieën"]);
+
     const handleLogout = useHandleLogout();
     const filteredProductsList = filterProducts(allProducts, query, selectedCategory);
 
@@ -46,8 +50,10 @@ const CategoryPage = () => {
             try {
                 const res = await axios.get("https://fakestoreapi.com/products");
                 setAllProducts(res.data);
-                const filtered = res.data.filter(item => item.category === category);
+
+                const filtered = res.data.filter((item) => item.category === category);
                 setProducts(filtered);
+
                 const cat = await axios.get("https://fakestoreapi.com/products/categories");
                 setCategories(["Alle categorieën", ...cat.data]);
             } catch (error) {
@@ -56,50 +62,66 @@ const CategoryPage = () => {
                 setLoading(false);
             }
         }
+
         GetCategory();
     }, [category]);
 
     return (
         <>
-            <header>
-                <h1>Categorie: {category}</h1>
-            </header>
-
-            <nav className="navbar-four">
+            <nav className="navbar-four-category">
                 <ul className="nav-links4">
                     <li><NavLink to="/products/men's clothing">Men</NavLink></li>
                     <li><NavLink to="/products/women's clothing">Women</NavLink></li>
                     <li><NavLink to="/Shop">Shop</NavLink></li>
-                    <li><NavLink to="/">Home </NavLink></li>
+                    <li><NavLink to="/">Home</NavLink></li>
                 </ul>
+                <div className="search-hamburger-container">
+                    <SearchBar
+                        inputValue={query}
+                        inputCallback={(value) => {
+                            setQuery(value);
+                            navigate(`?query=${encodeURIComponent(value)}`);
+                            setShowModal(true);
+                        }}
+                        selectedCategory={selectedCategory}
+                        onCategoryChange={(value) => {
+                            setSelectedCategory(value);
+                            setShowModal(true);
+                            if (value !== "Alle categorieën") {
+                                navigate(`?query=${encodeURIComponent(query)}&category=${encodeURIComponent(value)}`);
+                            }
+                        }}
+                        categories={categories}
+                        showCategories={false}
+                    />
+                </div>
 
-                <SearchBar
-                    type="text"
-                    inputValue={query}
-                    inputCallback={(value) => {
-                        setQuery(value);
-                        navigate(`?query=${encodeURIComponent(value)}`);
-                        setShowModal(true);
-                    }}
-                    selectedCategory={selectedCategory}
-                    onCategoryChange={(value) => {
-                        setSelectedCategory(value);
-                        setShowModal(true);
-                        if (value !== "Alle categorieën") {
-                            navigate(`/products/${encodeURIComponent(value)}`);
-                        }
-                    }}
-                    categories={["Alle categorieën", ...categories]}
-                />
+                <section className="burger">
+                    <Hamburger
+                        menuOpen={menuOpen}
+                        setMenuOpen={setMenuOpen}
+                        categories={categories}
+                    />
+                </section>
 
-                <div className="button-container4">
+                <div className="icon-bar">
+                    <div className="icon-item" onClick={() => navigate("/favorietenpage")} title="Favorieten">
+                        <FontAwesomeIcon icon={faHeart} />
+                        {favoriteItems.length > 0 && <span className="icon-count">{favoriteItems.length}</span>}
+                    </div>
+
+                    <div className="icon-item" onClick={() => navigate("/cart")} title="Winkelwagen">
+                        <FontAwesomeIcon icon={faShoppingCart} />
+                        {cartItems.length > 0 && <span className="icon-count">{cartItems.length}</span>}
+                    </div>
+
                     {isAuth ? (
                         <>
-                            <div className="icon-item" onClick={handleLogout} title="Log uit">
-                                <FontAwesomeIcon icon={faSignOutAlt} />
-                            </div>
                             <div className="icon-item" title={`Ingelogd als ${user?.username ?? "Onbekend"}`}>
                                 <FontAwesomeIcon icon={faUser} />
+                            </div>
+                            <div className="icon-item" onClick={handleLogout} title="Log uit">
+                                <FontAwesomeIcon icon={faSignOutAlt} />
                             </div>
                         </>
                     ) : (
@@ -112,20 +134,6 @@ const CategoryPage = () => {
                             </div>
                         </>
                     )}
-
-                    <div className="icon-item" onClick={() => navigate("/cart")} title="Winkelwagen">
-                        <div className="icon-wrapper">
-                            <FontAwesomeIcon icon={faShoppingCart} />
-                            {cartItems.length > 0 && <span className="icon-count">{cartItems.length}</span>}
-                        </div>
-                    </div>
-
-                    <div className="icon-item" onClick={() => navigate("/favorietenpage")} title="Favorieten">
-                        <div className="icon-wrapper">
-                            <FontAwesomeIcon icon={faHeart} />
-                            {favoriteItems.length > 0 && <span className="icon-count">{favoriteItems.length}</span>}
-                        </div>
-                    </div>
                 </div>
             </nav>
 
@@ -140,26 +148,30 @@ const CategoryPage = () => {
                 )}
             </section>
 
-            <main>
+            <main className="main-content">
                 {loading ? (
                     <p>Producten laden...</p>
                 ) : (
                     <div className="carousel-wrapper">
-                        <button className="arrow left" onClick={() => scrollCarousel(-300)}>&#8592;</button>
-                        <div className="product-carousel" ref={carouselRef}>
-                            {products.map(product => (
-                                <CategoryCard
-                                    key={product.id}
-                                    product={product}
-                                    image={product.image}
-                                    label={product.title}
-                                    text={`Price:€${product.price}`}
-                                    rating={product.rating.rate}
-                                    onClick={() => navigate(`/detailpagina/${product.id}`)}
-                                />
-                            ))}
-                        </div>
-                        <button className="arrow right" onClick={() => scrollCarousel(300)}>&#8594;</button>
+                            <button className="arrow left" onClick={() => scrollCarousel(-300)}>
+                                &#8592;
+                            </button>
+                            <div className="product-carousel" ref={carouselRef}>
+                                {products.map((product) => (
+                                    <CategoryCard
+                                        key={product.id}
+                                        product={product}
+                                        image={product.image}
+                                        label={product.title}
+                                        text={`Price: €${product.price}`}
+                                        rating={product.rating.rate}
+                                        onClick={() => navigate(`/detailpagina/${product.id}`)}
+                                    />
+                                ))}
+                            </div>
+                            <button className="arrow right" onClick={() => scrollCarousel(300)}>
+                                &#8594;
+                            </button>
                     </div>
                 )}
             </main>
@@ -178,6 +190,7 @@ const CategoryPage = () => {
 };
 
 export default CategoryPage;
+
 
 
 

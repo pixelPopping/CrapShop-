@@ -111,7 +111,6 @@
     position: absolute;
     top: -8px;
     right: -10px;
-    background-color: red;
     color: white;
     font-size: 12px;
     padding: 2px 6px;
@@ -170,7 +169,6 @@ a {
 .search-field select {
     padding: 10px;
     font-size: 16px;
-    border-radius: 5px;
     border: none;
 }
 

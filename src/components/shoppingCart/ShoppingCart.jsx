@@ -10,9 +10,9 @@ function ShoppingCart() {
         <>
             <main className="shopping-cart">
                 <section className="winkelwagen">
-                    <h2>🛒 Winkelwagen</h2>
+                    <h2>Shopping Bag</h2>
                     {items.length === 0 ? (
-                        <p className="empty-cart">Je winkelwagen is leeg.</p>
+                        <p className="empty-cart">Cart is empty.</p>
                     ) : (
                         <ul className="cart-items">
                             {items.map((item) => (
@@ -27,7 +27,7 @@ function ShoppingCart() {
                         </ul>
                     )}
                     <p className="total-price">
-                        <strong>Totaalprijs:</strong> {price().toFixed(2) ? `€${price().toFixed(2)}` : "€0,00"}
+                        <strong>Totaleprice:</strong> {price().toFixed(2) ? `€${price().toFixed(2)}` : "€0,00"}
                     </p>
                 </section>
             </main>
