@@ -67,7 +67,8 @@ const CategoryPage = () => {
     }, [category]);
 
     return (
-        <>
+        <div className="outer-category-page">
+        <section className="inner-category-page">
             <nav className="navbar-four-category">
                 <ul className="nav-links4">
                     <li><NavLink to="/products/men's clothing">Men</NavLink></li>
@@ -147,7 +148,21 @@ const CategoryPage = () => {
                     />
                 )}
             </section>
-
+        <section>
+            <article>
+                <div className="empty-box">
+                </div>
+            </article>
+        </section>
+            <section>
+                <article>
+                <div className="empty-box2">
+                    <div className="header-content">
+                    <h2>{category}</h2>
+                    </div>
+                </div>
+                </article>
+            </section>
             <main className="main-content">
                 {loading ? (
                     <p>Producten laden...</p>
@@ -185,7 +200,8 @@ const CategoryPage = () => {
                     </ul>
                 </div>
             </footer>
-        </>
+        </section>
+        </div>
     );
 };
 

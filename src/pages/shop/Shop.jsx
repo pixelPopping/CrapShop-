@@ -58,13 +58,14 @@ function ShopPagina() {
     });
 
     return (
-        <div className="shop">
+        <div className="shop-outercontainer">
             <div className="shop">
                 <h1>Shop.</h1>
             </div>
+            <section className="shop-outer">
             <header className="shop-header">
                 <nav className="navbar-four">
-                    <ul className="nav-links4">
+                    <ul className="nav-links4-shop">
                         <li><NavLink to="/products/men's clothing">Men</NavLink></li>
                         <li><NavLink to="/products/women's clothing">Women</NavLink></li>
                         <li><NavLink to="/">Home </NavLink></li>
@@ -113,6 +114,7 @@ function ShopPagina() {
                     )}
                 </div>
             </header>
+            </section>
 
             <div className="inner-container">
                 <nav className="sidebar">

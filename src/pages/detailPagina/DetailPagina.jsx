@@ -78,38 +78,36 @@ function DetailPagina() {
     }, []);
 
     return (
-        <div className="outer-container">
+        <div className="layout">
             <header className="shop-header-detail">
-                <div className="button-container-nav">
-                    <div className="icon-bar">
-                        <div className="icon-item-detail" onClick={() => navigate("/favorietenpage")} title="Favorieten">
-                            <FontAwesomeIcon icon={faHeart} />
-                            {favoriteItems.length > 0 && <span className="icon-count">{favoriteItems.length}</span>}
-                        </div>
-                        <div className="icon-item-detail" onClick={() => navigate("/cart")} title="Winkelwagen">
-                            <FontAwesomeIcon icon={faShoppingCart} />
-                            {items.length > 0 && <span className="icon-count">{items.length}</span>}
-                        </div>
-                        {isAuth ? (
-                            <>
-                                <div className="icon-item-detail" title={`Ingelogd als ${user?.username ?? "Onbekend"}`}>
-                                    <FontAwesomeIcon icon={faUser} />
-                                </div>
-                                <div className="icon-item-detail" onClick={handleLogout} title="Log uit">
-                                    <FontAwesomeIcon icon={faSignOutAlt} />
-                                </div>
-                            </>
-                        ) : (
-                            <>
-                                <div className="icon-item-detail" onClick={() => navigate("/signup")} title="Sign Up">
-                                    <FontAwesomeIcon icon={faUser} />
-                                </div>
-                                <div className="icon-item-detail" onClick={() => navigate("/signin")} title="Login">
-                                    <FontAwesomeIcon icon={faUser} />
-                                </div>
-                            </>
-                        )}
+                <div className="icon-bar">
+                    <div className="icon-item-detail" onClick={() => navigate("/favorietenpage")} title="Favorieten">
+                        <FontAwesomeIcon icon={faHeart} />
+                        {favoriteItems.length > 0 && <span className="icon-count">{favoriteItems.length}</span>}
                     </div>
+                    <div className="icon-item-detail" onClick={() => navigate("/cart")} title="Winkelwagen">
+                        <FontAwesomeIcon icon={faShoppingCart} />
+                        {items.length > 0 && <span className="icon-count">{items.length}</span>}
+                    </div>
+                    {isAuth ? (
+                        <>
+                            <div className="icon-item-detail" title={`Ingelogd als ${user?.username ?? "Onbekend"}`}>
+                                <FontAwesomeIcon icon={faUser} />
+                            </div>
+                            <div className="icon-item-detail" onClick={handleLogout} title="Log uit">
+                                <FontAwesomeIcon icon={faSignOutAlt} />
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <div className="icon-item-detail" onClick={() => navigate("/signup")} title="Sign Up">
+                                <FontAwesomeIcon icon={faUser} />
+                            </div>
+                            <div className="icon-item-detail" onClick={() => navigate("/signin")} title="Login">
+                                <FontAwesomeIcon icon={faUser} />
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 <nav className="navbar-four-detail">
@@ -141,14 +139,12 @@ function DetailPagina() {
                     categories={categories}
                     showCategories={false}
                 />
-            </div>
-            <section className="burger">
                 <Hamburger
                     menuOpen={menuOpen}
                     setMenuOpen={setMenuOpen}
                     categories={categories}
                 />
-            </section>
+            </div>
 
             {showModal && (
                 <ShowModal
@@ -164,31 +160,41 @@ function DetailPagina() {
                 {error && <p>Er ging iets mis bij het ophalen van het product.</p>}
 
                 {!loading && !error && product && (
-                    <>
-                        <DetailCard
-                            key={product.id}
-                            id={product.id}
-                            label={product.title}
-                            text={product.description}
-                            price={product.price}
-                            image={product.image}
-                            cart={() =>
-                                cart({
-                                    id: product.id,
-                                    title: product.title,
-                                    description: product.description,
-                                    image: product.image,
-                                    price: product.price
-                                })
-                            }
-                        />
-                        <ShoppingCart product={product} resetButton={() => reSet()} cartItems={items} />
-                    </>
+                    <DetailCard
+                        key={product.id}
+                        id={product.id}
+                        label={product.title}
+                        text={product.description}
+                        price={product.price}
+                        image={product.image}
+                        cart={() =>
+                            cart({
+                                id: product.id,
+                                title: product.title,
+                                description: product.description,
+                                image: product.image,
+                                price: product.price
+                            })
+                        }
+                    />
                 )}
                 <div className="view-all-products">
-                    <li><NavLink to="/Shop" className={({ isActive }) => isActive ? 'active-link' : 'default-link'}>View All</NavLink></li>
+                    <li>
+                        <NavLink
+                            to="/Shop"
+                            className={({ isActive }) => isActive ? "active-link" : "default-link"}
+                        >
+                            View All
+                        </NavLink>
+                    </li>
                 </div>
             </main>
+
+            <aside className="shoppingcart-container">
+                {!loading && !error && product && (
+                    <ShoppingCart product={product} resetButton={() => reSet()} cartItems={items} />
+                )}
+            </aside>
 
             <footer>
                 <div className="footer-links">
@@ -204,6 +210,8 @@ function DetailPagina() {
 }
 
 export default DetailPagina;
+
+
 
 
 

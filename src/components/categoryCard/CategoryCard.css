@@ -1,7 +1,7 @@
 .category-container{
     display: flex;
     flex-direction: row;
-    border: solid 1px lightgray;
+    border: solid 1px black;
 }
 
 .category-card{
