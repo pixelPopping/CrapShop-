@@ -1,10 +1,15 @@
+import './RecensieItem.css'
+
 function RecensieItem({ label, text, likes, onLike }) {
     return (
-        <div className="recensie-item">
+        <section className="layout-item">
+        <div className="card-recencies">
             <p><strong>{label}</strong>: {text}</p>
             <p>Likes: {likes}</p>
             <button onClick={onLike}>Like</button>
+            <div className="visual"></div>
         </div>
+        </section>
     );
 }
 

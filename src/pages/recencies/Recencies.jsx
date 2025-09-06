@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useContext } from "react";
 import { useNavigate, useLocation, NavLink } from "react-router-dom";
 import axios from "axios";
@@ -9,6 +8,7 @@ import RecensieForm from "../../components/recensieForm/RecensieForm.jsx";
 import RecensieItem from "../../helpers/RecensieItem.jsx";
 import SearchBar from "../../components/searchFilter/SearchBar.jsx";
 import ShowModal from "../../components/modal/ShowModal.jsx";
+import Hamburger from "../../components/hamburmenu/Hamburger.jsx";
 
 import { AuthContext } from "../../components/context/AuthContext.jsx";
 import { ShoppingCartContext } from "../../components/context/ShoppingCartContext.jsx";
@@ -24,6 +24,7 @@ function Recencies() {
     const [recencies, setRecencies] = useState([]);
     const [allProducts, setAllProducts] = useState([]);
     const [categories, setCategories] = useState(["Alle categorieën"]);
+    const [menuOpen, setMenuOpen] = useState(false);
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -64,41 +65,23 @@ function Recencies() {
 
     return (
         <div className="layout-recencies">
-            <nav className="navbar-four">
-                <ul className="nav-links4">
-                    <li><NavLink to="/products/men's clothing">Men</NavLink></li>
-                    <li><NavLink to="/products/women's clothing">Women</NavLink></li>
-                    <li><NavLink to="/Shop">Shop</NavLink></li>
-                    <li><NavLink to="/">Home</NavLink></li>
-                </ul>
-
-                <SearchBar
-                    type="text"
-                    inputValue={query}
-                    inputCallback={(value) => {
-                        setQuery(value);
-                        navigate(`?query=${encodeURIComponent(value)}`);
-                        setShowModal(true);
-                    }}
-                    selectedCategory={selectedCategory}
-                    onCategoryChange={(value) => {
-                        setSelectedCategory(value);
-                        setShowModal(true);
-                        if (value !== "Alle categorieën") {
-                            navigate(`/products/${encodeURIComponent(value)}`);
-                        }
-                    }}
-                    categories={categories}
-                />
-
-                <div className="button-container4">
+            <header className="recencies-header">
+                <div className="icon-bar">
+                    <div className="icon-item" onClick={() => navigate("/favorietenpage")} title="Favorieten">
+                        <FontAwesomeIcon icon={faHeart} />
+                        {favoriteItems.length > 0 && <span className="icon-count">{favoriteItems.length}</span>}
+                    </div>
+                    <div className="icon-item" onClick={() => navigate("/cart")} title="Winkelwagen">
+                        <FontAwesomeIcon icon={faShoppingCart} />
+                        {cartItems.length > 0 && <span className="icon-count">{cartItems.length}</span>}
+                    </div>
                     {isAuth ? (
                         <>
-                            <div className="icon-item" onClick={handleLogout} title="Log uit">
-                                <FontAwesomeIcon icon={faSignOutAlt} />
-                            </div>
                             <div className="icon-item" title={`Ingelogd als ${user?.username ?? "Onbekend"}`}>
                                 <FontAwesomeIcon icon={faUser} />
+                            </div>
+                            <div className="icon-item" onClick={handleLogout} title="Log uit">
+                                <FontAwesomeIcon icon={faSignOutAlt} />
                             </div>
                         </>
                     ) : (
@@ -111,18 +94,39 @@ function Recencies() {
                             </div>
                         </>
                     )}
-
-                    <div className="icon-item" onClick={() => navigate("/cart")} title="Winkelwagen">
-                        <FontAwesomeIcon icon={faShoppingCart} />
-                        {cartItems.length > 0 && <span className="icon-count">{cartItems.length}</span>}
-                    </div>
-
-                    <div className="icon-item" onClick={() => navigate("/favorietenpage")} title="Favorieten">
-                        <FontAwesomeIcon icon={faHeart} />
-                        {favoriteItems.length > 0 && <span className="icon-count">{favoriteItems.length}</span>}
-                    </div>
                 </div>
-            </nav>
+
+                <nav className="navbar-four">
+                    <ul className={`nav-links4 ${menuOpen ? "active" : ""}`}>
+                        <li><NavLink to="/products/men's clothing">Men</NavLink></li>
+                        <li><NavLink to="/products/women's clothing">Women</NavLink></li>
+                        <li><NavLink to="/Shop">Shop</NavLink></li>
+                        <li><NavLink to="/">Home</NavLink></li>
+                    </ul>
+                </nav>
+
+                <div className="search-hamburger-container">
+                    <SearchBar
+                        inputValue={query}
+                        inputCallback={(value) => {
+                            setQuery(value);
+                            navigate(`?query=${encodeURIComponent(value)}`);
+                            setShowModal(true);
+                        }}
+                        selectedCategory={selectedCategory}
+                        onCategoryChange={(value) => {
+                            setSelectedCategory(value);
+                            setShowModal(true);
+                            if (value !== "Alle categorieën") {
+                                navigate(`/products/${encodeURIComponent(value)}`);
+                            }
+                        }}
+                        categories={categories}
+                        showCategories={false}
+                    />
+                    <Hamburger menuOpen={menuOpen} setMenuOpen={setMenuOpen} categories={categories} />
+                </div>
+            </header>
 
             <main>
                 {showModal && (
@@ -134,9 +138,7 @@ function Recencies() {
                     />
                 )}
 
-                <div className="recencies-header">
-                    <h1>Recencies</h1>
-                </div>
+                <h1 className="recencies-title">Recensies</h1>
 
                 <div className="form-outer">
                     <section className="form-inner">
@@ -175,5 +177,6 @@ function Recencies() {
 }
 
 export default Recencies;
+
 
 
