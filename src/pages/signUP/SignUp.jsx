@@ -12,6 +12,7 @@ import { FavoriteContext } from "../../components/context/FavoriteContext.jsx";
 import SignUpForm from "../../components/signUpForm/SignUpForm.jsx";
 import useHandleLogout from "../../helpers/UseHandleLogout.jsx";
 import ShowModal from "../../components/modal/ShowModal.jsx";
+import FooterLayout from "../../components/Footer/FooterLayout.jsx";
 
 function SignUp() {
     const navigate = useNavigate();
@@ -151,14 +152,7 @@ function SignUp() {
                 errorMessage={errorMessage}
             />
             </section>
-
-            <div className="profiel-links">
-                <ul>
-                    <li><NavLink to="/profiel">Profiel</NavLink></li>
-                    <li><NavLink to="/recencies">Recensies</NavLink></li>
-                    <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
-                </ul>
-            </div>
+          <FooterLayout/>
         </div>
     );
 }

@@ -12,6 +12,7 @@ import {
     faSignOutAlt, faUser, faShoppingCart, faHeart
 } from '@fortawesome/free-solid-svg-icons';
 import {FavoriteContext} from "../../components/context/FavoriteContext.jsx";
+import FooterLayout from "../../components/Footer/FooterLayout.jsx";
 
 function ShopPagina() {
     const [shop, setShop] = useState([]);
@@ -147,15 +148,8 @@ function ShopPagina() {
                     )}
                 </main>
             </div>
-
             <footer>
-                <div className="footer-links">
-                    <ul>
-                        <li><NavLink to="/profiel">Profiel</NavLink></li>
-                        <li><NavLink to="/recencies">Recensies</NavLink></li>
-                        <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
-                    </ul>
-                </div>
+              <FooterLayout/>
             </footer>
         </div>
     );

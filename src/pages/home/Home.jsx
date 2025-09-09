@@ -231,10 +231,9 @@ function Home() {
                     </section>
                 </div>
             </main>
-
-            <div className="footer-container">
-                <footer className="footer">
-                    <h1>PixelPopping@productions</h1>
+            <div className="footer-container-home">
+                <footer>
+                    <h1 className="footer-text">PixelPopping@productions</h1>
                 </footer>
             </div>
         </div>

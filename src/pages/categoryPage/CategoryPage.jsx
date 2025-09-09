@@ -13,6 +13,7 @@ import CategoryCard from "../../components/categoryCard/CategoryCard.jsx";
 import useHandleLogout from "../../helpers/UseHandleLogout.jsx";
 import "./CategoryPage.css";
 import Hamburger from "../../components/hamburmenu/Hamburger.jsx";
+import FooterLayout from "../../components/Footer/FooterLayout.jsx";
 
 const CategoryPage = () => {
     const { category } = useParams();
@@ -192,13 +193,7 @@ const CategoryPage = () => {
             </main>
 
             <footer>
-                <div className="footer-links">
-                    <ul>
-                        <li><NavLink to="/profiel">Profiel</NavLink></li>
-                        <li><NavLink to="/recencies">Recensies</NavLink></li>
-                        <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
-                    </ul>
-                </div>
+               <FooterLayout/>
             </footer>
         </section>
         </div>

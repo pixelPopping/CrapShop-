@@ -1,3 +1,10 @@
+.main-outer {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    background: linear-gradient(135deg, #000000, #434343);
+}
+
 .layout {
     display: grid;
     grid-template-areas:
@@ -13,9 +20,12 @@
 
 .shop-header-detail {
     grid-area: header;
+    width: auto;
     position: relative;
+    right: 100px;
+    left: -15px;
     background: linear-gradient(90deg, rgba(61,36,232,1) 4%, rgba(78,24,230,1) 62%, rgba(74,18,199,1) 80%);
-    padding: 50px 20px;
+    padding: 50px;
     clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 1;
@@ -25,13 +35,13 @@
 
 .navbar-four-detail {
     display: flex;
-    background: linear-gradient(90deg, rgba(61,36,232,1) 4%, rgba(78,24,230,1) 62%, rgba(74,18,199,1) 80%);
-    box-shadow: 0 4px 40px rgba(0, 0, 0, 0.1);
     justify-content: center;
     align-items: center;
+    background: linear-gradient(90deg, rgba(61,36,232,1) 4%, rgba(78,24,230,1) 62%, rgba(74,18,199,1) 80%);
+    box-shadow: 0 4px 40px rgba(0, 0, 0, 0.1);
     margin: 0 auto 20px auto;
     width: 100%;
-    max-width: 1200px;
+    max-width: 800px;
     padding: 20px 40px;
     border-radius: 12px;
 }
@@ -45,19 +55,19 @@
 }
 
 .nav-links4 li a {
-    color: black;
+    color: #f1f1f1;
     text-decoration: none;
-    font-weight: 500;
-    font-size: 25px;
+    font-weight: 600;
+    font-size: 20px;
     transition: color 0.3s ease;
 }
 
-.hamburger-broodje {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
+.nav-links4 li a:hover,
+.nav-links4 li a.active {
+    color: #ffcc00;
 }
 
+.hamburger-broodje,
 .burger {
     width: 100%;
     display: flex;
@@ -65,14 +75,17 @@
     justify-content: center;
 }
 
-.search-hamburger-container {
+.search-detail-container {
     grid-area: search;
-    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: center;
+    width: 100%;
     padding: 20px;
     gap: 16px;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
 
 .search-field {
@@ -99,7 +112,7 @@
 }
 
 .icon-item-detail:hover {
-    color: #ddd;
+    color: #ffcc00;
 }
 
 .icon-count {
@@ -120,13 +133,38 @@
     padding: 0;
 }
 
-.inner-container {
+.inner-container-detail {
     grid-area: main;
+    color: #e0e0e0;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    max-width: 800px;
+    flex: 0 0 auto;
+}
+
+.inner-container-detail h1,
+.inner-container-detail h2 {
+    color: #39ff14;
+    text-shadow: 0 0 10px rgba(57, 255, 20, 0.6);
 }
 
 .shoppingcart-container {
     grid-area: aside;
+    background: #f9f9f9;
+    color: #1a1a1a;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    width: 450px;
+    max-height: 80vh;
+    overflow-x: auto;
+    flex: 0 1 auto;
 }
+
 
 .view-all-products {
     display: flex;
@@ -140,24 +178,24 @@
 .view-all-products a {
     font-size: 20px;
     font-weight: bold;
-    color: #4e18e6;
+    color: #e63946;
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 .view-all-products a:hover {
-    color: #3d24e8;
+    color: #ff6a00;
 }
 
 footer {
     grid-area: footer;
+    width: 1200px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #eee;
-    padding: 40px;
-    margin-top: 40px;
     text-align: center;
+    color: #f1f1f1;
+    margin-top: 150px;
 }
 
 .footer-links ul {
@@ -173,22 +211,21 @@ footer {
     display: flex;
     text-decoration: none;
     font-size: 20px;
-    color: black;
-    font-weight: lighter;
-    padding: 5px 10px;
+    color: #cccccc;
+    font-weight: 500;
+    padding: 6px 12px;
+    transition: all 0.3s ease;
 }
 
-.footer-links li a:hover {
-    background-color: red;
-    padding: 4px;
-}
-
+.footer-links li a:hover,
 .footer-links li a.active {
-    background-color: red;
+    color: #fff;
+    background-color: #e63946;
+    box-shadow: 0 0 8px rgba(230, 57, 70, 0.6);
 }
 
 footer p {
-    color: black;
+    color: #aaa;
     font-size: 16px;
     margin-top: 10px;
 }
@@ -207,7 +244,7 @@ footer p {
             "aside"
             "footer";
         grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto auto auto;
+        grid-template-rows: auto auto 1fr auto auto;
     }
 
     .shop-header-detail {
@@ -283,5 +320,8 @@ footer p {
         gap: 10px;
     }
 }
+
+
+
 
 

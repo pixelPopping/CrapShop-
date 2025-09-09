@@ -19,6 +19,7 @@ import filterProducts from "../../helpers/filteredProducts.jsx";
 import HandleLike from "../../helpers/HandleLike.jsx";
 
 import "./Recencies.css";
+import FooterLayout from "../../components/Footer/FooterLayout.jsx";
 
 function Recencies() {
     const [recencies, setRecencies] = useState([]);
@@ -105,26 +106,28 @@ function Recencies() {
                     </ul>
                 </nav>
 
-                <div className="search-hamburger-container">
-                    <SearchBar
-                        inputValue={query}
-                        inputCallback={(value) => {
-                            setQuery(value);
-                            navigate(`?query=${encodeURIComponent(value)}`);
-                            setShowModal(true);
-                        }}
-                        selectedCategory={selectedCategory}
-                        onCategoryChange={(value) => {
-                            setSelectedCategory(value);
-                            setShowModal(true);
-                            if (value !== "Alle categorieën") {
-                                navigate(`/products/${encodeURIComponent(value)}`);
-                            }
-                        }}
-                        categories={categories}
-                        showCategories={false}
-                    />
-                    <Hamburger menuOpen={menuOpen} setMenuOpen={setMenuOpen} categories={categories} />
+                <div className="outer-search-container">
+                    <div className="search-container">
+                        <SearchBar
+                            inputValue={query}
+                            inputCallback={(value) => {
+                                setQuery(value);
+                                navigate(`?query=${encodeURIComponent(value)}`);
+                                setShowModal(true);
+                            }}
+                            selectedCategory={selectedCategory}
+                            onCategoryChange={(value) => {
+                                setSelectedCategory(value);
+                                setShowModal(true);
+                                if (value !== "Alle categorieën") {
+                                    navigate(`/products/${encodeURIComponent(value)}`);
+                                }
+                            }}
+                            categories={categories}
+                            showCategories={false}
+                        />
+                        <Hamburger menuOpen={menuOpen} setMenuOpen={setMenuOpen} categories={categories} />
+                    </div>
                 </div>
             </header>
 
@@ -162,21 +165,15 @@ function Recencies() {
                     </article>
                 </section>
             </main>
-
             <footer>
-                <div className="footer-links">
-                    <ul>
-                        <li><NavLink to="/profiel">Profiel</NavLink></li>
-                        <li><NavLink to="/recencies">Recensies</NavLink></li>
-                        <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
-                    </ul>
-                </div>
+              <FooterLayout/>
             </footer>
         </div>
     );
 }
 
 export default Recencies;
+
 
 
 

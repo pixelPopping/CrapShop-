@@ -18,9 +18,9 @@ function DetailCard({ id, label, text, image, price }) {
                 <article>
                     <div className="card-content">
                         <div className="card-header">
-                            <h2>{label}</h2>
-                            <p>{text}</p>
-                            <p><strong>Prijs:</strong> €{price}</p>
+                            <h2 className="h2-text">{label}</h2>
+                            <p className="card-text">{text}</p>
+                            <p className="card-text"><strong>Prijs:</strong> €{price}</p>
                         </div>
                         <div className="main-img">
                             <img src={image} alt={label} />

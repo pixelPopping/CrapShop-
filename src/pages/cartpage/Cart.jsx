@@ -11,6 +11,7 @@ import filterProducts from "../../helpers/filteredProducts.jsx";
 import useHandleLogout from "../../helpers/UseHandleLogout.jsx";
 import ShowModal from "../../components/modal/ShowModal.jsx";
 import CartItem from "../../components/cartItem/CartItem.jsx";
+import FooterLayout from "../../components/Footer/FooterLayout.jsx";
 
 function Cart() {
     const { items = [], price, reSet, } = useContext(ShoppingCartContext);
@@ -131,13 +132,7 @@ function Cart() {
             </main>
 
             <footer>
-                <div className="footer-links">
-                    <ul>
-                        <li><NavLink to="/profiel">Profiel</NavLink></li>
-                        <li><NavLink to="/recencies">Recensies</NavLink></li>
-                        <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
-                    </ul>
-                </div>
+             <FooterLayout/>
             </footer>
         </>
     );

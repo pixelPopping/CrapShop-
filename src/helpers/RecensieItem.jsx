@@ -6,7 +6,7 @@ function RecensieItem({ label, text, likes, onLike }) {
         <div className="card-recencies">
             <p><strong>{label}</strong>: {text}</p>
             <p>Likes: {likes}</p>
-            <button onClick={onLike}>Like</button>
+            <button className="like-button" onClick={onLike}>Like</button>
             <div className="visual"></div>
         </div>
         </section>
