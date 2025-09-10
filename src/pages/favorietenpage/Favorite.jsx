@@ -10,8 +10,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faShoppingCart, faSignOutAlt, faUser } from "@fortawesome/free-solid-svg-icons";
 import useHandleLogout from "../../helpers/UseHandleLogout.jsx";
 import ShowModal from "../../components/modal/ShowModal.jsx";
-import FavorietenItem from "../../components/favorietenItem/FavotietenItem.jsx";
+import FavorietenItem from "../../components/favorietenItem/FavorietenItem.jsx";
 import FooterLayout from "../../components/Footer/FooterLayout.jsx";
+import "./Favorite.css";
 
 const FavorietenPage = () => {
     const {
@@ -81,8 +82,6 @@ const FavorietenPage = () => {
         fetchData();
     }, []);
 
-
-
     return (
         <>
             <nav className="navbar-four">
@@ -148,27 +147,19 @@ const FavorietenPage = () => {
             </nav>
 
             <main>
-                <h2>
-                    ❤️ Favorieten –{" "}
-                    {items.length > 0
-                        ? items.map((item) => item.title).join(", ")
-                        : "Leeg"}
-                </h2>
+                <h2>❤️ Favorieten</h2>
 
                 {items.length === 0 ? (
                     <p>Je hebt nog geen favorieten toegevoegd.</p>
                 ) : (
-                    <div>
+                    <div className="favorieten-items-grid">
                         {items.map((item) => (
-                            <div key={item.id} style={{ marginBottom: "1rem" }}>
-                                <FavorietenItem item={item} />
-                                <button onClick={() => removeFavorite(item.id)}>
-                                    Verwijder uit favorieten
-                                </button>
-                            </div>
+                            <FavorietenItem key={item.id} item={item} />
                         ))}
-                        <p><strong>Totaal: €{totaalPrijs}</strong></p>
-                        <p><em>Totaal aantal favorieten: {totalFavorites}</em></p>
+                        <div className="favorieten-summary">
+                            <p><strong>Totaal: €{totaalPrijs}</strong></p>
+                            <p><em>Totaal aantal favorieten: {totalFavorites}</em></p>
+                        </div>
                     </div>
                 )}
 
@@ -182,13 +173,14 @@ const FavorietenPage = () => {
                 )}
             </main>
             <footer>
-              <FooterLayout/>
+                <FooterLayout />
             </footer>
         </>
     );
 };
 
 export default FavorietenPage;
+
 
 
 
