@@ -23,7 +23,7 @@ function Cart() {
     const params = new URLSearchParams(location.search);
     const zoekQuery = params.get("query")?.toLowerCase() || "";
     const [query, setQuery] = useState(zoekQuery);
-    const [selectedCategory, setSelectedCategory] = useState("Alle categorieën");
+    const [selectedCategory, setSelectedCategory] = useState("All category");
     const [showModal, setShowModal] = useState(zoekQuery.length > 0);
     const [allProducts, setAllProducts] = useState([]);
     const [categories, setCategories] = useState(["Alle categorieën"]);
@@ -36,7 +36,7 @@ function Cart() {
                 const res = await axios.get("https://fakestoreapi.com/products");
                 setAllProducts(res.data);
                 const cat = await axios.get("https://fakestoreapi.com/products/categories");
-                setCategories(["Alle categorieën", ...cat.data]);
+                setCategories(["Alle category", ...cat.data]);
             } catch (e) {
                 console.error(e);
             }
@@ -45,7 +45,7 @@ function Cart() {
     }, []);
 
     return (
-        <main className="outer-main-cart">
+        <div className="outer-main-cart">
             <nav className="navbar-four-cart">
                 <ul className="nav-links4">
                     <li><NavLink to="/products/men's clothing">Men</NavLink></li>
@@ -126,8 +126,8 @@ function Cart() {
                         {items.map((item) => (
                             <CartItem key={item.id} item={item} />
                         ))}
-                        <p><strong>Totaal aantal stuks:</strong> {items.reduce((sum, i) => sum + i.quantity, 0)}</p>
-                        <p><strong>Totaalprijs:</strong> €{price().toFixed(2)}</p>
+                        <p><strong>Total products:</strong> {items.reduce((sum, i) => sum + i.quantity, 0)}</p>
+                        <p><strong>Total price:</strong> €{price().toFixed(2)}</p>
                         <div className="reset-button">
                         <button onClick={reSet}>Reset</button>
                         </div>
@@ -135,11 +135,10 @@ function Cart() {
                 )}
                     </section>
             </main>
-
             <footer>
              <FooterLayout/>
             </footer>
-        </main>
+        </div>
     );
 }
 

@@ -1,10 +1,7 @@
 .inner-container {
-    display: flex;
     width: 100vw;
-    flex-wrap: wrap;
     gap: 36px;
     justify-content: center;
-    background: beige;
     padding: 30px;
 }
 

@@ -1,22 +1,22 @@
-.category-container{
+.category-container {
     display: flex;
     flex-direction: row;
     border: solid 1px black;
 }
 
-.category-card{
+.category-card {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
-.category-card-content{
+.category-card-content {
     width: 350px;
     display: flex;
     flex-direction: column;
 }
 
-.category-card-content img{
+.category-card-content img {
     width: 300px;
     height: 300px;
 }

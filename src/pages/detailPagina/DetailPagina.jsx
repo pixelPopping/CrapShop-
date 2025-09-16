@@ -8,7 +8,7 @@ import { AuthContext } from "../../components/context/AuthContext";
 import { FavoriteContext } from "../../components/context/FavoriteContext";
 import useHandleLogout from "../../helpers/useHandleLogout";
 import SearchBar from "../../components/searchFilter/SearchBar";
-import Hamburger from "../../components/hamburmenu/Hamburger";
+import Hamburger from "../../components/hamburgermenu/Hamburger";
 import ShowModal from "../../components/modal/ShowModal";
 import DetailCard from "../../components/detailcard/DetailCard";
 import ShoppingCart from "../../components/shoppingcart/ShoppingCart";
@@ -30,13 +30,13 @@ function DetailPagina() {
     const zoekQuery = params.get("query")?.toLowerCase() || "";
 
     const [query, setQuery] = useState(zoekQuery);
-    const [selectedCategory, setSelectedCategory] = useState("Alle categorieën");
+    const [selectedCategory, setSelectedCategory] = useState("All category");
     const [showModal, setShowModal] = useState(zoekQuery.length > 0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [product, setProduct] = useState(null);
     const [allProducts, setAllProducts] = useState([]);
-    const [categories, setCategories] = useState(["Alle categorieën"]);
+    const [categories, setCategories] = useState(["All category"]);
     const [menuOpen, setMenuOpen] = useState(false);
 
     const filteredProducts = filterProducts(allProducts, query, selectedCategory);
@@ -53,7 +53,7 @@ function DetailPagina() {
 
                 setProduct(productRes.data);
                 setAllProducts(allRes.data);
-                setCategories(["Alle categorieën", ...catRes.data]);
+                setCategories(["All category", ...catRes.data]);
             } catch (e) {
                 setError(true);
                 console.error(e);
@@ -137,7 +137,6 @@ function DetailPagina() {
                             </>
                         )}
                     </div>
-
                     <nav className="navbar-four-detail">
                         <ul className={`nav-links4 ${menuOpen ? "active" : ""}`}>
                             <li><NavLink to="/products/men's clothing">Men</NavLink></li>
@@ -147,7 +146,6 @@ function DetailPagina() {
                         </ul>
                     </nav>
                 </header>
-
                 <div className="search-detail-container">
                     <SearchBar
                         inputValue={query}
@@ -160,7 +158,7 @@ function DetailPagina() {
                         onCategoryChange={(value) => {
                             setSelectedCategory(value);
                             setShowModal(true);
-                            if (value !== "Alle categorieën") {
+                            if (value !== "All category") {
                                 navigate(
                                     `?query=${encodeURIComponent(query)}&category=${encodeURIComponent(value)}`
                                 );
@@ -186,8 +184,8 @@ function DetailPagina() {
                 )}
 
                 <main className="inner-container-detail">
-                    {loading && <p>Bezig met laden...</p>}
-                    {error && <p>Er ging iets mis bij het ophalen van het product.</p>}
+                    {loading && <p>Its Loading...</p>}
+                    {error && <p>There went something wrong with fetching the product.</p>}
 
                     {!loading && !error && product && (
                         <DetailCard

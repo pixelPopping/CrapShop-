@@ -5,10 +5,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faShoppingCart, faSignOutAlt, faUser } from "@fortawesome/free-solid-svg-icons";
 
 import RecensieForm from "../../components/recensieForm/RecensieForm.jsx";
-import RecensieItem from "../../helpers/RecensieItem.jsx";
+import RecensieItem from "../../components/recencieItem/RecensieItem.jsx";
 import SearchBar from "../../components/searchFilter/SearchBar.jsx";
 import ShowModal from "../../components/modal/ShowModal.jsx";
-import Hamburger from "../../components/hamburmenu/Hamburger.jsx";
+import Hamburger from "../../components/hamburgermenu/Hamburger.jsx";
 
 import { AuthContext } from "../../components/context/AuthContext.jsx";
 import { ShoppingCartContext } from "../../components/context/ShoppingCartContext.jsx";
@@ -24,7 +24,7 @@ import FooterLayout from "../../components/Footer/FooterLayout.jsx";
 function Recencies() {
     const [recencies, setRecencies] = useState([]);
     const [allProducts, setAllProducts] = useState([]);
-    const [categories, setCategories] = useState(["Alle categorieën"]);
+    const [categories, setCategories] = useState(["All category"]);
     const [menuOpen, setMenuOpen] = useState(false);
 
     const location = useLocation();
@@ -33,7 +33,7 @@ function Recencies() {
     const zoekQuery = params.get("query")?.toLowerCase() || "";
 
     const [query, setQuery] = useState(zoekQuery);
-    const [selectedCategory, setSelectedCategory] = useState("Alle categorieën");
+    const [selectedCategory, setSelectedCategory] = useState("All category");
     const [showModal, setShowModal] = useState(zoekQuery.length > 0);
 
     const { isAuth, user } = useContext(AuthContext);

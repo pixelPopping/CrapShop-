@@ -1,40 +1,44 @@
-import { useContext, useEffect, useState } from "react";
-import { FavoriteContext } from "../../components/context/FavoriteContext.jsx";
-import { AuthContext } from "../../components/context/AuthContext.jsx";
-import { ShoppingCartContext } from "../../components/context/ShoppingCartContext.jsx";
-import { useNavigate, useLocation, NavLink } from "react-router-dom";
-import SearchBar from "../../components/searchFilter/SearchBar.jsx";
+import { useContext, useEffect, useMemo, useState } from "react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import filterProducts from "../../helpers/filteredProducts.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faShoppingCart, faSignOutAlt, faUser } from "@fortawesome/free-solid-svg-icons";
-import useHandleLogout from "../../helpers/UseHandleLogout.jsx";
-import ShowModal from "../../components/modal/ShowModal.jsx";
-import FavorietenItem from "../../components/favorietenItem/FavorietenItem.jsx";
-import FooterLayout from "../../components/Footer/FooterLayout.jsx";
-import "./Favorite.css";
+import { faUser, faHeart, faShoppingCart, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
+
+import { FavoriteContext } from "../../components/context/FavoriteContext";
+import { AuthContext } from "../../components/context/AuthContext";
+import { ShoppingCartContext } from "../../components/context/ShoppingCartContext";
+
+import FavorietenItem from "../../components/favorietenitem/FavorietenItem";
+import ShowModal from "../../components/modal/ShowModal";
+import FooterLayout from "../../components/footer/FooterLayout";
+import SearchBar from "../../components/searchFilter/SearchBar";
+import useHandleLogout from "../../helpers/useHandleLogout";
+import filterProducts from "../../helpers/filteredProducts";
+import './Favorite.css'
 
 const FavorietenPage = () => {
-    const {
-        items = [],
-        setItems,
-        removeFavorite,
-        totalFavorites,
-        resetFavorites
-    } = useContext(FavoriteContext);
+    const { items = [], setItems, totalFavorites } = useContext(FavoriteContext);
     const { user, isAuth } = useContext(AuthContext);
     const { items: cartItems } = useContext(ShoppingCartContext);
+
     const navigate = useNavigate();
     const location = useLocation();
     const params = new URLSearchParams(location.search);
+
     const zoekQuery = params.get("query")?.toLowerCase() || "";
+    const zoekCategory = params.get("category") || "All category";
 
     const [query, setQuery] = useState(zoekQuery);
-    const [selectedCategory, setSelectedCategory] = useState("Alle categorieën");
+    const [selectedCategory, setSelectedCategory] = useState(zoekCategory);
     const [showModal, setShowModal] = useState(zoekQuery.length > 0);
     const [allProducts, setAllProducts] = useState([]);
-    const [categories, setCategories] = useState(["Alle categorieën"]);
-    const filteredProducts = filterProducts(allProducts, query, selectedCategory);
+    const [categories, setCategories] = useState(["All category"]);
+
+    const filteredProducts = useMemo(
+        () => filterProducts(allProducts, query, selectedCategory),
+        [allProducts, query, selectedCategory]
+    );
+
     const handleLogout = useHandleLogout();
     const getStorageKey = (userId) => `Favorieten_${userId || "guest"}`;
 
@@ -47,13 +51,12 @@ const FavorietenPage = () => {
         const stored = localStorage.getItem(key);
         if (stored) {
             try {
-                const parsed = JSON.parse(stored);
-                setItems(parsed);
+                setItems(JSON.parse(stored));
             } catch (e) {
                 console.error(e);
             }
         }
-    }, [user?.id]);
+    }, [user?.id, setItems]);
 
     useEffect(() => {
         const key = getStorageKey(user?.id);
@@ -62,29 +65,31 @@ const FavorietenPage = () => {
 
     useEffect(() => {
         if (!user) {
-            resetFavorites();
+            const guestKey = getStorageKey("guest");
+            const stored = localStorage.getItem(guestKey);
+            setItems(stored ? JSON.parse(stored) : []);
         }
-    }, [user]);
+    }, [user, setItems]);
 
     useEffect(() => {
         async function fetchData() {
             try {
                 const [productsRes, categoriesRes] = await Promise.all([
                     axios.get("https://fakestoreapi.com/products"),
-                    axios.get("https://fakestoreapi.com/products/categories")
+                    axios.get("https://fakestoreapi.com/products/categories"),
                 ]);
                 setAllProducts(productsRes.data);
-                setCategories(["Alle categorieën", ...categoriesRes.data]);
+                setCategories(["All category", ...categoriesRes.data]);
             } catch (e) {
-                console.error("Fout bij ophalen data:", e);
+                console.error(e);
             }
         }
         fetchData();
     }, []);
 
     return (
-        <>
-            <nav className="navbar-four">
+        <div className="favorite-layout">
+            <nav className="navbar-four-favorites">
                 <ul className="nav-links4">
                     <li><NavLink to="/products/men's clothing">Men</NavLink></li>
                     <li><NavLink to="/products/women's clothing">Women</NavLink></li>
@@ -97,7 +102,7 @@ const FavorietenPage = () => {
                     inputValue={query}
                     inputCallback={(value) => {
                         setQuery(value);
-                        navigate(`?query=${encodeURIComponent(value)}`);
+                        navigate(`?query=${encodeURIComponent(value)}&category=${encodeURIComponent(selectedCategory)}`);
                         setShowModal(true);
                     }}
                     selectedCategory={selectedCategory}
@@ -109,77 +114,81 @@ const FavorietenPage = () => {
                     categories={categories}
                 />
 
-                <div className="button-container4">
+                <div className="button-container-favorites">
                     {isAuth ? (
                         <>
-                            <div className="icon-item" onClick={handleLogout} title="Log uit">
+                            <button className="icon-item" onClick={handleLogout} title="Log uit">
                                 <FontAwesomeIcon icon={faSignOutAlt} />
-                            </div>
-                            <div className="icon-item" title={`Ingelogd als ${user?.username ?? "Onbekend"}`}>
-                                <FontAwesomeIcon icon={faUser} />
-                            </div>
+                            </button>
+                            <span className="icon-item" title={`Ingelogd als ${user?.username ?? "Onbekend"}`}>
+                <FontAwesomeIcon icon={faUser} />
+              </span>
                         </>
                     ) : (
                         <>
-                            <div className="icon-item" onClick={() => navigate("/signup")} title="Sign Up">
+                            <button className="icon-item" onClick={() => navigate("/signup")} title="Sign Up">
                                 <FontAwesomeIcon icon={faUser} />
-                            </div>
-                            <div className="icon-item" onClick={() => navigate("/signin")} title="Login">
+                            </button>
+                            <button className="icon-item" onClick={() => navigate("/signin")} title="Login">
                                 <FontAwesomeIcon icon={faUser} />
-                            </div>
+                            </button>
                         </>
                     )}
 
-                    <div className="icon-item" onClick={() => navigate("/cart")} title="Winkelwagen">
+                    <button className="icon-item" onClick={() => navigate("/cart")} title="Winkelwagen">
                         <div className="icon-wrapper">
                             <FontAwesomeIcon icon={faShoppingCart} />
                             {cartItems.length > 0 && <span className="icon-count">{cartItems.length}</span>}
                         </div>
-                    </div>
+                    </button>
 
-                    <div className="icon-item" onClick={() => navigate("/favorietenpage")} title="Favorieten">
+                    <button className="icon-item" onClick={() => navigate("/favorietenpage")} title="Favorieten">
                         <div className="icon-wrapper">
                             <FontAwesomeIcon icon={faHeart} />
                             {items.length > 0 && <span className="icon-count">{items.length}</span>}
                         </div>
-                    </div>
+                    </button>
                 </div>
             </nav>
 
-            <main>
-                <h2>❤️ Favorieten</h2>
-
-                {items.length === 0 ? (
-                    <p>Je hebt nog geen favorieten toegevoegd.</p>
-                ) : (
-                    <div className="favorieten-items-grid">
-                        {items.map((item) => (
-                            <FavorietenItem key={item.id} item={item} />
-                        ))}
-                        <div className="favorieten-summary">
-                            <p><strong>Totaal: €{totaalPrijs}</strong></p>
-                            <p><em>Totaal aantal favorieten: {totalFavorites}</em></p>
+            <main className="favorite-content">
+                <section className="favorite-inner">
+                    <h2>❤️ Favorites</h2>
+                    {items.length === 0 ? (
+                        <p>You havent add Favorites.</p>
+                    ) : (
+                        <div className="favorieten-items-grid">
+                            {items.map((item) => (
+                                <FavorietenItem key={item.id} item={item} />
+                            ))}
+                            <div className="favorieten-summary">
+                                <p><strong>Total Price: €{totaalPrijs}</strong></p>
+                                <p><em>Total Favorites: {totalFavorites}</em></p>
+                            </div>
                         </div>
-                    </div>
-                )}
-
-                {showModal && (
-                    <ShowModal
-                        query={query}
-                        selectedCategory={selectedCategory}
-                        filteredProducts={filteredProducts}
-                        setShowModal={setShowModal}
-                    />
-                )}
+                    )}
+                    {showModal && (
+                        <ShowModal
+                            query={query}
+                            selectedCategory={selectedCategory}
+                            filteredProducts={filteredProducts}
+                            setShowModal={setShowModal}
+                        />
+                    )}
+                </section>
             </main>
             <footer>
                 <FooterLayout />
             </footer>
-        </>
+        </div>
     );
 };
 
 export default FavorietenPage;
+
+
+
+
 
 
 

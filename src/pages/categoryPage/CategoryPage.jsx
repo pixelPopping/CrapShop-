@@ -12,7 +12,7 @@ import ShowModal from "../../components/modal/ShowModal.jsx";
 import CategoryCard from "../../components/categoryCard/CategoryCard.jsx";
 import useHandleLogout from "../../helpers/UseHandleLogout.jsx";
 import "./CategoryPage.css";
-import Hamburger from "../../components/hamburmenu/Hamburger.jsx";
+import Hamburger from "../../components/hamburgermenu/Hamburger.jsx";
 import FooterLayout from "../../components/Footer/FooterLayout.jsx";
 
 const CategoryPage = () => {
@@ -28,12 +28,12 @@ const CategoryPage = () => {
 
     const [query, setQuery] = useState(zoekQuery);
     const [menuOpen, setMenuOpen] = useState(false);
-    const [selectedCategory, setSelectedCategory] = useState(category || "Alle categorieën");
+    const [selectedCategory, setSelectedCategory] = useState(category || "All category");
     const [showModal, setShowModal] = useState(zoekQuery.length > 0);
     const [products, setProducts] = useState([]);
     const [allProducts, setAllProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [categories, setCategories] = useState(["Alle categorieën"]);
+    const [categories, setCategories] = useState(["All category"]);
 
     const handleLogout = useHandleLogout();
     const filteredProductsList = filterProducts(allProducts, query, selectedCategory);
@@ -56,7 +56,7 @@ const CategoryPage = () => {
                 setProducts(filtered);
 
                 const cat = await axios.get("https://fakestoreapi.com/products/categories");
-                setCategories(["Alle categorieën", ...cat.data]);
+                setCategories(["All category", ...cat.data]);
             } catch (error) {
                 console.error(error);
             } finally {
@@ -138,7 +138,6 @@ const CategoryPage = () => {
                     )}
                 </div>
             </nav>
-
             <section>
                 {showModal && (
                     <ShowModal
@@ -166,7 +165,7 @@ const CategoryPage = () => {
             </section>
             <main className="main-content">
                 {loading ? (
-                    <p>Producten laden...</p>
+                    <p>Load Products...</p>
                 ) : (
                     <div className="carousel-wrapper">
                             <button className="arrow left" onClick={() => scrollCarousel(-300)}>
@@ -191,7 +190,6 @@ const CategoryPage = () => {
                     </div>
                 )}
             </main>
-
             <footer>
                <FooterLayout/>
             </footer>

@@ -7,9 +7,9 @@ function FooterLayout() {
         <footer className="layout-footer">
             <div className="footer-links">
                 <ul>
-                    <li><NavLink to="/profiel">Profiel</NavLink></li>
+                    <li><NavLink to="/profile">Profile</NavLink></li>
                     <li><NavLink to="/recencies">Recensies</NavLink></li>
-                    <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
+                    <li><NavLink to="/favorietenpage">Favorite,s</NavLink></li>
                 </ul>
             </div>
         </footer>

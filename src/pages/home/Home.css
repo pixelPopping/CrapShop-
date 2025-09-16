@@ -11,7 +11,7 @@
     background: linear-gradient(90deg, rgba(10, 54, 125, 1) 0%, rgba(87, 199, 133, 1) 28%, rgba(83, 191, 237, 1) 100%);
 }
 
-.clock{
+.clock {
     display: flex;
     flex-direction: column;
     padding: 30px;
@@ -122,15 +122,20 @@
     width: 100%;
     flex-direction: row;
     justify-content: center;
+    background: linear-gradient(90deg, #ffaf7b 0%, #ff7e5f 50%, #ff6a88 100%);
+    box-shadow: 0px 1px 4px #000;
+    margin-top: 150px;
 }
 
-.footer-text{
+.footer-text {
     display: flex;
     flex-direction: row;
     width: 100%;
-    justify-content: center;
+    justify-content: flex-end;
     color: black;
-
+    padding:20px;
+    text-shadow: 0px 1px 4px #000;
+    text-transform: uppercase;
 }
 
 .outer-link-container {
@@ -177,13 +182,7 @@ a {
     border: none;
 }
 
-.hamburger-broodje{
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-}
-
-.burger{
+.burger {
     width: 100%;
     display: flex;
     flex-direction: row;

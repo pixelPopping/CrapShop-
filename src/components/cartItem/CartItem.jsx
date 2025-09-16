@@ -24,7 +24,7 @@ function CartItem({ item }) {
             <div className="buttons-cart">
             <DecrementButton id={item.id} />
             <InCrementButton id={item.id} />
-            <button onClick={() => removeItem(item.id)}>Verwijder</button>
+            <button onClick={() => removeItem(item.id)}>Remove</button>
             </div>
         </div>
         </div>

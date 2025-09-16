@@ -152,7 +152,6 @@
 
 .shoppingcart-container {
     grid-area: aside;
-    background: #f9f9f9;
     color: #1a1a1a;
     padding: 20px;
     border-radius: 12px;
@@ -164,7 +163,6 @@
     overflow-x: auto;
     flex: 0 1 auto;
 }
-
 
 .view-all-products {
     display: flex;
@@ -195,33 +193,7 @@ footer {
     align-items: center;
     text-align: center;
     color: #f1f1f1;
-    margin-top: 150px;
-}
-
-.footer-links ul {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 15px 0;
-    display: flex;
-    flex-direction: row;
-    gap: 15px;
-}
-
-.footer-links li a {
-    display: flex;
-    text-decoration: none;
-    font-size: 20px;
-    color: #cccccc;
-    font-weight: 500;
-    padding: 6px 12px;
-    transition: all 0.3s ease;
-}
-
-.footer-links li a:hover,
-.footer-links li a.active {
-    color: #fff;
-    background-color: #e63946;
-    box-shadow: 0 0 8px rgba(230, 57, 70, 0.6);
+    margin-top: 100px;
 }
 
 footer p {

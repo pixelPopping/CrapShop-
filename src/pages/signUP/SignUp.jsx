@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useNavigate, NavLink } from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import SearchBar from "../../components/searchFilter/SearchBar.jsx";
 import "./SignUp.css";
 import React, { useContext, useEffect, useState } from "react";
@@ -50,15 +50,25 @@ function SignUp() {
     const handleFormSubmit = async (data) => {
         setLoading(true);
         setErrorMessage("");
-
+        console.log("Form data:", data);
         try {
             const response = await axios.post(
-                `/api/users`,
+                'http://localhost:5174/api/users',
                 {
                     username: data.username,
+                    lastname: data.lastname,
+                    gender: data.gender,
                     email: data.email,
                     password: data.password,
-                    roles: ["string"],
+                    postalcode: data.postalcode,
+                    unit: data.unit,
+                    homeadress: data.homeadress,
+                    city: data.city,
+                    phonenumber: data.phonenumber,
+                    dateOfBirth: data.date,
+                    roles: ["user"],    // default role
+                    favorites: [],      // lege favorieten bij aanmaken
+                    cart: []            // lege winkelwagen bij aanmaken
                 },
                 {
                     headers: {
@@ -80,61 +90,69 @@ function SignUp() {
     };
 
     return (
-        <div className="signup-container">
-            <SearchBar
-                type="text"
-                inputValue={query}
-                inputCallback={(value) => {
-                    setQuery(value);
-                    navigate(`?query=${encodeURIComponent(value)}`);
-                    setShowModal(true);
-                }}
-                selectedCategory={selectedCategory}
-                onCategoryChange={(value) => {
-                    setSelectedCategory(value);
-                    setShowModal(true);
-                    if (value !== "Alle categorieën") {
-                        navigate(`?query=${encodeURIComponent(query)}&category=${encodeURIComponent(value)}`);
-                    }
-                }}
-                categories={["Alle categorieën", ...categories]}
-            />
+        <div className="layout-signup">
+            <nav className="navbar-four-signup">
+                <ul className="nav-links4">
+                    <li><NavLink to="/products/men's clothing">Men</NavLink></li>
+                    <li><NavLink to="/products/women's clothing">Women</NavLink></li>
+                    <li><NavLink to="/Shop">Shop</NavLink></li>
+                    <li><NavLink to="/">Home</NavLink></li>
+                </ul>
+                <SearchBar
+                    type="text"
+                    inputValue={query}
+                    inputCallback={(value) => {
+                        setQuery(value);
+                        navigate(`?query=${encodeURIComponent(value)}`);
+                        setShowModal(true);
+                    }}
+                    selectedCategory={selectedCategory}
+                    onCategoryChange={(value) => {
+                        setSelectedCategory(value);
+                        setShowModal(true);
+                        if (value !== "Alle categorieën") {
+                            navigate(`?query=${encodeURIComponent(query)}&category=${encodeURIComponent(value)}`);
+                        }
+                    }}
+                    categories={["Alle categorieën", ...categories]}
+                />
+                <div className="button-container-signup">
+                    {isAuth ? (
+                        <>
+                            <div className="icon-item" onClick={handleLogout} title="Log uit">
+                                <FontAwesomeIcon icon={faSignOutAlt} />
+                            </div>
+                            <div className="icon-item" title={`Ingelogd als ${user?.username ?? "Onbekend"}`}>
+                                <FontAwesomeIcon icon={faUser} />
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <div className="icon-item" onClick={() => navigate("/signup")} title="Sign Up">
+                                <FontAwesomeIcon icon={faUser} />
+                            </div>
+                            <div className="icon-item" onClick={() => navigate("/signin")} title="Login">
+                                <FontAwesomeIcon icon={faUser} />
+                            </div>
+                        </>
+                    )}
 
-            <div className="button-container4">
-                {isAuth ? (
-                    <>
-                        <div className="icon-item" onClick={handleLogout} title="Log uit">
-                            <FontAwesomeIcon icon={faSignOutAlt} />
+                    <div className="icon-item" onClick={() => navigate("/cart")} title="Winkelwagen">
+                        <div className="icon-wrapper">
+                            <FontAwesomeIcon icon={faShoppingCart} />
+                            {cartItems.length > 0 && <span className="icon-count">{cartItems.length}</span>}
                         </div>
-                        <div className="icon-item" title={`Ingelogd als ${user?.username ?? "Onbekend"}`}>
-                            <FontAwesomeIcon icon={faUser} />
-                        </div>
-                    </>
-                ) : (
-                    <>
-                        <div className="icon-item" onClick={() => navigate("/signup")} title="Sign Up">
-                            <FontAwesomeIcon icon={faUser} />
-                        </div>
-                        <div className="icon-item" onClick={() => navigate("/signin")} title="Login">
-                            <FontAwesomeIcon icon={faUser} />
-                        </div>
-                    </>
-                )}
+                    </div>
 
-                <div className="icon-item" onClick={() => navigate("/cart")} title="Winkelwagen">
-                    <div className="icon-wrapper">
-                        <FontAwesomeIcon icon={faShoppingCart} />
-                        {cartItems.length > 0 && <span className="icon-count">{cartItems.length}</span>}
+                    <div className="icon-item" onClick={() => navigate("/favorietenpage")} title="Favorieten">
+                        <div className="icon-wrapper">
+                            <FontAwesomeIcon icon={faHeart} />
+                            {favoriteItems.length > 0 && <span className="icon-count">{favoriteItems.length}</span>}
+                        </div>
                     </div>
                 </div>
-
-                <div className="icon-item" onClick={() => navigate("/favorietenpage")} title="Favorieten">
-                    <div className="icon-wrapper">
-                        <FontAwesomeIcon icon={faHeart} />
-                        {favoriteItems.length > 0 && <span className="icon-count">{favoriteItems.length}</span>}
-                    </div>
-                </div>
-            </div>
+            </nav>
+            <main>
             <section>
             {showModal && (
                 <ShowModal
@@ -144,20 +162,22 @@ function SignUp() {
                     setShowModal={setShowModal}
                 />
             )}
-            </section>
-            <section>
+                </section>
             <SignUpForm
                 onSubmit={handleFormSubmit}
                 loading={loading}
                 errorMessage={errorMessage}
             />
-            </section>
-          <FooterLayout/>
+            </main>
+            <footer>
+            <FooterLayout/>
+            </footer>
         </div>
     );
 }
 
 export default SignUp;
+
 
 
 

@@ -49,7 +49,7 @@ function AuthContextProvider({ children }) {
                 },
                 status: 'done',
             });
-            navigate('/profiel');
+            navigate('/profile');
         } catch (error) {
             console.error("Ongeldige token:", error);
         }
@@ -77,5 +77,11 @@ function AuthContextProvider({ children }) {
 }
 
 export default AuthContextProvider;
+
+
+
+
+
+
 
 

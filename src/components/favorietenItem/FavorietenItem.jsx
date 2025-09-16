@@ -26,7 +26,7 @@ function FavorietenItem({ item }) {
 
                     <div className="buttons-favorieten">
                         <button onClick={() => removeFavorite(item.id)}>
-                            Verwijder
+                            Remove
                         </button>
                     </div>
                 </div>

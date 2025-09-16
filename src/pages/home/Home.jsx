@@ -14,7 +14,7 @@ import ClockTime from "../../components/digitaleClock/DigitaleClock.jsx";
 import SearchBar from "../../components/searchFilter/SearchBar.jsx";
 import WheelOfFortune from "../../components/wheelOfFortune/WheelOfFortune.jsx";
 import ShowModal from "../../components/modal/ShowModal.jsx";
-import Hamburger from "../../components/hamburmenu/Hamburger.jsx";
+import Hamburger from "../../components/hamburgermenu/Hamburger.jsx";
 import { ShoppingCartContext } from "../../components/context/ShoppingCartContext.jsx";
 import { AuthContext } from "../../components/context/AuthContext.jsx";
 import { SpinContext } from "../../components/context/SpinContext.jsx";
@@ -36,10 +36,10 @@ function Home() {
     const zoekQuery = params.get("query")?.toLowerCase() || "";
 
     const [query, setQuery] = useState(zoekQuery);
-    const [selectedCategory, setSelectedCategory] = useState("Alle categorieën");
+    const [selectedCategory, setSelectedCategory] = useState("All category");
     const [showModal, setShowModal] = useState(zoekQuery.length > 0);
     const [allProducts, setAllProducts] = useState([]);
-    const [categories, setCategories] = useState(["Alle categorieën"]);
+    const [categories, setCategories] = useState(["All category"]);
     const [menuOpen, setMenuOpen] = useState(false);
 
     const filteredProductsList = filterProducts(allProducts, query, selectedCategory);
@@ -201,9 +201,9 @@ function Home() {
                 <div className="outer-link-container">
                     <section className="link-container">
                         <ul>
-                            <li><NavLink to="/profiel">Profiel</NavLink></li>
+                            <li><NavLink to="/profile">Profile</NavLink></li>
                             <li><NavLink to="/recencies">Recensies</NavLink></li>
-                            <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
+                            <li><NavLink to="/favorietenpage">Favorite,s</NavLink></li>
                         </ul>
                     </section>
                 </div>

@@ -61,11 +61,13 @@ function RecensieForm({ recencies, setRecencies }) {
                         maxLength={200}
                         rows={4}
                     />
+                    <section className="recensie-button-outer">
                     <div className="recensie-button">
                         <button className="submit-button" type="submit" disabled={isDisabled}>
                             Submit
                         </button>
                     </div>
+                    </section>
                 </form>
             </section>
         </div>

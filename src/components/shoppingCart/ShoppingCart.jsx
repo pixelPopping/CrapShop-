@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { ShoppingCartContext } from "../context/ShoppingCartContext.jsx";
 import { NavLink } from "react-router-dom";
 import "./ShoppingCart.css";
+import FooterLayout from "../Footer/FooterLayout.jsx";
 
 function ShoppingCart() {
     const { items, price } = useContext(ShoppingCartContext);
@@ -9,7 +10,7 @@ function ShoppingCart() {
     return (
         <>
             <main className="shopping-cart">
-                <section className="winkelwagen">
+                <section className="shopbag">
                     <h2>Shopping Bag</h2>
                     {items.length === 0 ? (
                         <p className="empty-cart">Cart is empty.</p>
@@ -31,6 +32,9 @@ function ShoppingCart() {
                     </p>
                 </section>
             </main>
+            <footer>
+                <FooterLayout/>
+            </footer>
         </>
     );
 }

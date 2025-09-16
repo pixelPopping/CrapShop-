@@ -46,9 +46,9 @@ function SignIn() {
         <main className="signin-page">
             <header>
                 <h1>CrapShop</h1>
-                <h2>Inloggen</h2>
+                <h2>Login</h2>
             </header>
-            {loading && <p>Even geduld, je wordt ingelogd...</p>}
+            {loading && <p>One moment, you proceed to be logged in...</p>}
             <LoginForm onSubmit={handleFormSubmit} loading={loading} errorMessage={errorMessage} />
         </main>
     );

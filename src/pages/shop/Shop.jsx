@@ -65,8 +65,8 @@ function ShopPagina() {
             </div>
             <section className="shop-outer">
             <header className="shop-header">
-                <nav className="navbar-four">
-                    <ul className="nav-links4-shop">
+                <nav className="navbar-four-shop">
+                    <ul className="nav-links4">
                         <li><NavLink to="/products/men's clothing">Men</NavLink></li>
                         <li><NavLink to="/products/women's clothing">Women</NavLink></li>
                         <li><NavLink to="/">Home </NavLink></li>
@@ -120,7 +120,7 @@ function ShopPagina() {
             <div className="inner-container">
                 <nav className="sidebar">
                     <ul>
-                        <li><NavLink to="/products/jewelery">Jewelery</NavLink></li>
+                        <li><NavLink to="/products/jewelery">Jewellery</NavLink></li>
                         <li><NavLink to="/products/electronics">Electronics</NavLink></li>
                         <li><NavLink to="/products/men's clothing">Men</NavLink></li>
                         <li><NavLink to="/products/women's clothing">Women</NavLink></li>
@@ -128,9 +128,9 @@ function ShopPagina() {
                 </nav>
 
                 <main className="shop-products">
-                    {loading && <p>Bezig met laden...</p>}
-                    {error && <p>Er ging iets mis bij het ophalen van de producten.</p>}
-                    {!loading && !error && filteredItems.length === 0 && <p>Geen zoekresultaten gevonden.</p>}
+                    {loading && <p>Loading...</p>}
+                    {error && <p>There was a error to fetch the products</p>}
+                    {!loading && !error && filteredItems.length === 0 && <p>No search Result.</p>}
                     {!loading && !error && (
                         <section className="product-list">
                             {filteredItems.map((item) => (

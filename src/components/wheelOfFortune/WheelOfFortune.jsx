@@ -27,7 +27,7 @@ function WheelOfFortune({ buttonLabel = "Spin", onResult }) {
             <section className="result-container">
                 {results && !spinning && (
                     <p className="spin-result">
-                        Je hebt gewonnen: <strong>{results}</strong>
+                        Your Result is...: <strong>{results}</strong>
                     </p>
                 )}
             </section>
