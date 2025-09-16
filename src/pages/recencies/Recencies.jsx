@@ -24,7 +24,7 @@ import FooterLayout from "../../components/Footer/FooterLayout.jsx";
 function Recencies() {
     const [recencies, setRecencies] = useState([]);
     const [allProducts, setAllProducts] = useState([]);
-    const [categories, setCategories] = useState(["All category"]);
+    const [categories, setCategories] = useState(["Alle categorieën"]);
     const [menuOpen, setMenuOpen] = useState(false);
 
     const location = useLocation();
@@ -33,7 +33,7 @@ function Recencies() {
     const zoekQuery = params.get("query")?.toLowerCase() || "";
 
     const [query, setQuery] = useState(zoekQuery);
-    const [selectedCategory, setSelectedCategory] = useState("All category");
+    const [selectedCategory, setSelectedCategory] = useState("Alle categorieën");
     const [showModal, setShowModal] = useState(zoekQuery.length > 0);
 
     const { isAuth, user } = useContext(AuthContext);

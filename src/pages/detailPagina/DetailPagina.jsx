@@ -30,13 +30,13 @@ function DetailPagina() {
     const zoekQuery = params.get("query")?.toLowerCase() || "";
 
     const [query, setQuery] = useState(zoekQuery);
-    const [selectedCategory, setSelectedCategory] = useState("All category");
+    const [selectedCategory, setSelectedCategory] = useState("Alle categorieën");
     const [showModal, setShowModal] = useState(zoekQuery.length > 0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [product, setProduct] = useState(null);
     const [allProducts, setAllProducts] = useState([]);
-    const [categories, setCategories] = useState(["All category"]);
+    const [categories, setCategories] = useState(["Alle categorieën"]);
     const [menuOpen, setMenuOpen] = useState(false);
 
     const filteredProducts = filterProducts(allProducts, query, selectedCategory);
@@ -53,7 +53,7 @@ function DetailPagina() {
 
                 setProduct(productRes.data);
                 setAllProducts(allRes.data);
-                setCategories(["All category", ...catRes.data]);
+                setCategories(["Alle categorieën", ...catRes.data]);
             } catch (e) {
                 setError(true);
                 console.error(e);

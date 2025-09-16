@@ -27,8 +27,8 @@ function ProfilePagina() {
 
     const [apiData, setApiData] = useState(null);
     const [query, setQuery] = useState(zoekQuery);
-    const [selectedCategory, setSelectedCategory] = useState("All category");
-    const [categories, setCategories] = useState(["All category"]);
+    const [selectedCategory, setSelectedCategory] = useState("Alle categorieën");
+    const [categories, setCategories] = useState(["Alle categorieën"]);
     const [showModal, setShowModal] = useState(zoekQuery.length > 0);
     const [menuOpen, setMenuOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -46,7 +46,7 @@ function ProfilePagina() {
                     axios.get("https://fakestoreapi.com/products/categories")
                 ]);
                 setAllProducts(allRes.data);
-                setCategories(["All category", ...catRes.data]);
+                setCategories(["Alle categorieën", ...catRes.data]);
             } catch {
                 setError(true);
             } finally {

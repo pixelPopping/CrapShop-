@@ -26,13 +26,13 @@ const FavorietenPage = () => {
     const params = new URLSearchParams(location.search);
 
     const zoekQuery = params.get("query")?.toLowerCase() || "";
-    const zoekCategory = params.get("category") || "All category";
+    const zoekCategory = params.get("category") || "Alle categorieën";
 
     const [query, setQuery] = useState(zoekQuery);
     const [selectedCategory, setSelectedCategory] = useState(zoekCategory);
     const [showModal, setShowModal] = useState(zoekQuery.length > 0);
     const [allProducts, setAllProducts] = useState([]);
-    const [categories, setCategories] = useState(["All category"]);
+    const [categories, setCategories] = useState(["Alle categorieën"]);
 
     const filteredProducts = useMemo(
         () => filterProducts(allProducts, query, selectedCategory),
@@ -79,7 +79,7 @@ const FavorietenPage = () => {
                     axios.get("https://fakestoreapi.com/products/categories"),
                 ]);
                 setAllProducts(productsRes.data);
-                setCategories(["All category", ...categoriesRes.data]);
+                setCategories(["Alle categorieën", ...categoriesRes.data]);
             } catch (e) {
                 console.error(e);
             }
@@ -185,6 +185,29 @@ const FavorietenPage = () => {
 };
 
 export default FavorietenPage;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -23,7 +23,7 @@ function Cart() {
     const params = new URLSearchParams(location.search);
     const zoekQuery = params.get("query")?.toLowerCase() || "";
     const [query, setQuery] = useState(zoekQuery);
-    const [selectedCategory, setSelectedCategory] = useState("All category");
+    const [selectedCategory, setSelectedCategory] = useState("Alle categorieën");
     const [showModal, setShowModal] = useState(zoekQuery.length > 0);
     const [allProducts, setAllProducts] = useState([]);
     const [categories, setCategories] = useState(["Alle categorieën"]);
@@ -36,7 +36,7 @@ function Cart() {
                 const res = await axios.get("https://fakestoreapi.com/products");
                 setAllProducts(res.data);
                 const cat = await axios.get("https://fakestoreapi.com/products/categories");
-                setCategories(["Alle category", ...cat.data]);
+                setCategories(["Alle categorieën", ...cat.data]);
             } catch (e) {
                 console.error(e);
             }
@@ -126,17 +126,20 @@ function Cart() {
                         {items.map((item) => (
                             <CartItem key={item.id} item={item} />
                         ))}
-                        <p><strong>Total products:</strong> {items.reduce((sum, i) => sum + i.quantity, 0)}</p>
-                        <p><strong>Total price:</strong> €{price().toFixed(2)}</p>
+                        <div className="reset-container">
+                            <p><strong>Total products:</strong> {items.reduce((sum, i) => sum + i.quantity, 0)}</p>
+                            <p><strong>Total price:</strong> €{price().toFixed(2)}</p>
                         <div className="reset-button">
                         <button onClick={reSet}>Reset</button>
+                            <button type="button">Check-Out</button>
+                        </div>
                         </div>
                     </>
                 )}
                     </section>
             </main>
             <footer>
-             <FooterLayout/>
+                <FooterLayout/>
             </footer>
         </div>
     );

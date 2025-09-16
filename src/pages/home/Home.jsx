@@ -36,10 +36,10 @@ function Home() {
     const zoekQuery = params.get("query")?.toLowerCase() || "";
 
     const [query, setQuery] = useState(zoekQuery);
-    const [selectedCategory, setSelectedCategory] = useState("All category");
+    const [selectedCategory, setSelectedCategory] = useState("Alle categorieën");
     const [showModal, setShowModal] = useState(zoekQuery.length > 0);
     const [allProducts, setAllProducts] = useState([]);
-    const [categories, setCategories] = useState(["All category"]);
+    const [categories, setCategories] = useState(["Alle categorieën"]);
     const [menuOpen, setMenuOpen] = useState(false);
 
     const filteredProductsList = filterProducts(allProducts, query, selectedCategory);
@@ -191,11 +191,11 @@ function Home() {
                 </div>
 
                 <div className="outer-wheel">
-                <div className="wheel-container-fortune">
-                    <section className="wheel-of-fortune">
-                        <WheelOfFortune buttonLabel="spin" />
-                    </section>
-                </div>
+                    <div className="wheel-container-fortune">
+                        <section className="wheel-of-fortune">
+                            <WheelOfFortune buttonLabel="spin" />
+                        </section>
+                    </div>
                 </div>
 
                 <div className="outer-link-container">
@@ -241,6 +241,141 @@ function Home() {
 }
 
 export default Home;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
