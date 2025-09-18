@@ -22,7 +22,7 @@ const SearchBar = ({
                 type="text"
                 value={inputValue}
                 onChange={(e) => inputCallback(e.target.value)}
-                placeholder="Zoek op product..."
+                placeholder="Search on product..."
                 className="searchInput"
             />
 

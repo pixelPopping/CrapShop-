@@ -14,7 +14,7 @@ import ClockTime from "../../components/digitaleClock/DigitaleClock.jsx";
 import SearchBar from "../../components/searchFilter/SearchBar.jsx";
 import WheelOfFortune from "../../components/wheelOfFortune/WheelOfFortune.jsx";
 import ShowModal from "../../components/modal/ShowModal.jsx";
-import Hamburger from "../../components/hamburmenu/Hamburger.jsx";
+import Hamburger from "../../components/hamburgermenu/Hamburger.jsx";
 import { ShoppingCartContext } from "../../components/context/ShoppingCartContext.jsx";
 import { AuthContext } from "../../components/context/AuthContext.jsx";
 import { SpinContext } from "../../components/context/SpinContext.jsx";
@@ -191,19 +191,19 @@ function Home() {
                 </div>
 
                 <div className="outer-wheel">
-                <div className="wheel-container-fortune">
-                    <section className="wheel-of-fortune">
-                        <WheelOfFortune buttonLabel="spin" />
-                    </section>
-                </div>
+                    <div className="wheel-container-fortune">
+                        <section className="wheel-of-fortune">
+                            <WheelOfFortune buttonLabel="spin" />
+                        </section>
+                    </div>
                 </div>
 
                 <div className="outer-link-container">
                     <section className="link-container">
                         <ul>
-                            <li><NavLink to="/profiel">Profiel</NavLink></li>
+                            <li><NavLink to="/profile">Profile</NavLink></li>
                             <li><NavLink to="/recencies">Recensies</NavLink></li>
-                            <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
+                            <li><NavLink to="/favorietenpage">Favorite,s</NavLink></li>
                         </ul>
                     </section>
                 </div>
@@ -231,10 +231,9 @@ function Home() {
                     </section>
                 </div>
             </main>
-
-            <div className="footer-container">
-                <footer className="footer">
-                    <h1>PixelPopping@productions</h1>
+            <div className="footer-container-home">
+                <footer>
+                    <h1 className="footer-text">PixelPopping@productions</h1>
                 </footer>
             </div>
         </div>
@@ -242,6 +241,141 @@ function Home() {
 }
 
 export default Home;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

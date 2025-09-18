@@ -10,7 +10,7 @@ import Home from './pages/home/Home.jsx';
 import Shop from './pages/shop/Shop.jsx';
 import DetailPagina from './pages/detailPagina/DetailPagina.jsx';
 import Cart from './pages/cartpage/Cart.jsx';
-import Profiel from "./pages/profiel/Profiel.jsx";
+import Profile from "./pages/profile/Profile.jsx";
 import SignUp from "./pages/signUP/SignUp.jsx";
 import SignIn from "./pages/signIn/SignIn.jsx";
 import {useContext} from "react";
@@ -26,7 +26,7 @@ function App () {
         <>
             <Routes>
                 <Route path="/" element={<Home/>} />
-                <Route path="/profiel" element={ isAuth ? <Profiel/> : <Navigate to="/signin"/>}/>
+                <Route path="/profile" element={ isAuth ? <Profile/> : <Navigate to="/signin"/>}/>
                 <Route path="/signup" element={<SignUp/>}/>
                 <Route path="/signin" element={<SignIn/>}/>
                 <Route path="/Shop" element={<Shop/>} />

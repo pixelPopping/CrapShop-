@@ -1,5 +1,5 @@
-
 import { useForm } from "react-hook-form";
+import './LoginForm.css'
 
 const LoginForm = ({ onSubmit, loading }) => {
     const {
@@ -9,6 +9,8 @@ const LoginForm = ({ onSubmit, loading }) => {
     } = useForm();
 
     return (
+        <main className="outer-signin">
+        <section className="inner-signin">
         <form className="form" onSubmit={handleSubmit(onSubmit)}>
             <label htmlFor="email-field">
                 Email:
@@ -25,7 +27,7 @@ const LoginForm = ({ onSubmit, loading }) => {
             </label>
 
             <label htmlFor="password-field">
-                Wachtwoord:
+                Password:
                 <input
                     type="password"
                     id="password-field"
@@ -41,9 +43,11 @@ const LoginForm = ({ onSubmit, loading }) => {
             </label>
 
             <button type="submit" disabled={loading}>
-                {loading ? "Even geduld..." : "Inloggen"}
+                {loading ? "Just one Moment..." : "Log In"}
             </button>
         </form>
+        </section>
+        </main>
     );
 };
 
