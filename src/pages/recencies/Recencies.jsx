@@ -141,7 +141,7 @@ function Recencies() {
                     />
                 )}
 
-                <h1 className="recencies-title">Recensies</h1>
+                <h1 className="recencies-title">Reviews</h1>
 
                 <div className="form-outer">
                     <section className="form-inner">

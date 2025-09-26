@@ -37,7 +37,7 @@ function SignIn() {
             login(token);
             navigate("/");
         } catch (error) {
-            setErrorMessage("Login mislukt. Controleer je gegevens en probeer opnieuw.");
+            setErrorMessage("Login Error try again.");
         } finally {
             setLoading(false);
         }

@@ -183,7 +183,7 @@ function DetailPagina() {
                     />
                 )}
 
-                <main className="inner-container-detail">
+                <section className="inner-container-detail">
                     {loading && <p>Its Loading...</p>}
                     {error && <p>There went something wrong with fetching the product.</p>}
 
@@ -219,7 +219,7 @@ function DetailPagina() {
                             </NavLink>
                         </li>
                     </div>
-                </main>
+                </section>
 
                 <aside className="shoppingcart-container">
                     {!loading && !error && product && (

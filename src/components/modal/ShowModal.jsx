@@ -22,7 +22,6 @@ function ShowModal({query, selectedCategory, filteredProducts, setShowModal}) {
                     </ul>
                 </div>
             </div>
-
     )
 }
 

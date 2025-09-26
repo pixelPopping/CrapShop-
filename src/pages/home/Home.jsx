@@ -211,19 +211,19 @@ function Home() {
                 <div className="outer-sociale-container">
                     <section className="sociale-container">
                         <img
-                            src="/assets/icons/image13.png"
+                            src="/icons/image13.png"
                             alt="LinkedIn icon"
                             onClick={() => window.open("https://nl.linkedin.com/in/yorian-fransz-58111527b", "_blank")}
                             style={{ cursor: "pointer" }}
                         />
                         <img
-                            src="/assets/icons/image15.png"
+                            src="/icons/image15.png"
                             alt="GitHub icon"
                             onClick={() => window.open("https://github.com/PixelPopping", "_blank")}
                             style={{ cursor: "pointer" }}
                         />
                         <img
-                            src="/assets/icons/image12.png"
+                            src="/icons/image12.png"
                             alt="Mail icon"
                             onClick={() => window.open("mailto:sydney-cook@outlook.com", "_blank")}
                             style={{ cursor: "pointer" }}

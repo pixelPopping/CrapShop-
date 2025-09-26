@@ -1,4 +1,3 @@
-
 function getItems() {
     return [
         "men's clothing", "women's clothing", "jewelery", "electronics",

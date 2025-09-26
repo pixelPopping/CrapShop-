@@ -1,9 +1,8 @@
 Crapshop
 
+. Inleiding 
 
-.Inleiding 
-
- Welkom bij CrapShop,
+Welkom bij CrapShop,
  
 Crapshop is een gift/webshop, dit project is voor mij begonnen als een eigen idee waar ik mij geleerde skills wilde toepassen, en 
 experimenteer met javascript en react. Ik heb dit idee gekozen omdat ik het nu kan afmaken. 
@@ -13,7 +12,7 @@ en wat het leuk maakt om op deze website te shoppen. Ook is dit wat je niet tege
 
 
 . Deze applicatie is gemaakt met vite de benodigde runtime environment en commando's die je nodig heb om deze applicatie te starten
-een code editor met terminal dit kan Visual studio code zijn of Webstorm.
+een code-editor met terminal dit kan Visual studio code zijn of Webstorm.
 
 . Benodigdheden
 

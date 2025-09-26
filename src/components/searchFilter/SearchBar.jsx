@@ -1,4 +1,3 @@
-
 ///stap 1 simpele zoekbalk maken
 ///stap 2 alle producten ophalen uit de shop.json
 ///stap 3 state aanmaken om de zoekresultaten op te slaan en een controlt component te maken

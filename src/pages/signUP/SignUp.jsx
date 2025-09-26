@@ -1,24 +1,29 @@
-import axios from "axios";
-import {NavLink, useNavigate} from "react-router-dom";
-import SearchBar from "../../components/searchFilter/SearchBar.jsx";
-import "./SignUp.css";
 import React, { useContext, useEffect, useState } from "react";
-import filterProducts from "../../helpers/filteredProducts.jsx";
+import axios from "axios";
+import { NavLink, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faShoppingCart, faSignOutAlt, faUser } from "@fortawesome/free-solid-svg-icons";
+
+import SearchBar from "../../components/searchFilter/SearchBar.jsx";
+import SignUpForm from "../../components/signUpForm/SignUpForm.jsx";
+import ShowModal from "../../components/modal/ShowModal.jsx";
+import FooterLayout from "../../components/Footer/FooterLayout.jsx";
+
 import { AuthContext } from "../../components/context/AuthContext.jsx";
 import { ShoppingCartContext } from "../../components/context/ShoppingCartContext.jsx";
 import { FavoriteContext } from "../../components/context/FavoriteContext.jsx";
-import SignUpForm from "../../components/signUpForm/SignUpForm.jsx";
+
 import useHandleLogout from "../../helpers/UseHandleLogout.jsx";
-import ShowModal from "../../components/modal/ShowModal.jsx";
-import FooterLayout from "../../components/Footer/FooterLayout.jsx";
+import filterProducts from "../../helpers/filteredProducts.jsx";
+
+import "./SignUp.css";
 
 function SignUp() {
     const navigate = useNavigate();
     const { isAuth, user } = useContext(AuthContext);
     const { items: cartItems } = useContext(ShoppingCartContext);
     const { items: favoriteItems } = useContext(FavoriteContext);
+
     const params = new URLSearchParams(location.search);
     const zoekQuery = params.get("query")?.toLowerCase() || "";
 
@@ -53,7 +58,7 @@ function SignUp() {
         console.log("Form data:", data);
         try {
             const response = await axios.post(
-                'http://localhost:5174/api/users',
+                "/api/users",
                 {
                     username: data.username,
                     lastname: data.lastname,
@@ -66,23 +71,22 @@ function SignUp() {
                     city: data.city,
                     phonenumber: data.phonenumber,
                     dateOfBirth: data.date,
-                    roles: ["user"],    // default role
-                    favorites: [],      // lege favorieten bij aanmaken
-                    cart: []            // lege winkelwagen bij aanmaken
+                    roles: ["user"],
+                    cart: [],
                 },
                 {
                     headers: {
-                        'accept': 'application/json',
-                        'novi-education-project-id': 'b72992a3-9bd0-4e8c-84d5-0e24aff4e81b',
-                        'content-type': 'application/json',
-                    }
+                        accept: "application/json",
+                        "novi-education-project-id": "b72992a3-9bd0-4e8c-84d5-0e24aff4e81b",
+                        "content-type": "application/json",
+                    },
                 }
             );
 
-            console.log('Create succesvol:', response.data);
-            navigate('/signin');
+            console.log("Create succesvol:", response.data);
+            navigate("/signin");
         } catch (error) {
-            console.error('Fout bij create:', error.message);
+            console.error("Fout bij create:", error.message);
             setErrorMessage("Registratie mislukt. Probeer het opnieuw.");
         } finally {
             setLoading(false);
@@ -98,6 +102,7 @@ function SignUp() {
                     <li><NavLink to="/Shop">Shop</NavLink></li>
                     <li><NavLink to="/">Home</NavLink></li>
                 </ul>
+
                 <SearchBar
                     type="text"
                     inputValue={query}
@@ -116,6 +121,7 @@ function SignUp() {
                     }}
                     categories={["Alle categorieën", ...categories]}
                 />
+
                 <div className="button-container-signup">
                     {isAuth ? (
                         <>
@@ -152,31 +158,35 @@ function SignUp() {
                     </div>
                 </div>
             </nav>
+
             <main>
-            <section>
-            {showModal && (
-                <ShowModal
-                    query={query}
-                    selectedCategory={selectedCategory}
-                    filteredProducts={filteredProducts}
-                    setShowModal={setShowModal}
-                />
-            )}
+                <section>
+                    {showModal && (
+                        <ShowModal
+                            query={query}
+                            selectedCategory={selectedCategory}
+                            filteredProducts={filteredProducts}
+                            setShowModal={setShowModal}
+                        />
+                    )}
                 </section>
-            <SignUpForm
-                onSubmit={handleFormSubmit}
-                loading={loading}
-                errorMessage={errorMessage}
-            />
+
+                <SignUpForm
+                    onSubmit={handleFormSubmit}
+                    loading={loading}
+                    errorMessage={errorMessage}
+                />
             </main>
+
             <footer>
-            <FooterLayout/>
+                <FooterLayout />
             </footer>
         </div>
     );
 }
 
 export default SignUp;
+
 
 
 
