@@ -11,6 +11,8 @@ import filterProducts from "../../helpers/filteredProducts.jsx";
 import useHandleLogout from "../../helpers/UseHandleLogout.jsx";
 import ShowModal from "../../components/modal/ShowModal.jsx";
 import CartItem from "../../components/cartItem/CartItem.jsx";
+import FooterLayout from "../../components/Footer/FooterLayout.jsx";
+import './Cart.css'
 
 function Cart() {
     const { items = [], price, reSet, } = useContext(ShoppingCartContext);
@@ -43,8 +45,8 @@ function Cart() {
     }, []);
 
     return (
-        <>
-            <nav className="navbar-four">
+        <div className="outer-main-cart">
+            <nav className="navbar-four-cart">
                 <ul className="nav-links4">
                     <li><NavLink to="/products/men's clothing">Men</NavLink></li>
                     <li><NavLink to="/products/women's clothing">Women</NavLink></li>
@@ -71,7 +73,7 @@ function Cart() {
                     categories={categories}
                 />
 
-                <div className="button-container4">
+                <div className="icon-container">
                     {isAuth ? (
                         <>
                             <div className="icon-item" onClick={handleLogout} title="Log uit">
@@ -113,7 +115,8 @@ function Cart() {
                 />
             )}
 
-            <main>
+            <main className="cart-layout">
+                <section className="inner-cart">
                 <h2>Shopping Bag – {items.length > 0 ? items.map(item => item.title).join(", ") : "Leeg"}</h2>
 
                 {items.length === 0 ? (
@@ -123,23 +126,22 @@ function Cart() {
                         {items.map((item) => (
                             <CartItem key={item.id} item={item} />
                         ))}
-                        <p><strong>Totaal aantal stuks:</strong> {items.reduce((sum, i) => sum + i.quantity, 0)}</p>
-                        <p><strong>Totaalprijs:</strong> €{price().toFixed(2)}</p>
+                        <div className="reset-container">
+                            <p><strong>Total products:</strong> {items.reduce((sum, i) => sum + i.quantity, 0)}</p>
+                            <p><strong>Total price:</strong> €{price().toFixed(2)}</p>
+                        <div className="reset-button">
                         <button onClick={reSet}>Reset</button>
+                            <button type="button">Check-Out</button>
+                        </div>
+                        </div>
                     </>
                 )}
+                    </section>
             </main>
-
             <footer>
-                <div className="footer-links">
-                    <ul>
-                        <li><NavLink to="/profiel">Profiel</NavLink></li>
-                        <li><NavLink to="/recencies">Recensies</NavLink></li>
-                        <li><NavLink to="/favorietenpage">Favorieten</NavLink></li>
-                    </ul>
-                </div>
+                <FooterLayout/>
             </footer>
-        </>
+        </div>
     );
 }
 
