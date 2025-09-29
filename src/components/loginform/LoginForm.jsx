@@ -1,5 +1,5 @@
-
 import { useForm } from "react-hook-form";
+import "./LoginForm.css";
 
 const LoginForm = ({ onSubmit, loading }) => {
     const {
@@ -9,42 +9,51 @@ const LoginForm = ({ onSubmit, loading }) => {
     } = useForm();
 
     return (
-        <form className="form" onSubmit={handleSubmit(onSubmit)}>
-            <label htmlFor="email-field">
-                Email:
-                <input
-                    type="text"
-                    id="email-field"
-                    {...register("email", {
-                        required: "Email is verplicht",
-                        validate: (value) =>
-                            value.includes("@") || 'Email moet een "@" bevatten',
-                    })}
-                />
-                {errors.email && <p className="error">{errors.email.message}</p>}
-            </label>
+        <main className="outer-signin">
+            <section className="inner-signin">
+                <form className="form" onSubmit={handleSubmit(onSubmit)}>
+                    <label htmlFor="email-field">
+                        Email:
+                        <input
+                            type="text"
+                            id="email-field"
+                            {...register("email", {
+                                required: "Email is verplicht",
+                                validate: (value) =>
+                                    value.includes("@") || 'Email moet een "@" bevatten',
+                            })}
+                        />
+                        {errors.email && (
+                            <p className="error">{errors.email.message}</p>
+                        )}
+                    </label>
 
-            <label htmlFor="password-field">
-                Wachtwoord:
-                <input
-                    type="password"
-                    id="password-field"
-                    {...register("password", {
-                        required: "Wachtwoord is verplicht",
-                        minLength: {
-                            value: 8,
-                            message: "Minimaal 8 tekens",
-                        },
-                    })}
-                />
-                {errors.password && <p className="error">{errors.password.message}</p>}
-            </label>
+                    <label htmlFor="password-field">
+                        Password:
+                        <input
+                            type="password"
+                            id="password-field"
+                            {...register("password", {
+                                required: "Password is obliged",
+                                minLength: {
+                                    value: 8,
+                                    message: "Minimaal 8 characters long",
+                                },
+                            })}
+                        />
+                        {errors.password && (
+                            <p className="error">{errors.password.message}</p>
+                        )}
+                    </label>
 
-            <button type="submit" disabled={loading}>
-                {loading ? "Even geduld..." : "Inloggen"}
-            </button>
-        </form>
+                    <button type="submit" disabled={loading}>
+                        {loading ? "Just one Moment..." : "Log In"}
+                    </button>
+                </form>
+            </section>
+        </main>
     );
 };
 
 export default LoginForm;
+

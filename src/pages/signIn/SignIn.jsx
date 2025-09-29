@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../../components/context/AuthContext.jsx";
 import LoginForm from "../../components/loginform/LoginForm.jsx";
+import './SigIn.css';
 
 function SignIn() {
     const navigate = useNavigate();
@@ -36,7 +37,7 @@ function SignIn() {
             login(token);
             navigate("/");
         } catch (error) {
-            setErrorMessage("Login mislukt. Controleer je gegevens en probeer opnieuw.");
+            setErrorMessage("Login Error try again.");
         } finally {
             setLoading(false);
         }
@@ -45,10 +46,10 @@ function SignIn() {
     return (
         <main className="signin-page">
             <header>
-                <h1>CrapShop</h1>
-                <h2>Inloggen</h2>
+                <h1 className="crapshop"> CrapShop</h1>
+                <h2 className="crapshop">Login</h2>
             </header>
-            {loading && <p>Even geduld, je wordt ingelogd...</p>}
+            {loading && <p>One moment, you proceed to be logged in...</p>}
             <LoginForm onSubmit={handleFormSubmit} loading={loading} errorMessage={errorMessage} />
         </main>
     );

@@ -1,4 +1,3 @@
-
 ///stap 1 simpele zoekbalk maken
 ///stap 2 alle producten ophalen uit de shop.json
 ///stap 3 state aanmaken om de zoekresultaten op te slaan en een controlt component te maken
@@ -22,7 +21,7 @@ const SearchBar = ({
                 type="text"
                 value={inputValue}
                 onChange={(e) => inputCallback(e.target.value)}
-                placeholder="Zoek op product..."
+                placeholder="Search on product..."
                 className="searchInput"
             />
 

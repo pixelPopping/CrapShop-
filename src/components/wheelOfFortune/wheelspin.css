@@ -89,7 +89,7 @@ span {
 .span10 { clip-path: polygon(100% 82%, 100% 50%, 50% 50%); background: lightpink; }
 
 .box1 .span1 h5 { top: 40%; right: 73%; transform: rotate(198deg); position: absolute; text-align: center; }
-.box1 .span2 h5 { top: 21%; right: 59%; transform: rotate(-128deg); position: absolute; text-align: center; }
+.box1 .span2 h5 { top: 24%; right: 59%; transform: rotate(-138deg); position: absolute; text-align: center; }
 .box1 .span3 h5 { top: 16%; right: 40%; transform: rotate(-82deg); position: absolute; text-align: center; }
 .box1 .span4 h5 { top: 20%; right: 21%; transform: rotate(-46deg); position: absolute; text-align: center; }
 .box1 .span5 h5 { top: 40%; right: 10%; transform: rotate(-15deg); position: absolute; text-align: center; }
@@ -143,16 +143,7 @@ span {
     opacity: 1;
 }
 
-button {
-    margin: 10px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    border: none;
-    background: #333;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-}
+
 
 button:disabled {
     background: #aaa;
@@ -173,7 +164,7 @@ p {
     flex-grow: 1;
 }
 
-.spin-button{
+.spin-button {
     font-family: Outfit,sans-serif;
     width: 100%;
     font-size: 20px;
@@ -185,7 +176,7 @@ p {
     cursor: pointer;
 }
 
-.result-container{
+.result-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
